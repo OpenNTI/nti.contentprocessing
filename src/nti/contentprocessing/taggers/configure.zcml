@@ -11,16 +11,20 @@
 	<include package="zope.security" />
 
     <utility factory=".nltk._NLTKTaggedSents" 
-    		 provides=".interfaces.INLTKTaggedSents" />
+    		 provides=".interfaces.INLTKTaggedSents"
+			 zcml:condition="installed nltk" />
     		 
 	<utility factory=".nltk._NLTKBackoffNgramTaggerFactory" 
-			 provides=".interfaces.INLTKBackoffNgramTaggerFactory" />
+			 provides=".interfaces.INLTKBackoffNgramTaggerFactory" 
+			 zcml:condition="installed nltk" />
 
 	<utility factory=".nltk.default_nltk_tagger"
-			 provides=".interfaces.ITagger" />
+			 provides=".interfaces.ITagger"
+			 zcml:condition="installed nltk" />
 			 
 	<utility factory=".nltk.default_nltk_tagger"
 			 provides=".interfaces.ITagger"
-			 name="en" />
+			 name="en"
+			 zcml:condition="installed nltk" />
 
 </configure>

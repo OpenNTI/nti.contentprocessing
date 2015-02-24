@@ -55,4 +55,3 @@ class TestTikaLangDetector(unittest.TestCase):
 		lang = dectector(self.sample_ru)
 		assert_that(lang, is_not(none()))
 		assert_that(lang, has_property('code', is_('ru')))
-

@@ -19,7 +19,8 @@ except ImportError:
 	import pickle
 import inspect
 
-import pkg_resources
+resource_exists = __import__('pkg_resources').resource_exists
+resource_stream = __import__('pkg_resources').resource_stream
 
 from zope import component
 from zope import interface
@@ -91,8 +92,8 @@ def get_backoff_ngram_tagger(ngrams=3, corpus="brown", limit=-1, train_sents=Non
 		name = "ngrams.%s.%s.%s.pickle.gz" %  (ngrams, corpus, limit)
 		if name in _trained_taggers:
 			tagger = _trained_taggers[name]
-		elif pkg_resources.resource_exists('nti.contentprocessing.taggers', name):
-			stream = pkg_resources.resource_stream('nti.contentprocessing.taggers', name)
+		elif resource_exists('nti.contentprocessing.taggers', name):
+			stream = resource_stream('nti.contentprocessing.taggers', name)
 			tagger = load_tagger_pickle(stream)
 			_trained_taggers[name] = tagger
 

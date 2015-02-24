@@ -13,9 +13,9 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import component
 
-from . import interfaces as ct_interfaces
+from .interfaces import IConceptTagger
 
 def concept_tag(content, name=u''):
-	tagger = component.getUtility(ct_interfaces.IConceptTagger, name=name)
+	tagger = component.getUtility(IConceptTagger, name=name)
 	result = tagger(content)
 	return result

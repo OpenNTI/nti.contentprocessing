@@ -35,4 +35,3 @@ class TestOpenXeroxLangDetector(unittest.TestCase):
 		lang = _OpenXeroxLanguageDetector()(self.sample_en)
 		assert_that(lang, is_not(none()))
 		assert_that(lang, has_property('code', is_('en')))
-

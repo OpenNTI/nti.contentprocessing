@@ -18,7 +18,7 @@ from collections import defaultdict
 from zope import interface
 from zope import component
 
-from nti.externalization.representation import WithRepr
+from nti.common.representation import WithRepr
 
 from nti.schema.schema import EqHash
 

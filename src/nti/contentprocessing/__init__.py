@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Content processing module
-
 .. $Id$
 """
 
@@ -43,7 +41,7 @@ from nti.contentfragments.punctuation import default_punk_mark_expression as def
 from nti.contentfragments.punctuation import default_punk_mark_pattern_plus as default_punk_char_pattern_plus
 from nti.contentfragments.punctuation import default_punk_mark_expression_plus as default_punk_char_expression_plus
 
-# ReExport common functions
+# Re-export common functions
 from .content_utils import normalize
 from .content_utils import rank_words
 from .content_utils import tokenize_content

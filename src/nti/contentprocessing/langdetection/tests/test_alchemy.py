@@ -45,4 +45,3 @@ class TestAlchemyLangDetector(unittest.TestCase):
 		assert_that(a, is_(b))
 		assert_that(hash(a), is_(hash(b) ) )
 		assert_that(str(a), is_('en'))
-

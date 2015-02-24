@@ -17,7 +17,7 @@ from cStringIO import StringIO
 
 from zope import interface
 
-from .. import utils
+from ..utils import getAlchemyAPIKey
 
 from . import ContentKeyWord
 
@@ -27,7 +27,7 @@ ALCHEMYAPI_LIMIT_KB = 150
 ALCHEMYAPI_URL = u'http://access.alchemyapi.com/calls/text/TextGetRankedKeywords'
 
 def get_keywords(content, name=None, **kwargs):
-	apikey = utils.getAlchemyAPIKey(name=name)
+	apikey = getAlchemyAPIKey(name=name)
 	headers = {u'content-type': u'application/x-www-form-urlencoded'}
 	params = {
 				u'text':unicode(content),

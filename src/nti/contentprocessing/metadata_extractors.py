@@ -35,8 +35,8 @@ from zope.cachedescriptors.property import Lazy
 
 from nti.common.property import alias
 
-from nti.schema.fieldproperty import createDirectFieldProperties
 from nti.schema.schema import PermissiveSchemaConfigured
+from nti.schema.fieldproperty import createDirectFieldProperties
 
 from . import interfaces
 

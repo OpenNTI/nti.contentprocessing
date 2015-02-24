@@ -12,26 +12,13 @@ logger = __import__('logging').getLogger(__name__)
 from zope import component
 from zope.component.interfaces import ComponentLookupError
 
-from pyramid.threadlocal import get_current_request
-
 from .interfaces import IAlchemyAPIKey
 
-def get_possible_site_names(request=None, include_default=True):
-	request = request or get_current_request()
-	if not request:
-		return () if not include_default else ('',)
-	__traceback_info__ = request
-
-	site_names = getattr(request, 'possible_site_names', ())
-	if include_default:
-		site_names += ('',)
-	return site_names
-
-def getAlchemyAPIKey(name=None, request=None, error=True):
+def getAlchemyAPIKey(name=None, error=True):
 	if name is not None:
 		names = (name,)
 	else:
-		names = (name,) # get_possible_site_names(request)
+		names = (name,) 
 	for name in names:
 		result = component.queryUtility(IAlchemyAPIKey, name=name)
 		if result is not None:

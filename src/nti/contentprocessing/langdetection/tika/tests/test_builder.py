@@ -80,4 +80,3 @@ class TestBuilder(unittest.TestCase):
 			assert_that(profile.sorted, has_length(1000))
 		finally:
 			shutil.rmtree(outdir, True)
-			

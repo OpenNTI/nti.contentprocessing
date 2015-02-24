@@ -11,13 +11,13 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-import functools
 from collections import namedtuple
+from functools import total_ordering
 
 from zope import component
 from zope import interface
 
-from nti.externalization.representation import WithRepr
+from nti.common.representation import WithRepr
 
 from nti.schema.schema import EqHash
 
@@ -27,7 +27,7 @@ from .interfaces import ITermExtractKeyWordExtractor
 
 @WithRepr
 @EqHash('token',)
-@functools.total_ordering
+@total_ordering
 @interface.implementer(IContentKeyWord)
 class ContentKeyWord(object):
 

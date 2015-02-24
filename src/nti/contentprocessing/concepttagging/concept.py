@@ -15,7 +15,7 @@ import functools
 
 from zope import interface
 
-from nti.externalization.representation import WithRepr
+from nti.common.representation import WithRepr
 
 from nti.schema.schema import EqHash
 
