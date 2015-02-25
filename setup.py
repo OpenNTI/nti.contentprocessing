@@ -37,7 +37,7 @@ setup(
 		'Operating System :: OS Independent',
 		'Programming Language :: Python :: 2',
 		'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: CPython'
 	],
 	packages=find_packages('src'),
 	package_dir={'': 'src'},
