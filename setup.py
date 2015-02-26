@@ -15,7 +15,8 @@ TESTS_REQUIRE = [
 	'nose-progressive',
 	'nose2[coverage_plugin]',
 	'pyhamcrest',
-	'nti.testing',
+	'nti.nose_traceback_info',
+	'nti.testing'
 ]
 
 import platform
@@ -63,8 +64,7 @@ setup(
         'zopyx.txng3.ext' if not IS_PYPY else '',
 		'nti.common',
 		'nti.contentfragments',
-		'nti.schema',
-		'nti.nose_traceback_info'
+		'nti.schema'
 	],
 	extras_require={
 		'test': TESTS_REQUIRE,
