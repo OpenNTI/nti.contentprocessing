@@ -60,7 +60,6 @@ def _default_word_tokenizer_pattern():
 def tokenize_content(text, lang='en'):
 	if not text or not isinstance(text, string_types):
 		return ()
-
 	tokenizer = component.getUtility(IContentTokenizer, name=lang)
 	result = tokenizer.tokenize(text)
 	return result
@@ -100,14 +99,12 @@ class _ContentTokenizer(object):
 		plain_text = cls.to_plain_text(content)
 		return cls.tokenizer.tokenize(plain_text)
 
-
 	@classmethod
 	def to_plain_text(cls, content):
 		text = component.getAdapter(content,
 									IPlainTextContentFragment,
 									name='text')
 		return text
-
 
 @interface.implementer(IWordSimilarity)
 class _BaseWordSimilarity(object):
