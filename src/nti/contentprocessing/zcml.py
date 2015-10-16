@@ -12,10 +12,13 @@ logger = __import__('logging').getLogger(__name__)
 from functools import partial
 
 from zope import interface
-from zope.configuration import fields
+
 from zope.component.zcml import utility
 
+from zope.configuration import fields
+
 from .alchemy import create_api_key
+
 from .interfaces import IAlchemyAPIKey
 
 class IRegisterAlchemyAPIKeyDirective(interface.Interface):

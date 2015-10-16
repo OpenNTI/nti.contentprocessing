@@ -27,36 +27,43 @@ import PyPDF2 as pyPdf
 from zope import component
 from zope import interface
 
-from zope.location import interfaces as loc_interfaces
-
-from zope.mimetype import interfaces as mime_interfaces
-
 from zope.cachedescriptors.property import Lazy
+
+from zope.location.interfaces import IContained
+
+from zope.mimetype.interfaces import IMimeTypeGetter
 
 from nti.common.property import alias
 
 from nti.schema.schema import PermissiveSchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
 
-from . import interfaces
+from .interfaces import IImageMetadata
+from .interfaces import IContentMetadata
+from .interfaces import IContentMetadataExtractor
+from .interfaces import IContentMetadataURLHandler
 
-@interface.implementer(interfaces.IImageMetadata, loc_interfaces.IContained)
+@interface.implementer(IImageMetadata, IContained)
 class ImageMetadata(PermissiveSchemaConfigured):
-	"Default implementation of :class:`.IImageMetadata`"
+	"""
+	Default implementation of :class:`.IImageMetadata`
+	"""
 
 	__name__ = None
 	__parent__ = None
 
-	createDirectFieldProperties( interfaces.IImageMetadata )
+	createDirectFieldProperties(IImageMetadata)
 
-@interface.implementer(interfaces.IContentMetadata, loc_interfaces.IContained)
+@interface.implementer(IContentMetadata, IContained)
 class ContentMetadata(PermissiveSchemaConfigured):
-	"Default implementation of :class:`.IContentMetadata`"
+	"""
+	Default implementation of :class:`.IContentMetadata`
+	"""
 
 	__name__ = None
 	__parent__ = None
 
-	createDirectFieldProperties( interfaces.IContentMetadata, adapting=True )
+	createDirectFieldProperties(IContentMetadata, adapting=True)
 
 	# BWC
 	href = alias('contentLocation')
@@ -68,11 +75,11 @@ class _abstract_args(object):
 
 	@Lazy
 	def pyquery_dom(self):
-		return pyquery.PyQuery( url=self.__name__, opener=lambda url, **kwargs: self.text )
+		return pyquery.PyQuery(url=self.__name__, opener=lambda url, **kwargs: self.text)
 
 class _request_args(_abstract_args):
 
-	def __init__( self, url, response ):
+	def __init__(self, url, response):
 		self.response = response
 		self.__name__ = url
 		self.download_path = None
@@ -82,10 +89,10 @@ class _request_args(_abstract_args):
 
 	@Lazy
 	def bidirectionalstream(self):
-		fd, pdf_path = tempfile.mkstemp( '.metadata', 'download' )
+		fd, pdf_path = tempfile.mkstemp('.metadata', 'download')
 		self.download_path = pdf_path
-		pdf_file = os.fdopen( fd, 'wb' )
-		shutil.copyfileobj( self.response.raw, pdf_file )
+		pdf_file = os.fdopen(fd, 'wb')
+		shutil.copyfileobj(self.response.raw, pdf_file)
 		pdf_file.close()
 		return open(pdf_path, 'rb')
 
@@ -99,7 +106,7 @@ class _request_args(_abstract_args):
 
 class _file_args(_abstract_args):
 
-	def __init__( self, path ):
+	def __init__(self, path):
 		self.path = path
 		self.__name__ = path
 
@@ -112,25 +119,25 @@ class _file_args(_abstract_args):
 	@Lazy
 	def text(self):
 		with open(self.path, 'r') as f:
-			return f.read().decode( 'utf-8' )
+			return f.read().decode('utf-8')
 
 	@Lazy
 	def bytes(self):
 		with open(self.path, 'r') as f:
 			return f.read()
 
-def _get_metadata_from_mime_type( location, mime_type, args_factory ):
+def _get_metadata_from_mime_type(location, mime_type, args_factory):
 
 	processor = None
 	args = None
 	result = None
 
 	if mime_type:
-		processor = component.queryUtility(interfaces.IContentMetadataExtractor,
-										   name=mime_type )
+		processor = component.queryUtility(IContentMetadataExtractor,
+										   name=mime_type)
 	if processor:
 		args = args_factory()
-		result = processor.extract_metadata( args )
+		result = processor.extract_metadata(args)
 
 	if result is not None:
 		result.sourceLocation = location
@@ -141,44 +148,43 @@ def _get_metadata_from_mime_type( location, mime_type, args_factory ):
 # NOTE: See also https://github.com/coleifer/micawber
 # for a library to find metadata about all kinds of things including youtube videos, etc
 
-def _get_metadata_from_url( urlscheme, location ):
+def _get_metadata_from_url(urlscheme, location):
 	# TODO: Need to redirect here based on url scheme
 
-	schemehandler = component.queryUtility(interfaces.IContentMetadataURLHandler,
+	schemehandler = component.queryUtility(IContentMetadataURLHandler,
 										   name=urlscheme)
 	if schemehandler is not None:
-		return schemehandler( location )
+		return schemehandler(location)
 
-def _http_scheme_handler( location ):
+def _http_scheme_handler(location):
 	# Must use requests, not the url= argument, as
 	# the default Python User-Agent is blocked (note: pyquery 1.2.4 starts using requests internally by default)
 	# The custom user-agent string is to trick Google into sending UTF-8.
-	response = requests.get( location,
+	response = requests.get(location,
 							 headers={'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"},
 							 stream=True)
 	# Get the content type, splitting off encoding, etc
-	mime_type = response.headers.get('content-type').split( ';', 1 )[0]
+	mime_type = response.headers.get('content-type').split(';', 1)[0]
 
 	result, args = \
-		 _get_metadata_from_mime_type( 
-					location, mime_type, lambda: _request_args( location, response ) )
+		 _get_metadata_from_mime_type(
+					location, mime_type, lambda: _request_args(location, response))
 
 	if result is not None:
 		result.sourcePath = args.download_path
 	return result
-interface.directlyProvides( _http_scheme_handler, interfaces.IContentMetadataURLHandler )
+interface.directlyProvides(_http_scheme_handler, IContentMetadataURLHandler)
 
-
-def _get_metadata_from_path( location ):
-	mime_type = component.getUtility( mime_interfaces.IMimeTypeGetter )(name=location)
-	result, _ = _get_metadata_from_mime_type( location, mime_type, lambda: _file_args(location) )
+def _get_metadata_from_path(location):
+	mime_type = component.getUtility(IMimeTypeGetter)(name=location)
+	result, _ = _get_metadata_from_mime_type(location, mime_type, lambda: _file_args(location))
 
 	if result is not None:
 		result.sourcePath = location
 
 	return result
 
-def get_metadata_from_content_location( location ):
+def get_metadata_from_content_location(location):
 	"""
 	Given the location of a piece of content (i.e., an HTML file or PDF),
 	attempt to extract metadata from it and return an :class:`.IContentMetadata` object.
@@ -191,29 +197,28 @@ def get_metadata_from_content_location( location ):
 
 	# Is it a URL and not a local file (taking care not
 	# to treat windoze paths like "c:\foo" as URLs)
-	urlscheme = urlparse.urlparse( location ).scheme
+	urlscheme = urlparse.urlparse(location).scheme
 	if urlscheme and (len(urlscheme) != 1 or urlscheme not in string.ascii_letters):
 		# look up a handler for the scheme and pass it over.
 		# this lets us delegate responsibility for schemes we
 		# can't access, like tag: schemes for NTIIDs
-		return _get_metadata_from_url( urlscheme, location )
+		return _get_metadata_from_url(urlscheme, location)
 
 	# Ok, assume a local path.
-	return _get_metadata_from_path( location )
+	return _get_metadata_from_path(location)
 
-@interface.implementer(interfaces.IContentMetadataExtractor)
+@interface.implementer(IContentMetadataExtractor)
 class _HTMLExtractor(object):
 
-	def extract_metadata( self, args ):
+	def extract_metadata(self, args):
 		result = ContentMetadata()
 		# Extract metadata. Need to handle OpenGraph
 		# as well as twitter, with a final fallback to some
 		# page attributes
-		result = self._extract_opengraph( result, args )
-		result = self._extract_twitter( result, args )
-		result = self._extract_page( result, args )
+		result = self._extract_opengraph(result, args)
+		result = self._extract_twitter(result, args)
+		result = self._extract_page(result, args)
 		return result
-
 
 	def _extract_opengraph(self, result, args):
 		# The opengraph metadata is preferred if we can get
@@ -231,25 +236,25 @@ class _HTMLExtractor(object):
 		graph.parse(data=args.text, format='rdfa',
 					publicID=args.__name__, media_type='text/html')
 
-		nss = (rdflib.Namespace('http://ogp.me/ns#'), 
+		nss = (rdflib.Namespace('http://ogp.me/ns#'),
 			   rdflib.Namespace('http://opengraphprotocol.org/schema/'))
-		
-		pairs = (('title', 'title'), ('url', 'href'), ('image', 'image'), 
+
+		pairs = (('title', 'title'), ('url', 'href'), ('image', 'image'),
 				 ('description', 'description'))
-		
+
 		for ns_name, attr_name in pairs:
 			# Don't overwrite
-			if getattr( result, attr_name, None ):
+			if getattr(result, attr_name, None):
 				continue
 
 			triples = \
 				graph.triples_choices((None, [getattr(x, ns_name) for x in nss], None))
-				
+
 			for _, _, val in triples:
 				if ns_name == 'image':
 					if not result.images:
 						result.images = []
-					image = ImageMetadata( url=val.toPython() )
+					image = ImageMetadata(url=val.toPython())
 					image.__parent__ = result
 					image.__name__ = image.url
 					# FIXME: If there are multiple image elements,
@@ -257,20 +262,19 @@ class _HTMLExtractor(object):
 					# that if they provide height and width values,
 					# we have no way to associate that with them.
 					# We can only do it if there is exactly one image.
-					result.images.append( image )
+					result.images.append(image)
 				else:
-					setattr( result, attr_name, val.toPython() )
+					setattr(result, attr_name, val.toPython())
 					break
 
 		if len(result.images) == 1:
 			for k in 'height', 'width':
 				triples = \
 					graph.triples_choices(
-							(None, [getattr(x, 'image:' + k) for x in nss], None ) )
+							(None, [getattr(x, 'image:' + k) for x in nss], None))
 				for _, _, val in triples:
-					setattr( result.images[0], k, int(val.toPython()) )
+					setattr(result.images[0], k, int(val.toPython()))
 		return result
-
 
 	def _extract_twitter(self, result, args):
 		# Get the twitter card metadata. Stupid twitter cards
@@ -294,42 +298,42 @@ class _HTMLExtractor(object):
 				val = six.text_type(val)
 				if name in prop_names:
 					attr_name = prop_names[name]
-					if not getattr( result, attr_name, None ):
-						setattr( result, attr_name, val )
+					if not getattr(result, attr_name, None):
+						setattr(result, attr_name, val)
 				elif name == 'twitter:image':
 					if not result.images:
 						result.images = []
-					image = ImageMetadata( url=val )
+					image = ImageMetadata(url=val)
 					image.__name__ = image.url
 					image.__parent__ = result
-					result.images.append( image )
+					result.images.append(image)
 		return result
 
-	def _extract_page( self, result, args ):
+	def _extract_page(self, result, args):
 		if not result.description:
-			meta = args.pyquery_dom( b'meta[name=description]' )
+			meta = args.pyquery_dom(b'meta[name=description]')
 			text = meta.attr['content'] if meta else ''
 			if text:
 				result.description = text
 		if not result.title:
-			title = args.pyquery_dom( b'title' )
+			title = args.pyquery_dom(b'title')
 			text = title.text()
 			if text:
 				result.title = text
 		return result
 
-@interface.implementer(interfaces.IContentMetadataExtractor)
+@interface.implementer(IContentMetadataExtractor)
 class _PDFExtractor(object):
 
-	def extract_metadata( self, args ):
+	def extract_metadata(self, args):
 		# pyPdf is a streaming parser. It only
 		# has to load the xref table from the end of the stream initially,
 		# and then objects are loaded on demand from the (seekable!)
 		# stream. Thus, even for very large PDFs, it uses
 		# minimal memory.
 		result = ContentMetadata()
-		pdf = pyPdf.PdfFileReader( args.bidirectionalstream )
-		info = pdf.getDocumentInfo() # TODO: Also check the xmpMetadata?
+		pdf = pyPdf.PdfFileReader(args.bidirectionalstream)
+		info = pdf.getDocumentInfo()  # TODO: Also check the xmpMetadata?
 		# This dict is weird: [] and get() return different things,
 		# with [] returning the strings we want
 		if '/Title' in info and info['/Title']:
@@ -338,5 +342,4 @@ class _PDFExtractor(object):
 			result.creator = info['/Author']
 		if '/Subject' in info and info['/Subject']:
 			result.description = info['/Subject']
-
 		return result

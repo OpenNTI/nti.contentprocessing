@@ -22,8 +22,8 @@ from .content_utils import tokenize_content
 
 from .interfaces import INgramComputer
 
-from . import default_ngram_minsize
 from . import default_ngram_maxsize
+from . import default_ngram_minsize
 
 @repoze.lru.lru_cache(5000)
 def _ngram_cache(text, minsize=3, maxsize=None, unique=True, lower=True):

@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Content processing interfaces
-
 .. $Id$
 """
 
 from __future__ import print_function, unicode_literals, absolute_import, division
 __docformat__ = "restructuredtext en"
+
+logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
@@ -64,12 +64,12 @@ class IAlchemyAPIKey(interface.Interface):
 	name = interface.Attribute("Key name or alias")
 	value = interface.Attribute("The actual key value")
 
-####
 # Metadata extraction
-####
 
-from nti.contentfragments import schema as frg_schema
 from zope.mimetype.interfaces import mimeTypeConstraint
+
+from nti.contentfragments.schema import PlainText
+from nti.contentfragments.schema import PlainTextLine
 
 class IImageMetadata(interface.Interface):
 	"""
@@ -78,10 +78,10 @@ class IImageMetadata(interface.Interface):
 
 	url = TextLine(title="The URL to resolve the image")
 
-	width = Number( title="The width in pixels of the image",
-					required=False )
-	height = Number( title="The height in pixels of the image",
-					 required=False )
+	width = Number(title="The width in pixels of the image",
+					required=False)
+	height = Number(title="The height in pixels of the image",
+					 required=False)
 
 class IContentMetadata(interface.Interface):
 	"""
@@ -90,25 +90,24 @@ class IContentMetadata(interface.Interface):
 	possible extraction and each may be missing or empty.
 	"""
 
-	title = frg_schema.PlainTextLine(title="The title of the content",
-									 required=False,
-									 default='')
-	description = frg_schema.PlainText(title="A short description of the content",
-									   required=False,
-									   default='' ) # TODO: Size limits?
-	creator = frg_schema.PlainTextLine(title="A description of the creator",
-									   description="Possibly one or more names or even an organization.",
-									   required=False,
-									   default='' )
+	title = PlainTextLine(title="The title of the content",
+						  required=False,
+						  default='')
+	description = PlainText(title="A short description of the content",
+							required=False,
+							default='')
+	creator = PlainTextLine(title="A description of the creator",
+							description="Possibly one or more names or even an organization.",
+							required=False,
+							default='')
 
-	images = ListOrTuple( Object(IImageMetadata),
+	images = ListOrTuple(Object(IImageMetadata),
 						  title="Any images associated with this content, typically thumbnails",
 						  default=())
 
-	mimeType = TextLine(
-		title="The Mime Type of the content",
-		constraint=mimeTypeConstraint,
-		required=False )
+	mimeType = TextLine(title="The Mime Type of the content",
+						constraint=mimeTypeConstraint,
+						required=False)
 
 	contentLocation = TextLine(title="The canonical URL of the content",
 							   description=("After metadata extraction, we may have obtained"
@@ -121,7 +120,7 @@ class IContentMetadata(interface.Interface):
 							  description=("The unprocessed, original location of the content"
 											" used to find the metadata. May be a local file"
 											" path or a URL."),
-									  required=False )
+									  required=False)
 	sourcePath = TextLine(title="A local file path to the content",
 						  description=("If the content was a local file, or"
 									   " had to be downloaded to a temporary file"
@@ -145,7 +144,7 @@ class IContentMetadataExtractor(interface.Interface):
 	they handle.
 	"""
 
-	def extract_metadata( args ):
+	def extract_metadata(args):
 		"""
 		Called with an :class:`IContentMetadataExtractorArgs`.
 
@@ -158,7 +157,7 @@ class IContentMetadataURLHandler(interface.Interface):
 	a URL scheme.
 	"""
 
-	def __call__( url ):
+	def __call__(url):
 		"""
 		Called with a string giving the URL.
 
@@ -168,10 +167,14 @@ class IContentMetadataURLHandler(interface.Interface):
 class IStopWords(interface.Interface):
 
 	def stopwords(language):
-		"""return stop word for the specified language"""
+		"""
+		return stop word for the specified language
+		"""
 
 	def available_languages():
-		"available languages"
+		"""
+		available languages
+		"""
 
 import zope.deferredimport
 zope.deferredimport.initialize()

@@ -38,7 +38,7 @@ setup(
 		'Operating System :: OS Independent',
 		'Programming Language :: Python :: 2',
 		'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: Implementation :: CPython'
+		'Programming Language :: Python :: Implementation :: CPython'
 	],
 	packages=find_packages('src'),
 	package_dir={'': 'src'},
@@ -46,22 +46,22 @@ setup(
 	tests_require=TESTS_REQUIRE,
 	install_requires=[
 		'setuptools',
-        'nltk',
-        'numpy' if not IS_PYPY else '',
-        'pyquery',
-        'PyPDF2',
-        'rdflib',
-        'repoze.lru',
+		'nltk',
+		'numpy',
+		'pyquery',
+		'PyPDF2',
+		'rdflib',
+		'repoze.lru',
 		'requests',
-        'Whoosh',
-        'zope.cachedescriptors',
+		'Whoosh',
+		'zope.cachedescriptors',
 		'zope.component',
 		'zope.interface',
-        'zope.location',
-        'zope.mimetype',
+		'zope.location',
+		'zope.mimetype',
 		'zope.security',
-        'zope.schema',
-        'zopyx.txng3.ext' if not IS_PYPY else '',
+		'zope.schema',
+		'zopyx.txng3.ext' if not IS_PYPY else '',
 		'nti.common',
 		'nti.contentfragments',
 		'nti.schema'
@@ -69,9 +69,6 @@ setup(
 	extras_require={
 		'test': TESTS_REQUIRE,
 	},
-	dependency_links=[
-		'git+https://github.com/NextThought/nti.schema.git#egg=nti.schema',
-		'git+https://github.com/NextThought/nti.nose_traceback_info.git#egg=nti.nose_traceback_info'
-	],
+	dependency_links=[],
 	entry_points=entry_points
 )
