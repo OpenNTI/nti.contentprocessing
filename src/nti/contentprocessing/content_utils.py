@@ -26,23 +26,23 @@ try:
 except ImportError:
 	from whoosh.support.levenshtein import relative
 
-from nltk.tokenize import RegexpTokenizer
-
 import repoze.lru
 
 from nti.contentfragments.interfaces import IPlainTextContentFragment
 
-from . import space_pattern
-from . import non_alpha_pattern
-from . import special_regexp_chars
-from . import default_word_tokenizer_pattern
-from . import default_word_tokenizer_expression
+from .tokenizer import DefaultRegexpTokenizer
 
 from .interfaces import IWordSimilarity
 from .interfaces import IContentTokenizer
 from .interfaces import IWordTokenizerPattern
 from .interfaces import IContentTranslationTable
 from .interfaces import IWordTokenizerExpression
+
+from . import space_pattern
+from . import non_alpha_pattern
+from . import special_regexp_chars
+from . import default_word_tokenizer_pattern
+from . import default_word_tokenizer_expression
 
 def get_content_translation_table(lang='en'):
 	table = component.queryUtility(IContentTranslationTable, name=lang)
@@ -88,8 +88,9 @@ class _ContentTokenizer(object):
 
 	__slots__ = ()
 
-	tokenizer = RegexpTokenizer(_default_word_tokenizer_expression(),
-								flags=re.MULTILINE | re.DOTALL | re.UNICODE)
+	tokenizer = DefaultRegexpTokenizer(
+						_default_word_tokenizer_expression(),
+						flags=re.MULTILINE | re.DOTALL | re.UNICODE)
 
 	@classmethod
 	def tokenize(cls, content):
@@ -97,7 +98,8 @@ class _ContentTokenizer(object):
 			return ()
 
 		plain_text = cls.to_plain_text(content)
-		return cls.tokenizer.tokenize(plain_text)
+		result = cls.tokenizer.tokenize(plain_text)
+		return result
 
 	@classmethod
 	def to_plain_text(cls, content):
