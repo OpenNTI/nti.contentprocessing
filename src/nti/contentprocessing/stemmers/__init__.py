@@ -20,6 +20,6 @@ from .interfaces import IStemmer
 
 @repoze.lru.lru_cache(1000)
 def stem_word(word, lang='en', name=''):
-    stemmer = component.getUtility(IStemmer, name=name)
-    result = stemmer.stem(unicode(word), lang) if word else None
-    return result
+	stemmer = component.getUtility(IStemmer, name=name)
+	result = stemmer.stem(unicode(word), lang) if word else None
+	return result

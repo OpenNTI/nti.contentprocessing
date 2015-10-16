@@ -18,7 +18,7 @@ try:
 except ImportError:
 	class PorterStemmer(object):
 		def stem(self, x): return x
-	
+
 from .interfaces import IStemmer
 
 @interface.implementer(IStemmer)

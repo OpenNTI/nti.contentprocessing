@@ -15,7 +15,7 @@ from zope import interface
 
 try:
 	from zopyx.txng3.ext import stemmer
-except ImportError:
+except ImportError: #PyPy
 	stemmer = None
 
 from .interfaces import IStemmer
@@ -44,6 +44,7 @@ class _ZopyYXStemmer(object):
 		if stemmer is not None:
 			token = unicode(token)
 			result = self._stemmer(lang).stem((token,))
-			return result[0] if result else token
+			result = result[0] if result else token
 		else:
-			return token
+			result = token
+		return result

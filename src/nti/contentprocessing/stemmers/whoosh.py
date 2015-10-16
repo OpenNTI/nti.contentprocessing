@@ -14,20 +14,20 @@ logger = __import__('logging').getLogger(__name__)
 from zope import interface
 
 try:
-    from whoosh.lang import stemmer_for_language
+	from whoosh.lang import stemmer_for_language
 except ImportError:
-    stemmer_for_language = lambda x: x
-    
+	stemmer_for_language = lambda x: x
+
 from .interfaces import IStemmer
 
 @interface.implementer(IStemmer)
 class _WhooshStemmer(object):
 
-    def __init__(self, *args, **kwargs):
-        pass
+	def __init__(self, *args, **kwargs):
+		pass
 
-    def stem(self, token, language='en'):
-        stemmer = stemmer_for_language(language)
-        token = unicode(token)
-        result = stemmer(token)
-        return result if result else token
+	def stem(self, token, language='en'):
+		stemmer = stemmer_for_language(language)
+		token = unicode(token)
+		result = stemmer(token)
+		return result if result else token
