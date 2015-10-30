@@ -15,7 +15,6 @@ logger = __import__('logging').getLogger(__name__)
 
 import os
 import six
-import rdflib
 import shutil
 import string
 import pyquery
@@ -206,121 +205,6 @@ def get_metadata_from_content_location(location):
 
 	# Ok, assume a local path.
 	return _get_metadata_from_path(location)
-
-@interface.implementer(IContentMetadataExtractor)
-class _HTMLExtractor(object):
-
-	def extract_metadata(self, args):
-		result = ContentMetadata()
-		# Extract metadata. Need to handle OpenGraph
-		# as well as twitter, with a final fallback to some
-		# page attributes
-		result = self._extract_opengraph(result, args)
-		result = self._extract_twitter(result, args)
-		result = self._extract_page(result, args)
-		return result
-
-	def _extract_opengraph(self, result, args):
-		# The opengraph metadata is preferred if we can get
-		# it. It may have one of two different
-		# namespaces, depending on the data:
-		# http://opengraphprotocol.org/schema/
-		# http://ogp.me/ns#
-		graph = rdflib.Graph()
-		# The arguments to parse are quite sensitive.
-		# If we are not careful, it can wind up trying
-		# to re-open the URL and using
-		# the wrong data or content type. Thus,
-		# we do not provide the location argument,
-		# and we do force the media type.
-		graph.parse(data=args.text, format='rdfa',
-					publicID=args.__name__, media_type='text/html')
-
-		nss = (rdflib.Namespace('http://ogp.me/ns#'),
-			   rdflib.Namespace('http://opengraphprotocol.org/schema/'))
-
-		pairs = (('title', 'title'), ('url', 'href'), ('image', 'image'),
-				 ('description', 'description'))
-
-		for ns_name, attr_name in pairs:
-			# Don't overwrite
-			if getattr(result, attr_name, None):
-				continue
-
-			triples = \
-				graph.triples_choices((None, [getattr(x, ns_name) for x in nss], None))
-
-			for _, _, val in triples:
-				if ns_name == 'image':
-					if not result.images:
-						result.images = []
-					image = ImageMetadata(url=val.toPython())
-					image.__parent__ = result
-					image.__name__ = image.url
-					# FIXME: If there are multiple image elements,
-					# their relative order is not retained. This means
-					# that if they provide height and width values,
-					# we have no way to associate that with them.
-					# We can only do it if there is exactly one image.
-					result.images.append(image)
-				else:
-					setattr(result, attr_name, val.toPython())
-					break
-
-		if len(result.images) == 1:
-			for k in 'height', 'width':
-				triples = \
-					graph.triples_choices(
-							(None, [getattr(x, 'image:' + k) for x in nss], None))
-				for _, _, val in triples:
-					setattr(result.images[0], k, int(val.toPython()))
-		return result
-
-	def _extract_twitter(self, result, args):
-		# Get the twitter card metadata. Stupid twitter cards
-		# are "similar to OpenGraph", except that they are not
-		# valid RDFa for no apparent reason, so they don't actually
-		# have a namespace, just a prefix. idiots. Fortunately,
-		# twitter will parse OG if present, which it usually seems to
-		# be. Thus the stupid twitter metadata is only a fallback.
-
-		# { meta: attr }
-		prop_names = { 'twitter:description': 'description',
-					   'twitter:title': 'title',
-					   'twitter:url': 'href'}
-
-		dom = args.pyquery_dom
-		for meta in dom.find('meta'):
-			name = meta.get('name')
-			val = meta.get('content')
-
-			if name and val:
-				val = six.text_type(val)
-				if name in prop_names:
-					attr_name = prop_names[name]
-					if not getattr(result, attr_name, None):
-						setattr(result, attr_name, val)
-				elif name == 'twitter:image':
-					if not result.images:
-						result.images = []
-					image = ImageMetadata(url=val)
-					image.__name__ = image.url
-					image.__parent__ = result
-					result.images.append(image)
-		return result
-
-	def _extract_page(self, result, args):
-		if not result.description:
-			meta = args.pyquery_dom(b'meta[name=description]')
-			text = meta.attr['content'] if meta else ''
-			if text:
-				result.description = text
-		if not result.title:
-			title = args.pyquery_dom(b'title')
-			text = title.text()
-			if text:
-				result.title = text
-		return result
 
 @interface.implementer(IContentMetadataExtractor)
 class _PDFExtractor(object):
