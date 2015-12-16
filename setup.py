@@ -50,6 +50,7 @@ setup(
 		'numpy',
 		'pyquery',
 		'PyPDF2',
+		'rdflib',
 		'repoze.lru',
 		'requests',
 		'Whoosh',

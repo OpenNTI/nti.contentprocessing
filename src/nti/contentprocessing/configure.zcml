@@ -13,6 +13,9 @@
 	<include package="nti.contentfragments" />
 	
 	<!-- Metadata Extractors -->
+	<utility name="text/html"
+			 factory=".metadata_extractors._HTMLExtractor" />
+
 	<utility name="application/pdf"
 			 factory=".metadata_extractors._PDFExtractor" />
 
