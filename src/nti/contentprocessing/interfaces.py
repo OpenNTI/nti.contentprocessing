@@ -105,9 +105,9 @@ class IContentMetadata(interface.Interface):
 						  title="Any images associated with this content, typically thumbnails",
 						  default=())
 
-	mimeType = TextLine(title="The Mime Type of the content",
-						constraint=mimeTypeConstraint,
-						required=False)
+	contentMimeType = TextLine(title="The Mime Type of the content",
+							   constraint=mimeTypeConstraint,
+							   required=False)
 
 	contentLocation = TextLine(title="The canonical URL of the content",
 							   description=("After metadata extraction, we may have obtained"

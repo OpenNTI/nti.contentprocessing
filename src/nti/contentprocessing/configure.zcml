@@ -68,4 +68,12 @@
 		value="afe98c5b8fb8586e930d1b2128386d40c136e6d3"
 		zcml:condition="have devmode"/>
 
+	<!-- Externalization -->
+
+    <include package="nti.externalization" />
+    <ext:registerAutoPackageIO
+		root_interfaces=".interfaces.IContentMetadata
+						 .interfaces.IImageMetadata"
+		modules="" />
+
 </configure>

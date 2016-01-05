@@ -35,6 +35,9 @@ from zope.mimetype.interfaces import IMimeTypeGetter
 
 from nti.common.property import alias
 
+from nti.externalization.interfaces import IExternalObject
+from nti.externalization.interfaces import LocatedExternalDict
+
 from nti.schema.schema import PermissiveSchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
 
@@ -52,6 +55,9 @@ class ImageMetadata(PermissiveSchemaConfigured):
 	__name__ = None
 	__parent__ = None
 
+	__external_class_name__ = "ImageMetadata"
+	mime_type = mimeType = 'application/vnd.nextthought.metadata.imagemetadata'
+
 	createDirectFieldProperties(IImageMetadata)
 
 @interface.implementer(IContentMetadata, IContained)
@@ -62,6 +68,9 @@ class ContentMetadata(PermissiveSchemaConfigured):
 
 	__name__ = None
 	__parent__ = None
+
+	__external_class_name__ = "ContentMetadata"
+	mime_type = mimeType = 'application/vnd.nextthought.metadata.contentmetadata'
 
 	createDirectFieldProperties(IContentMetadata, adapting=True)
 
@@ -141,7 +150,7 @@ def _get_metadata_from_mime_type(location, mime_type, args_factory):
 
 	if result is not None:
 		result.sourceLocation = location
-		result.mimeType = six.text_type(mime_type)
+		result.contentMimeType = six.text_type(mime_type)
 
 	return result, args
 
@@ -183,6 +192,22 @@ def _get_metadata_from_path(location):
 		result.sourcePath = location
 
 	return result
+
+def get_metadata_from_http_url(url):
+	"""
+	Given a remote http or https url attempt to extract metadata 
+	from it and return an :class:`.IContentMetadata` object.
+
+	Unlike get_metadata_from_content_location which may check local files
+	or allow urls with other schemes a url with scheme other than http or https
+	will raise a ValueError
+	"""
+
+	urlscheme = urlparse.urlparse(url).scheme
+	if urlscheme and urlscheme.startswith('http'):
+		return _get_metadata_from_url(urlscheme, url)
+	else:
+		raise ValueError( 'unsupported url scheme', urlscheme )
 
 def get_metadata_from_content_location(location):
 	"""
@@ -314,12 +339,12 @@ class _HTMLExtractor(object):
 			meta = args.pyquery_dom(b'meta[name=description]')
 			text = meta.attr['content'] if meta else ''
 			if text:
-				result.description = text
+				result.description = unicode(text)
 		if not result.title:
 			title = args.pyquery_dom(b'title')
 			text = title.text()
 			if text:
-				result.title = text
+				result.title = unicode(text)
 		return result
 
 @interface.implementer(IContentMetadataExtractor)
