@@ -32,11 +32,9 @@ from zope.cachedescriptors.property import Lazy
 from zope.location.interfaces import IContained
 
 from zope.mimetype.interfaces import IMimeTypeGetter
+from zope.mimetype.interfaces import IContentTypeAware
 
 from nti.common.property import alias
-
-from nti.externalization.interfaces import IExternalObject
-from nti.externalization.interfaces import LocatedExternalDict
 
 from nti.schema.schema import PermissiveSchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
@@ -46,7 +44,7 @@ from .interfaces import IContentMetadata
 from .interfaces import IContentMetadataExtractor
 from .interfaces import IContentMetadataURLHandler
 
-@interface.implementer(IImageMetadata, IContained)
+@interface.implementer(IImageMetadata, IContained, IContentTypeAware)
 class ImageMetadata(PermissiveSchemaConfigured):
 	"""
 	Default implementation of :class:`.IImageMetadata`
@@ -60,7 +58,7 @@ class ImageMetadata(PermissiveSchemaConfigured):
 
 	createDirectFieldProperties(IImageMetadata)
 
-@interface.implementer(IContentMetadata, IContained)
+@interface.implementer(IContentMetadata, IContained, IContentTypeAware)
 class ContentMetadata(PermissiveSchemaConfigured):
 	"""
 	Default implementation of :class:`.IContentMetadata`
@@ -167,11 +165,12 @@ def _get_metadata_from_url(urlscheme, location):
 
 def _http_scheme_handler(location):
 	# Must use requests, not the url= argument, as
-	# the default Python User-Agent is blocked (note: pyquery 1.2.4 starts using requests internally by default)
+	# the default Python User-Agent is blocked
+	# (note: pyquery 1.2.4 starts using requests internally by default)
 	# The custom user-agent string is to trick Google into sending UTF-8.
 	response = requests.get(location,
-							 headers={'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"},
-							 stream=True)
+							headers={'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"},
+							stream=True)
 	# Get the content type, splitting off encoding, etc
 	mime_type = response.headers.get('content-type').split(';', 1)[0]
 
@@ -186,16 +185,17 @@ interface.directlyProvides(_http_scheme_handler, IContentMetadataURLHandler)
 
 def _get_metadata_from_path(location):
 	mime_type = component.getUtility(IMimeTypeGetter)(name=location)
-	result, _ = _get_metadata_from_mime_type(location, mime_type, lambda: _file_args(location))
+	result, _ = _get_metadata_from_mime_type(location,
+											 mime_type,
+											 lambda: _file_args(location))
 
 	if result is not None:
 		result.sourcePath = location
-
 	return result
 
 def get_metadata_from_http_url(url):
 	"""
-	Given a remote http or https url attempt to extract metadata 
+	Given a remote http or https url attempt to extract metadata
 	from it and return an :class:`.IContentMetadata` object.
 
 	Unlike get_metadata_from_content_location which may check local files
@@ -207,7 +207,7 @@ def get_metadata_from_http_url(url):
 	if urlscheme and urlscheme.startswith('http'):
 		return _get_metadata_from_url(urlscheme, url)
 	else:
-		raise ValueError( 'unsupported url scheme', urlscheme )
+		raise ValueError('unsupported url scheme', urlscheme)
 
 def get_metadata_from_content_location(location):
 	"""

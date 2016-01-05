@@ -64,6 +64,7 @@ setup(
 		'zopyx.txng3.ext' if not IS_PYPY else '',
 		'nti.common',
 		'nti.contentfragments',
+		'nti.externalization',
 		'nti.schema'
 	],
 	extras_require={
