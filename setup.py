@@ -38,7 +38,8 @@ setup(
 		'Operating System :: OS Independent',
 		'Programming Language :: Python :: 2',
 		'Programming Language :: Python :: 2.7',
-		'Programming Language :: Python :: Implementation :: CPython'
+		'Programming Language :: Python :: Implementation :: CPython',
+		'Programming Language :: Python :: Implementation :: PyPy'
 	],
 	packages=find_packages('src'),
 	package_dir={'': 'src'},
@@ -61,7 +62,7 @@ setup(
 		'zope.mimetype',
 		'zope.security',
 		'zope.schema',
-		'zopyx.txng3.ext' if not IS_PYPY else '',
+		'zopyx.txng3.ext',
 		'nti.common',
 		'nti.contentfragments',
 		'nti.schema'
