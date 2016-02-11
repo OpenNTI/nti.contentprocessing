@@ -18,10 +18,13 @@ import six
 import rdflib
 import shutil
 import string
-import pyquery
-import requests
 import tempfile
 import urlparse
+
+import pyquery
+
+import requests
+
 import PyPDF2 as pyPdf
 
 from zope import component
@@ -36,13 +39,13 @@ from zope.mimetype.interfaces import IContentTypeAware
 
 from nti.common.property import alias
 
+from nti.contentprocessing.interfaces import IImageMetadata
+from nti.contentprocessing.interfaces import IContentMetadata
+from nti.contentprocessing.interfaces import IContentMetadataExtractor
+from nti.contentprocessing.interfaces import IContentMetadataURLHandler
+
 from nti.schema.schema import PermissiveSchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
-
-from .interfaces import IImageMetadata
-from .interfaces import IContentMetadata
-from .interfaces import IContentMetadataExtractor
-from .interfaces import IContentMetadataURLHandler
 
 @interface.implementer(IImageMetadata, IContained, IContentTypeAware)
 class ImageMetadata(PermissiveSchemaConfigured):
