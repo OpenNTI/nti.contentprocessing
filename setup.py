@@ -19,10 +19,6 @@ TESTS_REQUIRE = [
 	'nti.testing'
 ]
 
-import platform
-py_impl = getattr(platform, 'python_implementation', lambda: None)
-IS_PYPY = py_impl() == 'PyPy'
-
 setup(
 	name='nti.contentprocessing',
 	version=VERSION,
