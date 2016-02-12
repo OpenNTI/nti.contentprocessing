@@ -42,10 +42,10 @@ from nti.contentfragments.punctuation import default_punk_mark_pattern_plus as d
 from nti.contentfragments.punctuation import default_punk_mark_expression_plus as default_punk_char_expression_plus
 
 # Re-export common functions
-from .content_utils import normalize
-from .content_utils import rank_words
-from .content_utils import tokenize_content
-from .content_utils import get_content_translation_table
+from nti.contentprocessing.content_utils import normalize
+from nti.contentprocessing.content_utils import rank_words
+from nti.contentprocessing.content_utils import tokenize_content
+from nti.contentprocessing.content_utils import get_content_translation_table
 split_content = tokenize_content
 
-from .ngrams_utils import compute_ngrams
+from nti.contentprocessing.ngrams_utils import compute_ngrams

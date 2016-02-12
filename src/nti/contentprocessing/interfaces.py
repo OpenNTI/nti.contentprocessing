@@ -11,6 +11,11 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
+from zope.mimetype.interfaces import mimeTypeConstraint
+
+from nti.contentfragments.schema import PlainText
+from nti.contentfragments.schema import PlainTextLine
+
 from nti.schema.field import Int
 from nti.schema.field import Number
 from nti.schema.field import Object
@@ -65,11 +70,6 @@ class IAlchemyAPIKey(interface.Interface):
 	value = interface.Attribute("The actual key value")
 
 # Metadata extraction
-
-from zope.mimetype.interfaces import mimeTypeConstraint
-
-from nti.contentfragments.schema import PlainText
-from nti.contentfragments.schema import PlainTextLine
 
 class IImageMetadata(interface.Interface):
 	"""

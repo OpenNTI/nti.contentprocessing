@@ -16,9 +16,9 @@ from zope import interface
 from nti.common.property import alias as aka
 from nti.common.representation import WithRepr
 
-from nti.schema.schema import EqHash
+from nti.contentprocessing.interfaces import IAlchemyAPIKey
 
-from .interfaces import IAlchemyAPIKey
+from nti.schema.schema import EqHash
 
 @WithRepr
 @EqHash('name', 'value')

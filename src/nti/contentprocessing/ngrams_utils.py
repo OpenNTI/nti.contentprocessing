@@ -18,12 +18,12 @@ import repoze.lru
 from zope import component
 from zope import interface
 
-from .content_utils import tokenize_content
+from nti.contentprocessing import default_ngram_maxsize
+from nti.contentprocessing import default_ngram_minsize
 
-from .interfaces import INgramComputer
+from nti.contentprocessing.content_utils import tokenize_content
 
-from . import default_ngram_maxsize
-from . import default_ngram_minsize
+from nti.contentprocessing.interfaces import INgramComputer
 
 @repoze.lru.lru_cache(5000)
 def _ngram_cache(text, minsize=3, maxsize=None, unique=True, lower=True):

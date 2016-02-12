@@ -30,19 +30,19 @@ import repoze.lru
 
 from nti.contentfragments.interfaces import IPlainTextContentFragment
 
-from .tokenizer import DefaultRegexpTokenizer
+from nti.contentprocessing import space_pattern
+from nti.contentprocessing import non_alpha_pattern
+from nti.contentprocessing import special_regexp_chars
+from nti.contentprocessing import default_word_tokenizer_pattern
+from nti.contentprocessing import default_word_tokenizer_expression
 
-from .interfaces import IWordSimilarity
-from .interfaces import IContentTokenizer
-from .interfaces import IWordTokenizerPattern
-from .interfaces import IContentTranslationTable
-from .interfaces import IWordTokenizerExpression
+from nti.contentprocessing.interfaces import IWordSimilarity
+from nti.contentprocessing.interfaces import IContentTokenizer
+from nti.contentprocessing.interfaces import IWordTokenizerPattern
+from nti.contentprocessing.interfaces import IContentTranslationTable
+from nti.contentprocessing.interfaces import IWordTokenizerExpression
 
-from . import space_pattern
-from . import non_alpha_pattern
-from . import special_regexp_chars
-from . import default_word_tokenizer_pattern
-from . import default_word_tokenizer_expression
+from nti.contentprocessing.tokenizer import DefaultRegexpTokenizer
 
 def get_content_translation_table(lang='en'):
 	table = component.queryUtility(IContentTranslationTable, name=lang)

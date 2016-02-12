@@ -13,7 +13,7 @@ from zope import component
 
 from zope.component.interfaces import ComponentLookupError
 
-from .interfaces import IAlchemyAPIKey
+from nti.contentprocessing.interfaces import IAlchemyAPIKey
 
 def getAlchemyAPIKey(name=None, error=True):
 	if name is not None:

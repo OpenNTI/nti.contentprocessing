@@ -15,13 +15,14 @@ logger = __import__('logging').getLogger(__name__)
 
 import os
 import six
-import rdflib
 import shutil
 import string
 import tempfile
 import urlparse
 
 import pyquery
+
+import rdflib
 
 import requests
 
