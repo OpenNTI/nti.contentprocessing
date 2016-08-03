@@ -19,7 +19,7 @@ from zope import interface
 
 from nti.common.representation import WithRepr
 
-from nti.schema.schema import EqHash
+from nti.schema.eqhash import EqHash
 
 from .interfaces import IContentKeyWord
 from .interfaces import IKeyWordExtractor

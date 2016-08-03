@@ -17,7 +17,7 @@ from zope import interface
 
 from nti.common.representation import WithRepr
 
-from nti.schema.schema import EqHash
+from nti.schema.eqhash import EqHash
 
 from .interfaces import IConcept
 from .interfaces import IConceptSource

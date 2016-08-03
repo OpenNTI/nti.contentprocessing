@@ -12,13 +12,17 @@ logger = __import__('logging').getLogger(__name__)
 import functools
 
 from zope import interface
+
 from zope.schema.fieldproperty import FieldPropertyStoredThroughField as FP
 
 from nti.common.property import alias
+
 from nti.common.representation import WithRepr
 
-from nti.schema.schema import EqHash
+from nti.schema.eqhash import EqHash
+
 from nti.schema.schema import SchemaConfigured
+
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 from .interfaces import ILanguage

@@ -20,7 +20,7 @@ from zope import component
 
 from nti.common.representation import WithRepr
 
-from nti.schema.schema import EqHash
+from nti.schema.eqhash import EqHash
 
 from .. import taggers
 from .. import stemmers
