@@ -18,7 +18,7 @@ from nti.common.representation import WithRepr
 
 from nti.contentprocessing.interfaces import IAlchemyAPIKey
 
-from nti.schema.schema import EqHash
+from nti.schema.eqhash import EqHash
 
 @WithRepr
 @EqHash('name', 'value')

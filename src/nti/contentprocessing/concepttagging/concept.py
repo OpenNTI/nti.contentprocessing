@@ -17,10 +17,10 @@ from zope import interface
 
 from nti.common.representation import WithRepr
 
-from nti.schema.eqhash import EqHash
+from nti.contentprocessing.concepttagging.interfaces import IConcept
+from nti.contentprocessing.concepttagging.interfaces import IConceptSource
 
-from .interfaces import IConcept
-from .interfaces import IConceptSource
+from nti.schema.eqhash import EqHash
 
 @WithRepr
 @EqHash('uri','source')

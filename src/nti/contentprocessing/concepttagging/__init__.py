@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Concept tagging module
-
 .. $Id$
 """
 
@@ -13,7 +11,7 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import component
 
-from .interfaces import IConceptTagger
+from nti.contentprocessing.concepttagging.interfaces import IConceptTagger
 
 def concept_tag(content, name=u''):
 	tagger = component.getUtility(IConceptTagger, name=name)

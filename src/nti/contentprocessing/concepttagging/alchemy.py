@@ -17,12 +17,12 @@ from cStringIO import StringIO
 
 from zope import interface
 
-from ..utils import getAlchemyAPIKey
+from nti.contentprocessing.concepttagging.concept import Concept
+from nti.contentprocessing.concepttagging.concept import ConceptSource
 
-from .concept import Concept
-from .concept import ConceptSource
+from nti.contentprocessing.concepttagging.interfaces import IConceptTagger
 
-from .interfaces import IConceptTagger
+from nti.contentprocessing.utils import getAlchemyAPIKey
 
 ALCHEMYAPI_LIMIT_KB = 150
 ALCHEMYAPI_URL = u'http://access.alchemyapi.com/calls/text/TextGetRankedConcepts'
@@ -32,7 +32,7 @@ def get_ranked_concepts(content, name=None, **kwargs):
 	headers = {u'content-type': u'application/x-www-form-urlencoded'}
 	params = {u'text':unicode(content), u'apikey':apikey.value, u'outputMode':u'json'}
 	params.update(kwargs)
-			
+
 	r = requests.post(ALCHEMYAPI_URL, data=params, headers=headers)
 	data = r.json()
 
@@ -53,7 +53,7 @@ def get_ranked_concepts(content, name=None, **kwargs):
 		result = ()
 		logger.error('Invalid request status while getting ranked concepts; %s',
 					 data.get('status', ''))
-		
+
 	return result
 
 @interface.implementer(IConceptTagger)
