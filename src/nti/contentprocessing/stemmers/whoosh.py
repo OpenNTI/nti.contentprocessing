@@ -18,7 +18,7 @@ try:
 except ImportError:
 	stemmer_for_language = lambda x: x
 
-from .interfaces import IStemmer
+from nti.contentprocessing.stemmers.interfaces import IStemmer
 
 @interface.implementer(IStemmer)
 class _WhooshStemmer(object):

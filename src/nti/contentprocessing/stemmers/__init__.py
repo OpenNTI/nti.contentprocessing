@@ -16,7 +16,7 @@ import repoze.lru
 from zope import component
 from zope import interface
 
-from .interfaces import IStemmer
+from nti.contentprocessing.stemmers.interfaces import IStemmer
 
 @repoze.lru.lru_cache(1000)
 def stem_word(word, lang='en', name=''):

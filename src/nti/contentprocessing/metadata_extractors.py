@@ -45,8 +45,9 @@ from nti.contentprocessing.interfaces import IContentMetadata
 from nti.contentprocessing.interfaces import IContentMetadataExtractor
 from nti.contentprocessing.interfaces import IContentMetadataURLHandler
 
-from nti.schema.schema import PermissiveSchemaConfigured
 from nti.schema.fieldproperty import createDirectFieldProperties
+
+from nti.schema.schema import PermissiveSchemaConfigured
 
 @interface.implementer(IImageMetadata, IContained, IContentTypeAware)
 class ImageMetadata(PermissiveSchemaConfigured):

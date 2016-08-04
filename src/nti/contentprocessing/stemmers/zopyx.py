@@ -18,7 +18,7 @@ try:
 except ImportError: #PyPy
 	stemmer = None
 
-from .interfaces import IStemmer
+from nti.contentprocessing.stemmers.interfaces import IStemmer
 
 lang_translation = {'en':'english', 'es':'spansih', 'ru':'russian',
 					'fr':'french', 'de':'german', 'da':'danish',

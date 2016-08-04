@@ -9,4 +9,4 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from .nltk import DefaultRegexpTokenizer
+from nti.contentprocessing.tokenizer.nltk import DefaultRegexpTokenizer

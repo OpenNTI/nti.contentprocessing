@@ -15,7 +15,7 @@ import repoze.lru
 
 from zope import component
 
-from .interfaces import ITagger
+from nti.contentprocessing.taggers.interfaces import ITagger
 
 @repoze.lru.lru_cache(1000)
 def tag_word(word, lang=u'en'):

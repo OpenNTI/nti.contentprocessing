@@ -34,7 +34,7 @@ def compile_regexp_to_noncapturing(pattern, flags=0):
 				_, subpattern = value
 				value = (None, convert_regexp_to_noncapturing_parsed(subpattern))
 			elif key == sre_constants.GROUPREF:
-				msg = 'Regular expressions with back-references are not supported: {0}'.format(pattern)
+				msg = 'Regular expressions with back-references are not supported: %r' % pattern
 				raise ValueError(msg)
 			res_data.append((key, value))
 		parsed_pattern.data = res_data

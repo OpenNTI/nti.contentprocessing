@@ -27,11 +27,11 @@ from zope import interface
 
 from nltk.tag import DefaultTagger, NgramTagger
 
-from .interfaces import ITagger
-from .interfaces import ITaggedCorpus
-from .interfaces import INLTKTaggedSents
-from .interfaces import INLTKBackoffNgramTagger
-from .interfaces import INLTKBackoffNgramTaggerFactory
+from nti.contentprocessing.taggers.interfaces import ITagger
+from nti.contentprocessing.taggers.interfaces import ITaggedCorpus
+from nti.contentprocessing.taggers.interfaces import INLTKTaggedSents
+from nti.contentprocessing.taggers.interfaces import INLTKBackoffNgramTagger
+from nti.contentprocessing.taggers.interfaces import INLTKBackoffNgramTaggerFactory
 
 def nltk_tagged_corpora():
 	result = {}

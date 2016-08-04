@@ -19,7 +19,7 @@ except ImportError:
 	class PorterStemmer(object):
 		def stem(self, x): return x
 
-from .interfaces import IStemmer
+from nti.contentprocessing.stemmers.interfaces import IStemmer
 
 @interface.implementer(IStemmer)
 class _PorterStemmer(object):

@@ -16,7 +16,7 @@ from zope import interface
 
 from nti.common.property import Lazy
 
-from ..interfaces import IStopWords
+from nti.contentprocessing.interfaces import IStopWords
 
 @interface.implementer(IStopWords)
 class FileBasedStopWords(object):
