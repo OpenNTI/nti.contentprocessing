@@ -19,13 +19,13 @@ from nti.common.property import alias
 
 from nti.common.representation import WithRepr
 
+from nti.contentprocessing.langdetection.interfaces import ILanguage
+
 from nti.schema.eqhash import EqHash
 
 from nti.schema.schema import SchemaConfigured
 
 from nti.schema.fieldproperty import createDirectFieldProperties
-
-from .interfaces import ILanguage
 
 @WithRepr
 @EqHash('code',)

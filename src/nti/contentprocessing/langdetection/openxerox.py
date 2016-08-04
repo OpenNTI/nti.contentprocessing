@@ -15,9 +15,9 @@ import requests
 
 from zope import interface
 
-from . import Language
+from nti.contentprocessing.langdetection import Language
 
-from .interfaces import ILanguageDetector
+from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
 @interface.implementer(ILanguageDetector)
 class _OpenXeroxLanguageDetector(object):

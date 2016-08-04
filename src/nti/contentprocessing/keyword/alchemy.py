@@ -17,11 +17,10 @@ from cStringIO import StringIO
 
 from zope import interface
 
-from ..utils import getAlchemyAPIKey
+from nti.contentprocessing.keyword import ContentKeyWord
+from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 
-from . import ContentKeyWord
-
-from .interfaces import IKeyWordExtractor
+from nti.contentprocessing.utils import getAlchemyAPIKey
 
 ALCHEMYAPI_LIMIT_KB = 150
 ALCHEMYAPI_URL = u'http://access.alchemyapi.com/calls/text/TextGetRankedKeywords'

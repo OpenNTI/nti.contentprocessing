@@ -11,14 +11,14 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
-from .. import Language
+from nti.contentprocessing.langdetection import Language
 
-from ..interfaces import ILanguageDetector
+from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
-from .profile import LanguageProfile
+from nti.contentprocessing.langdetection.tika.identifier import initProfiles
+from nti.contentprocessing.langdetection.tika.identifier import LanguageIdentifier
 
-from .identifier import initProfiles
-from .identifier import LanguageIdentifier
+from nti.contentprocessing.langdetection.tika.profile import LanguageProfile
 
 _profiles_loaded = False
 def loadProfiles():

@@ -20,15 +20,15 @@ from zope import component
 
 from nti.common.representation import WithRepr
 
+from nti.contentprocessing import taggers
+from nti.contentprocessing import stemmers
+from nti.contentprocessing import tokenize_content
+
+from nti.contentprocessing.keyword.interfaces import ITermExtractFilter
+from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWord
+from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWordExtractor
+
 from nti.schema.eqhash import EqHash
-
-from .. import taggers
-from .. import stemmers
-from .. import tokenize_content
-
-from .interfaces import ITermExtractFilter
-from .interfaces import ITermExtractKeyWord
-from .interfaces import ITermExtractKeyWordExtractor
 
 @interface.implementer(ITermExtractFilter)
 class DefaultFilter(object):
@@ -38,8 +38,8 @@ class DefaultFilter(object):
 		self.single_strength_min_occur = single_strength_min_occur
 
 	def __call__(self, word, occur, strength):
-		return	(strength == 1 and occur >= self.single_strength_min_occur) or \
-				(strength >= self.no_limit_strength)
+		return		(strength == 1 and occur >= self.single_strength_min_occur) \
+				or	(strength >= self.no_limit_strength)
 
 	def __repr__(self):
 		return "DefaultFilter(%s, %s)" % (self.no_limit_strength,

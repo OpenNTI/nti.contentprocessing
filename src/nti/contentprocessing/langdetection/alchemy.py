@@ -20,14 +20,14 @@ from zope import interface
 from nti.common.property import alias
 from nti.common.representation import WithRepr
 
+from nti.contentprocessing.langdetection import Language
+
+from nti.contentprocessing.langdetection.interfaces import IAlchemyLanguage
+from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
+
+from nti.contentprocessing.utils import getAlchemyAPIKey
+
 from nti.schema.fieldproperty import createDirectFieldProperties
-
-from ..utils import getAlchemyAPIKey
-
-from . import Language
-
-from .interfaces import IAlchemyLanguage
-from .interfaces import ILanguageDetector
 
 ALCHEMYAPI_LIMIT_KB = 150
 ALCHEMYAPI_URL = u'http://access.alchemyapi.com/calls/text/TextGetLanguage'

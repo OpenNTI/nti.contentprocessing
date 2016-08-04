@@ -19,11 +19,11 @@ from zope import interface
 
 from nti.common.representation import WithRepr
 
-from nti.schema.eqhash import EqHash
+from nti.contentprocessing.keyword.interfaces import IContentKeyWord
+from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
+from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWordExtractor
 
-from .interfaces import IContentKeyWord
-from .interfaces import IKeyWordExtractor
-from .interfaces import ITermExtractKeyWordExtractor
+from nti.schema.eqhash import EqHash
 
 @WithRepr
 @EqHash('token',)

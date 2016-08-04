@@ -57,7 +57,7 @@ class QuickStringBuffer(object):
 	def lower(self):
 		t = [x.lower() for x in self.value]
 		return QuickStringBuffer(t)
-	
+
 	def clear(self):
 		self.value = []
 		return self
@@ -144,10 +144,11 @@ class LanguageProfilerBuilder(object):
 	SEPARATOR = u'_'
 	SEP_CHARSEQ = QuickStringBuffer(SEPARATOR)
 
-	_sorted = None
-	ngramcounts = None
 	minLength = DEFAULT_MIN_NGRAM_LENGTH
 	maxLength = DEFAULT_MAX_NGRAM_LENGTH
+
+	_sorted = None
+	ngramcounts = None
 
 	def __init__(self, name=None, minlen=ABSOLUTE_MIN_NGRAM_LENGTH,
 				 maxlen=ABSOLUTE_MAX_NGRAM_LENGTH):
@@ -170,23 +171,23 @@ class LanguageProfilerBuilder(object):
 	def _add_len(self, word, n):
 		if isinstance(word, six.string_types):
 			word = QuickStringBuffer(word)
-		for i in range(0, len(word)-n+1):
+		for i in range(0, len(word) - n + 1):
 			self._add_cs(word.subSequence(i, i + n))
-			
+
 	def _add_qsb(self, word):
 		wlen = len(word)
 		if wlen >= self.minLength:
 			_max = min(self.maxLength, wlen)
-			for i in range(self.minLength, _max+1):
+			for i in range(self.minLength, _max + 1):
 				self._add_cs(word.subSequence(wlen - i, wlen))
-	
+
 	def _add_str(self, word):
 		wlen = len(word)
 		i = self.minLength
 		while i <= self.maxLength and i < wlen:
 			self._add_len(word, i)
 			i += 1
-	
+
 	def add(self, word):
 		if isinstance(word, six.string_types):
 			self._add_str(word)
@@ -201,7 +202,7 @@ class LanguageProfilerBuilder(object):
 			self.ngrams.clear()
 			self.sorted = None
 			self.ngramcounts = None
-			
+
 		self.word.clear().append(self.SEPARATOR)
 		for c in text:
 			c = c.lower()
@@ -212,7 +213,7 @@ class LanguageProfilerBuilder(object):
 				if wlen > 1:
 					self.add(self.word.append(self.SEPARATOR))
 					self.word.clear().append(self.SEPARATOR)
-				
+
 		wlen = len(self.word)
 		if wlen > 1:
 			self.add(self.word.append(self.SEPARATOR))
@@ -242,15 +243,15 @@ class LanguageProfilerBuilder(object):
 				result += abs((other.frequency - self.ngrams[other.seq].frequency)) / 2.0
 			else:
 				result += other.frequency;
-	
+
 		for other in self.sorted:
 			if other.seq in another.ngrams:
 				result += abs((other.frequency - another.ngrams[other.seq].frequency)) / 2.0
 			else:
 				result += other.frequency
-				
+
 		return result
-	
+
 	def load(self, source, encoding="utf-8"):
 		result = 0
 		source = open(str(source), "r") if not hasattr(source, "readlines") else source
@@ -273,7 +274,7 @@ class LanguageProfilerBuilder(object):
 			source.close()
 		self.normalize()
 		return result
-	
+
 	def save(self, target):
 		fp = None
 		close = not hasattr(target, "write")
@@ -296,7 +297,7 @@ class LanguageProfilerBuilder(object):
 
 				lst.extend(sublist)
 				sublist = []
-			
+
 			for e in lst:
 				e.write(fp)
 				fp.write(" %s\n" % e.count)

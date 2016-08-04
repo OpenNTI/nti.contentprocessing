@@ -14,7 +14,7 @@ import six
 import codecs
 import ConfigParser
 
-from .profile import LanguageProfile
+from nti.contentprocessing.langdetection.tika.profile import LanguageProfile
 
 def initProfiles():
 	return LanguageIdentifier.initProfiles()

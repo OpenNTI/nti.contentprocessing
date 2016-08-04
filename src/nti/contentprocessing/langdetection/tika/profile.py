@@ -44,11 +44,13 @@ class LanguageProfile(object):
 		self.n +=1
 		if self.n >= len(self.buffer):
 			self.add(''.join(self.buffer))
+	add_letter = addLetter
 	
 	def addSeparator(self):
 		self.addLetter('_')
 		self.n = 1
-
+	add_separator = addSeparator
+	
 	def close(self):
 		self.addSeparator()
 
@@ -61,7 +63,8 @@ class LanguageProfile(object):
 
 	def getCount(self, ngram):
 		return self.ngrams.get(ngram, 0.0)
-
+	get_count = getCount
+	
 	def distance(self, that):
 		
 		if self.length != that.length:
