@@ -38,12 +38,12 @@ from zope.location.interfaces import IContained
 from zope.mimetype.interfaces import IMimeTypeGetter
 from zope.mimetype.interfaces import IContentTypeAware
 
-from nti.common.property import alias
-
 from nti.contentprocessing.interfaces import IImageMetadata
 from nti.contentprocessing.interfaces import IContentMetadata
 from nti.contentprocessing.interfaces import IContentMetadataExtractor
 from nti.contentprocessing.interfaces import IContentMetadataURLHandler
+
+from nti.property.property import alias
 
 from nti.schema.fieldproperty import createDirectFieldProperties
 
