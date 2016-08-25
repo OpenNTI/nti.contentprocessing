@@ -14,9 +14,9 @@ import codecs
 
 from zope import interface
 
-from nti.common.property import Lazy
-
 from nti.contentprocessing.interfaces import IStopWords
+
+from nti.property.property import Lazy
 
 @interface.implementer(IStopWords)
 class FileBasedStopWords(object):

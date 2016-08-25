@@ -15,11 +15,11 @@ from zope import interface
 
 from zope.schema.fieldproperty import FieldPropertyStoredThroughField as FP
 
-from nti.common.property import alias
-
 from nti.common.representation import WithRepr
 
 from nti.contentprocessing.langdetection.interfaces import ILanguage
+
+from nti.property.property import alias
 
 from nti.schema.eqhash import EqHash
 

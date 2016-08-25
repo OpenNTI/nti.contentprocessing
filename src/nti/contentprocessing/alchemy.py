@@ -13,10 +13,11 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
-from nti.common.property import alias as aka
 from nti.common.representation import WithRepr
 
 from nti.contentprocessing.interfaces import IAlchemyAPIKey
+
+from nti.property.property import alias as aka
 
 from nti.schema.eqhash import EqHash
 

@@ -17,7 +17,6 @@ from cStringIO import StringIO
 
 from zope import interface
 
-from nti.common.property import alias
 from nti.common.representation import WithRepr
 
 from nti.contentprocessing.langdetection import Language
@@ -26,6 +25,8 @@ from nti.contentprocessing.langdetection.interfaces import IAlchemyLanguage
 from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
 from nti.contentprocessing.utils import getAlchemyAPIKey
+
+from nti.property.property import alias
 
 from nti.schema.fieldproperty import createDirectFieldProperties
 
