@@ -13,7 +13,7 @@ logger = __import__('logging').getLogger(__name__)
 
 import sys
 import requests
-from cStringIO import StringIO
+from StringIO import StringIO
 
 from zope import interface
 
