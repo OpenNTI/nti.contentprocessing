@@ -60,3 +60,7 @@ class DefaultRegexpTokenizer(RegexpTokenizer):
 				self._regexp = compile_regexp_to_noncapturing(self._pattern, self._flags)
 			except re.error as e:
 				raise ValueError('Error in regular expression %r: %s' % (self._pattern, e))
+
+
+# import zope.deprecation
+# zope.deprecation.moved('nti.contentprocessing.tokenizer.tokenizer')

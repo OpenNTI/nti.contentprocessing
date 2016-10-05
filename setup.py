@@ -53,6 +53,7 @@ setup(
 		'Whoosh',
 		'zope.cachedescriptors',
 		'zope.component',
+		'zope.deprecation',
 		'zope.interface',
 		'zope.location',
 		'zope.mimetype',
