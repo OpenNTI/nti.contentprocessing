@@ -12,13 +12,10 @@ __docformat__ = "restructuredtext en"
 logger = __import__('logging').getLogger(__name__)
 
 import six
-
 from collections import defaultdict
 
-from zope import interface
 from zope import component
-
-from nti.common.representation import WithRepr
+from zope import interface
 
 from nti.contentprocessing import taggers
 from nti.contentprocessing import stemmers
@@ -27,8 +24,6 @@ from nti.contentprocessing import tokenize_content
 from nti.contentprocessing.keyword.interfaces import ITermExtractFilter
 from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWord
 from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWordExtractor
-
-from nti.schema.eqhash import EqHash
 
 @interface.implementer(ITermExtractFilter)
 class DefaultFilter(object):
@@ -51,8 +46,6 @@ def term_extract_filter(name=u''):
 	result = component.queryUtility(ITermExtractFilter, name=name)
 	return result or DefaultFilter()
 
-@WithRepr
-@EqHash('norm','terms','strength','frequency')
 @interface.implementer(ITermExtractKeyWord)
 class NormRecord(object):
 
@@ -90,6 +83,7 @@ class TermExtractor(object):
 
 	def extract(self, tagged_terms=()):
 		terms = {}
+
 		# phase 1: A little state machine is used to build simple and
 		# composite terms.
 		multiterm = []
@@ -112,13 +106,13 @@ class TermExtractor(object):
 					terms.setdefault(word, 0)
 					terms[word] += 1
 				multiterm = []
+
 		# phase 2: Only select the terms that fulfill the filter criteria.
 		# also create the term strength.
 		result = [	NormRecord(norm, occur, len(norm.split()), terms_norm.get(norm, ()))
 			 		for norm, occur in terms.items()
 			 		if self.term_filter(norm, occur, len(norm.split())) ]
 		result = sorted(result, reverse=True, key=lambda x: x.occur)
-
 		return result
 
 @interface.implementer(ITermExtractKeyWordExtractor)
@@ -135,7 +129,7 @@ class _DefaultKeyWorExtractor():
 		term_filter = term_extract_filter(filtername)
 		extractor = TermExtractor(term_filter)
 		tagged_items = taggers.tag_tokens(tokenized_words, lang)
-		for token, tag in tagged_items:
+		for token, tag in tagged_items or ():
 			root = stemmers.stem_word(token, lang)
 			tagged_terms.append((token, tag, root))
 		result = extractor.extract(tagged_terms)
