@@ -162,10 +162,6 @@ class RegexpTokenizer(TokenizerI):
 class DefaultRegexpTokenizer(RegexpTokenizer):
 
 	def _check_regexp(self):
-		"""
-		Natural Language Toolkit: Internal utility functions
-		Copyright (C) 2001-2015 NLTK Project
-		"""
 		if self._regexp is None:
 			try:
 				# Remove capturing parentheses -- if the regexp contains any
