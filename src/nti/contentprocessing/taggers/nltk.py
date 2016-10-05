@@ -13,25 +13,59 @@ logger = __import__('logging').getLogger(__name__)
 
 import os
 import gzip
-try:
-	import cPickle as pickle
-except ImportError:
-	import pickle
+import pickle
 import inspect
-
-resource_exists = __import__('pkg_resources').resource_exists
-resource_stream = __import__('pkg_resources').resource_stream
 
 from zope import component
 from zope import interface
 
-from nltk.tag import DefaultTagger, NgramTagger
+from nltk.tag import NgramTagger
+from nltk.tag import DefaultTagger 
 
 from nti.contentprocessing.taggers.interfaces import ITagger
-from nti.contentprocessing.taggers.interfaces import ITaggedCorpus
-from nti.contentprocessing.taggers.interfaces import INLTKTaggedSents
-from nti.contentprocessing.taggers.interfaces import INLTKBackoffNgramTagger
-from nti.contentprocessing.taggers.interfaces import INLTKBackoffNgramTaggerFactory
+
+resource_exists = __import__('pkg_resources').resource_exists
+resource_stream = __import__('pkg_resources').resource_stream
+
+# Interfaces
+
+class INLTKTaggedSents(interface.Interface):
+	
+	def __call__(corpus):
+		"""
+		return tagged sents for the specified corpus
+		"""
+
+class ITaggedCorpus(interface.Interface):
+	"""
+	Define a POS tagged corpus.
+	"""
+	
+	def tagged_words():
+		"""
+		return a list of POS tagged words
+		"""
+		
+	def tagged_sents():
+		"""
+		return a list of POS tagged sentences
+		"""
+
+class INLTKBackoffNgramTagger(ITagger):
+	pass
+		
+class INLTKBackoffNgramTaggerFactory(interface.Interface):
+	
+	def __call__(ngrams, corpus, train_sents, limit):
+		"""
+		Create and train a backoff ngram tagger
+		
+		:param ngrams Number of ngrams
+		:param corpus Optional corpus name
+		:param train_sents: Training tagged sents
+		:param limit Max munber of training sents
+		"""
+# Implementation
 
 def nltk_tagged_corpora():
 	result = {}
@@ -39,8 +73,9 @@ def nltk_tagged_corpora():
 		from nltk import corpus
 		from nltk.corpus import LazyCorpusLoader, CorpusReader
 		for k, v in inspect.getmembers(corpus):
-			if isinstance(v, (LazyCorpusLoader, CorpusReader)) and \
-			  hasattr(v,"tagged_sents") and hasattr(v,"tagged_words"):
+			if 		isinstance(v, (LazyCorpusLoader, CorpusReader)) \
+				and hasattr(v,"tagged_sents") \
+				and hasattr(v,"tagged_words"):
 				result[k] = v
 				interface.alsoProvides(v, ITaggedCorpus)
 	except Exception:
@@ -92,8 +127,8 @@ def get_backoff_ngram_tagger(ngrams=3, corpus="brown", limit=-1, train_sents=Non
 		name = "ngrams.%s.%s.%s.pickle.gz" %  (ngrams, corpus, limit)
 		if name in _trained_taggers:
 			tagger = _trained_taggers[name]
-		elif resource_exists('nti.contentprocessing.taggers', name):
-			stream = resource_stream('nti.contentprocessing.taggers', name)
+		elif resource_exists('nti.contentprocessing.taggers.pickles', name):
+			stream = resource_stream('nti.contentprocessing.taggers.pickles', name)
 			tagger = load_tagger_pickle(stream)
 			_trained_taggers[name] = tagger
 

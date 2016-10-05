@@ -17,7 +17,7 @@ from zope import component
 
 from nti.contentprocessing.taggers.interfaces import ITagger
 
-@repoze.lru.lru_cache(1000)
+@repoze.lru.lru_cache(500)
 def tag_word(word, lang=u'en'):
     return tag_tokens((word,), lang)
 

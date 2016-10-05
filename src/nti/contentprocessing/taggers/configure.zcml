@@ -9,21 +9,21 @@
 	<include package="zope.component" />
 	<include package="zope.security" />
 
-    <utility factory=".nltk._NLTKTaggedSents" 
-    		 provides=".interfaces.INLTKTaggedSents"
-			 zcml:condition="installed nltk" />
-    		 
-	<utility factory=".nltk._NLTKBackoffNgramTaggerFactory" 
-			 provides=".interfaces.INLTKBackoffNgramTaggerFactory" 
-			 zcml:condition="installed nltk" />
+	<configure zcml:condition="installed nltk">
 
-	<utility factory=".nltk.default_nltk_tagger"
-			 provides=".interfaces.ITagger"
-			 zcml:condition="installed nltk" />
-			 
-	<utility factory=".nltk.default_nltk_tagger"
-			 provides=".interfaces.ITagger"
-			 name="en"
-			 zcml:condition="installed nltk" />
+	    <utility factory=".nltk._NLTKTaggedSents" 
+	    		 provides=".interfaces.nltk.INLTKTaggedSents" />
+	    		 
+		<utility factory=".nltk._NLTKBackoffNgramTaggerFactory" 
+				 provides=".interfaces.nltk.INLTKBackoffNgramTaggerFactory" />
+	
+		<utility factory=".nltk.default_nltk_tagger"
+				 provides=".interfaces.ITagger" />
+				 
+		<utility factory=".nltk.default_nltk_tagger"
+				 provides=".interfaces.ITagger"
+				 name="en" />
 
+	</configure>
+	
 </configure>
