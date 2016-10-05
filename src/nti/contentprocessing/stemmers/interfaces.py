@@ -13,7 +13,7 @@ from zope import interface
 
 class IStemmer(interface.Interface):
 
-	def stem(token, lang):
+	def stem(token, lang='en'):
 		"""
-		Return the stem of the specified token
+		Return the stem from the specified token
 		"""

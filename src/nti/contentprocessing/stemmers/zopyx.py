@@ -11,12 +11,12 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from zope import interface
-
 try:
 	from zopyx.txng3.ext import stemmer
 except ImportError: #PyPy
 	stemmer = None
+
+from zope import interface
 
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 

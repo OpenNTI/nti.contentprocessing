@@ -11,13 +11,13 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from zope import interface
-
 try:
 	from nltk import PorterStemmer
 except ImportError:
 	class PorterStemmer(object):
 		def stem(self, x): return x
+
+from zope import interface
 
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 

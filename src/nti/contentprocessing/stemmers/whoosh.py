@@ -11,12 +11,12 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-from zope import interface
-
 try:
 	from whoosh.lang import stemmer_for_language
 except ImportError:
 	stemmer_for_language = lambda x: x
+
+from zope import interface
 
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 
