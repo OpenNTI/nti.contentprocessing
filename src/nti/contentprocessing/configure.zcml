@@ -54,7 +54,6 @@
 	<utility factory=".ngrams_utils._DefaultNgramComputer" name="en" />
 
 	<include package=".keyword" />
-	<include package=".taggers" />
 	<include package=".stemmers" />
 	<include package=".stopwords" />
 	<include package=".langdetection" />
