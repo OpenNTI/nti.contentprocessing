@@ -50,10 +50,10 @@ class StanfordPostagger(object):
 	@staticmethod
 	def parse_tags(source):
 		result = []
-		if not hasattr(source, "fp"):
+		if not hasattr(source, "read"):
 			source = StringIO(source)
 			source.seek(0)
-		for line in	source:
+		for line in source:
 			splits = line.strip().split('\t')
 			if splits and len(splits) == 2 and splits[1].isupper():
 				result.append(tuple(splits))
