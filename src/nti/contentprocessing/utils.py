@@ -15,15 +15,11 @@ from zope.component.interfaces import ComponentLookupError
 
 from nti.contentprocessing.interfaces import IAlchemyAPIKey
 
-def getAlchemyAPIKey(name=None, error=True):
-	if name is not None:
-		names = (name,)
-	else:
-		names = (name,)
-	for name in names:
-		result = component.queryUtility(IAlchemyAPIKey, name=name)
-		if result is not None:
-			break
+def get_alchemy_api_key(name=None, error=True):
+	name = ('',) if name is None else (name,)
+	result = component.queryUtility(IAlchemyAPIKey, name=name)
 	if error and result is None:
 		raise ComponentLookupError(IAlchemyAPIKey, name)
 	return result
+getAlchemyAPIKey = get_alchemy_api_key
+

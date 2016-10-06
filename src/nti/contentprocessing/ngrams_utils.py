@@ -18,6 +18,8 @@ import repoze.lru
 from zope import component
 from zope import interface
 
+from nti.common.string import to_unicode
+
 from nti.contentprocessing import default_ngram_maxsize
 from nti.contentprocessing import default_ngram_minsize
 
@@ -50,11 +52,11 @@ def ngram_filter(text, minsize=3, maxsize=None, unique=True, lower=True):
 @repoze.lru.lru_cache(100)
 def compute_ngrams(text, lang="en"):
 	if not text or not isinstance(text, string_types):
-		return ''
-
-	u = component.getUtility(INgramComputer, name=lang)
-	result = u.compute(text)
-	return unicode(result)
+		return u''
+	else:
+		u = component.getUtility(INgramComputer, name=lang)
+		result = u.compute(text)
+		return to_unicode(result)
 
 @interface.implementer(INgramComputer)
 class _DefaultNgramComputer(object):
@@ -67,5 +69,5 @@ class _DefaultNgramComputer(object):
 			result = ngram_filter(text, self.minsize, self.maxsize)
 			result = ' '.join(result)
 		else:
-			result = ''
+			result = u''
 		return result
