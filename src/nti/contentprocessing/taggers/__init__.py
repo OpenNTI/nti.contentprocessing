@@ -16,12 +16,17 @@ import repoze.lru
 from zope import component
 
 from nti.contentprocessing.taggers.interfaces import ITagger
+from nti.contentprocessing.taggers.interfaces import INLTKTagger
+from nti.contentprocessing.taggers.interfaces import IStanfordTagger
 
 @repoze.lru.lru_cache(500)
 def tag_word(word, lang=u'en'):
     return tag_tokens((word,), lang)
 
 def tag_tokens(tokens, lang=u'en'):
-    tagger = component.queryUtility(ITagger, name=lang)
-    result = tagger.tag(tokens) if tagger is not None and tokens else ()
-    return result
+    for provided in (IStanfordTagger, INLTKTagger):
+        tagger = component.queryUtility(provided, name=lang)
+        result = tagger.tag(tokens) if tagger is not None and tokens else ()
+        if result:
+            return result
+    return ()
