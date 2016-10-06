@@ -17,7 +17,18 @@ class ITagger(interface.Interface):
 	"""
 	Defines a POS tagger
 	"""
+
 	def tag(tokens):
 		"""
 		tag the specified tokens
 		"""
+
+class INLTKTagger(ITagger):
+	"""
+	Defines an NTLK POS tagger
+	"""
+
+class IStanfordTagger(ITagger):
+	"""
+	Defines an Standford POS tagger
+	"""

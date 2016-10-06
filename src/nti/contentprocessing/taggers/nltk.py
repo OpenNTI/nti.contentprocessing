@@ -22,7 +22,7 @@ from zope import interface
 from nltk.tag import NgramTagger
 from nltk.tag import DefaultTagger 
 
-from nti.contentprocessing.taggers.interfaces import ITagger
+from nti.contentprocessing.taggers.interfaces import INLTKTagger
 
 resource_exists = __import__('pkg_resources').resource_exists
 resource_stream = __import__('pkg_resources').resource_stream
@@ -51,7 +51,7 @@ class ITaggedCorpus(interface.Interface):
 		return a list of POS tagged sentences
 		"""
 
-class INLTKBackoffNgramTagger(ITagger):
+class INLTKBackoffNgramTagger(INLTKTagger):
 	pass
 		
 class INLTKBackoffNgramTaggerFactory(interface.Interface):
@@ -104,7 +104,7 @@ def get_training_sents(corpus="brown", limit=-1):
 	util = util or _NLTKTaggedSents()
 	return util(corpus, limit)
 
-@interface.implementer(ITagger)
+@interface.implementer(INLTKTagger)
 def load_tagger_pickle(name_or_stream):
 	result = None
 	stream = None
@@ -151,7 +151,7 @@ class _NLTKBackoffNgramTaggerFactory(object):
 
 _the_default_nltk_tagger = None
 
-@interface.implementer(ITagger)
+@interface.implementer(INLTKTagger)
 def default_nltk_tagger():
 	global _the_default_nltk_tagger
 	if _the_default_nltk_tagger is not None:

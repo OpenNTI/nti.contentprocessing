@@ -18,10 +18,10 @@
 				 provides=".interfaces.nltk.INLTKBackoffNgramTaggerFactory" />
 	
 		<utility factory=".nltk.default_nltk_tagger"
-				 provides=".interfaces.ITagger" />
+				 provides=".interfaces.INLTKTagger" />
 				 
 		<utility factory=".nltk.default_nltk_tagger"
-				 provides=".interfaces.ITagger"
+				 provides=".interfaces.INLTKTagger"
 				 name="en" />
 
 	</configure>
