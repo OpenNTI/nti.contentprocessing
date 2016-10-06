@@ -124,11 +124,12 @@ def get_backoff_ngram_tagger(ngrams=3, corpus="brown", limit=-1, train_sents=Non
 	tagger = None
 	if not train_sents:
 		# check for a trained tagger
+		pickles = 'nti.contentprocessing.taggers.pickles'
 		name = "ngrams.%s.%s.%s.pickle.gz" %  (ngrams, corpus, limit)
 		if name in _trained_taggers:
 			tagger = _trained_taggers[name]
-		elif resource_exists('nti.contentprocessing.taggers.pickles', name):
-			stream = resource_stream('nti.contentprocessing.taggers.pickles', name)
+		elif resource_exists(pickles, name):
+			stream = resource_stream(pickles, name)
 			tagger = load_tagger_pickle(stream)
 			_trained_taggers[name] = tagger
 
@@ -154,8 +155,6 @@ _the_default_nltk_tagger = None
 @interface.implementer(INLTKTagger)
 def default_nltk_tagger():
 	global _the_default_nltk_tagger
-	if _the_default_nltk_tagger is not None:
-		return _the_default_nltk_tagger
-
-	_the_default_nltk_tagger = get_backoff_ngram_tagger()
+	if _the_default_nltk_tagger is None:
+		_the_default_nltk_tagger = get_backoff_ngram_tagger()
 	return _the_default_nltk_tagger

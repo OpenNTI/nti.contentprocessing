@@ -19,6 +19,11 @@ from zope import interface
 
 from nti.contentprocessing.taggers.interfaces import IStanfordTagger
 
+LANG_MODELS = {
+	'':'english-left3words-distsim.tagger',
+	'en': 'english-left3words-distsim.tagger'
+}
+
 def stanford_postagger(path):
 	path = path or os.path.join(os.getenv('DATASERVER_DIR'), 'bin')
 	path = os.path.join(os.path.expanduser(path), 'stanford_postagger')
@@ -28,14 +33,9 @@ def is_available(path=None):
 	path = stanford_postagger(path)
 	return os.path.exists(path)
 
-@interface.implementer(IStanfordTagger)
 class StanfordPostagger(object):
 	
-	LANG_MODELS = {
-		'':'english-left3words-distsim.tagger',
-		'en': 'english-left3words-distsim.tagger'
-	}
-	lang = 'en'
+	lang = ''
 
 	def _save_source(self, source):
 		tmp_path = tempfile.mkdtemp()
@@ -59,13 +59,12 @@ class StanfordPostagger(object):
 				result.append(tuple(splits))
 		return result
 	
-	def tag(self, source, lang='en'):
-		lang = lang or self.lang
-		if not is_available() or lang not in self.LANG_MODELS:
+	def tag(self, source):
+		if not is_available():
 			return ()
 		tmp_path = None
 		try:
-			model = self.LANG_MODELS.get(lang)
+			model = LANG_MODELS.get(self.lang)
 			tmp_path = self._save_source(source)
 			process = [stanford_postagger(), model, tmp_path]
 			logger.debug("Executing %s", process)
@@ -76,3 +75,7 @@ class StanfordPostagger(object):
 			return ()
 		finally:
 			shutil.rmtree(tmp_path, True)
+
+@interface.implementer(IStanfordTagger)
+class EnglishStanfordPostagger(StanfordPostagger):	
+	lang = 'en'
