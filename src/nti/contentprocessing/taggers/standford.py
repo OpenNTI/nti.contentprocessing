@@ -24,7 +24,7 @@ LANG_MODELS = {
 	'en': 'english-left3words-distsim.tagger'
 }
 
-def stanford_postagger(path):
+def stanford_postagger(path=None):
 	path = path or os.path.join(os.getenv('DATASERVER_DIR'), 'bin')
 	path = os.path.join(os.path.expanduser(path), 'stanford_postagger')
 	return path
