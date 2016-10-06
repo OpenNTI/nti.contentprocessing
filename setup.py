@@ -50,6 +50,7 @@ setup(
 		'rdflib',
 		'repoze.lru',
 		'requests',
+		'simplejson'
 		'Whoosh',
 		'zope.cachedescriptors',
 		'zope.component',

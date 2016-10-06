@@ -15,22 +15,28 @@ import requests
 
 from zope import interface
 
+from nti.common.string import to_unicode
+
 from nti.contentprocessing.langdetection import Language
 
 from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
+OPEN_XEROX_URL = u'https://services.open.xerox.com/RestOp/LanguageIdentifier/GetLanguageForString'
+
 @interface.implementer(ILanguageDetector)
 class _OpenXeroxLanguageDetector(object):
-
-	url = u'https://services.open.xerox.com/RestOp/LanguageIdentifier/GetLanguageForString'
-
+	
+	__slots__ = ()
+	
 	def __call__(self, content, **kwargs):
 		result = None
-		headers = {u'content-type': u'application/x-www-form-urlencoded', 
-				   u"Accept": "text/plain"}
-		params = {u'document':unicode(content)}
+		headers = {
+			u'content-type': u'application/x-www-form-urlencoded', 
+			u"Accept": "text/plain"
+		}
+		params = {u'document':to_unicode(content)}
 		try:
-			r = requests.post(self.url, data=params, headers=headers)
+			r = requests.post(OPEN_XEROX_URL, data=params, headers=headers)
 			data = r.json()
 			if r.status_code == 200 and data:
 				result = Language(code=data)

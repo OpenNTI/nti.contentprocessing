@@ -13,9 +13,12 @@ logger = __import__('logging').getLogger(__name__)
 
 import sys
 import requests
-from cStringIO import StringIO
+
+from simplejson.compat import StringIO
 
 from zope import interface
+
+from nti.common.string import to_unicode
 
 from nti.contentprocessing.concepttagging.concept import Concept
 from nti.contentprocessing.concepttagging.concept import ConceptSource
@@ -30,7 +33,11 @@ ALCHEMYAPI_URL = u'http://access.alchemyapi.com/calls/text/TextGetRankedConcepts
 def get_ranked_concepts(content, name=None, **kwargs):
 	apikey = getAlchemyAPIKey(name=name)
 	headers = {u'content-type': u'application/x-www-form-urlencoded'}
-	params = {u'text':unicode(content), u'apikey':apikey.value, u'outputMode':u'json'}
+	params = {
+		u'text':to_unicode(content),
+		u'apikey':apikey.value,
+		u'outputMode':u'json'
+	}
 	params.update(kwargs)
 
 	r = requests.post(ALCHEMYAPI_URL, data=params, headers=headers)
@@ -62,19 +69,15 @@ class _AlchemyAPIKConceptTaggger(object):
 	__slots__ = ()
 
 	def __call__(self, content, keyname=None, **kwargs):
+		result = ()
 		content = content or u''
 		size_kb = sys.getsizeof(content) / 1024.0
-		if not content:
-			result = ()
-		elif size_kb > ALCHEMYAPI_LIMIT_KB:
+		if size_kb > ALCHEMYAPI_LIMIT_KB:
 			s = StringIO(content)
 			content = s.read(ALCHEMYAPI_LIMIT_KB)
-
 		try:
-			result = get_ranked_concepts(content, name=keyname, **kwargs) \
-					 if content else ()
+			if content:
+				result = get_ranked_concepts(content, name=keyname, **kwargs)
 		except:
-			result = ()
 			logger.exception('Error while getting concept tags from Alchemy')
-
 		return result

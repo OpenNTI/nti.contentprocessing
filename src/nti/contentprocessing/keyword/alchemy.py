@@ -13,26 +13,29 @@ logger = __import__('logging').getLogger(__name__)
 
 import sys
 import requests
-from StringIO import StringIO
+
+from simplejson.compat import StringIO
 
 from zope import interface
+
+from nti.common.string import to_unicode
 
 from nti.contentprocessing.keyword import ContentKeyWord
 from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 
-from nti.contentprocessing.utils import getAlchemyAPIKey
+from nti.contentprocessing.utils import get_alchemy_api_key
 
 ALCHEMYAPI_LIMIT_KB = 150
 ALCHEMYAPI_URL = u'http://access.alchemyapi.com/calls/text/TextGetRankedKeywords'
 
 def get_keywords(content, name=None, **kwargs):
-	apikey = getAlchemyAPIKey(name=name)
+	apikey = get_alchemy_api_key(name=name)
 	headers = {u'content-type': u'application/x-www-form-urlencoded'}
 	params = {
-				u'text':unicode(content),
-				u'apikey':apikey.value,
-				u'outputMode':u'json'
-			 }
+		u'text':to_unicode(content),
+		u'apikey':apikey.value,
+		u'outputMode':u'json'
+	}
 	params.update(kwargs)
 
 	r = requests.post(ALCHEMYAPI_URL, data=params, headers=headers)
@@ -58,17 +61,12 @@ class _AlchemyAPIKeyWorExtractor(object):
 		result = ()
 		content = content or u''
 		size_kb = sys.getsizeof(content) / 1024.0
-		if not content:
-			result = ()
-		elif size_kb > ALCHEMYAPI_LIMIT_KB:
+		if size_kb > ALCHEMYAPI_LIMIT_KB:
 			s = StringIO(content)
 			content = s.read(ALCHEMYAPI_LIMIT_KB)
-
 		try:
-			result = get_keywords(content, keyname, **kwargs) \
-					 if content else ()
+			if content: 
+				result = get_keywords(content, keyname, **kwargs)
 		except:
-			result = ()
 			logger.exception('Error while getting keywords from Alchemy')
-
 		return result

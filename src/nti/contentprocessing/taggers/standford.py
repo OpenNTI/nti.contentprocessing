@@ -13,7 +13,8 @@ import os
 import shutil
 import tempfile
 import subprocess
-from StringIO import StringIO
+
+from simplejson.compat import StringIO
 
 from zope import interface
 
@@ -41,7 +42,7 @@ class StanfordPostagger(object):
 		tmp_path = tempfile.mkdtemp()
 		tmp_path = os.path.join(tmp_path, 'source.txt')
 		with open(tmp_path, "wb") as f:
-			if isinstance(source, (list, tuple)):
+			if isinstance(source, (list, tuple)): # tokens
 				f.write(' '.join(source))
 			else:
 				f.write(source)
@@ -71,7 +72,7 @@ class StanfordPostagger(object):
 			tags_str = subprocess.check_output(process, stderr=None).strip()
 			return self.parse_tags(tags_str)
 		except Exception:
-			logger.exception("Cannot get POS tags from source")
+			logger.exception("Cannot get POS tags from using Stanford POS tagger")
 			return ()
 		finally:
 			shutil.rmtree(tmp_path, True)

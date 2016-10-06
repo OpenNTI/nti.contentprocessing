@@ -119,12 +119,10 @@ class TermExtractor(object):
 class _DefaultKeyWorExtractor():
 
 	def __call__(self, content, lang='en', filtername=u'', *args, **kwargs):
-
 		if isinstance(content, six.string_types):
 			tokenized_words = tokenize_content(content, lang)
 		else:
 			tokenized_words = content
-
 		tagged_terms = []
 		term_filter = term_extract_filter(filtername)
 		extractor = TermExtractor(term_filter)
