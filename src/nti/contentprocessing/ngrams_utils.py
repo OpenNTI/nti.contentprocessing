@@ -40,7 +40,7 @@ def _ngram_cache(text, minsize=3, maxsize=None, unique=True, lower=True):
 
 def ngram_filter(text, minsize=3, maxsize=None, unique=True, lower=True):
 	tokens = tokenize_content(text)
-	result = set() if unique else []
+	result = set() if unique else list()
 	for text in tokens:
 		ngrams = _ngram_cache(text, minsize, maxsize, unique, lower)
 		if unique:
@@ -54,9 +54,8 @@ def compute_ngrams(text, lang="en"):
 	if not text or not isinstance(text, string_types):
 		return u''
 	else:
-		u = component.getUtility(INgramComputer, name=lang)
-		result = u.compute(text)
-		return to_unicode(result)
+		computer = component.getUtility(INgramComputer, name=lang)
+		return to_unicode(computer.compute(text))
 
 @interface.implementer(INgramComputer)
 class _DefaultNgramComputer(object):
