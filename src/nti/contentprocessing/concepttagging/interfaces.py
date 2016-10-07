@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Concept tagging interfaces
-
 .. $Id$
 """
 
@@ -20,19 +18,19 @@ from nti.schema.field import ValidTextLine
 
 class IConceptSource(interface.Interface):
 	"""
-	represent a concept source entry (e.g. linked data) 
+	Represent a concept source entry (e.g. linked data) 
 	"""
 	source = ValidTextLine(title="source name", required=True)
 	uri = ValidTextLine(title="source uri", required=True)
 
 class IConcept(interface.Interface):
 	"""
-	represent a concept
+	Represent a concept
 	"""
 	text = ValidTextLine(title="concept text", required=True)
 	relevance = Number(title="concept relevance", required=False)
 	sources = ListOrTuple(title="Concept sources", min_length=0,
-						 			 value_type=Object(IConceptSource, title="The source"))
+						  value_type=Object(IConceptSource, title="The source"))
 
 class IConceptTagger(interface.Interface):
 

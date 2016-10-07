@@ -17,7 +17,7 @@ from hamcrest import assert_that
 import os
 import unittest
 
-from nti.contentprocessing.concepttagging import alchemy
+from nti.contentprocessing.concepttagging.alchemy import get_ranked_concepts
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
@@ -33,7 +33,7 @@ class TestConceptTagger(unittest.TestCase):
 			return f.read()
 
 	def test_alchemy_ct(self):
-		concepts = alchemy.get_ranked_concepts(self.sample, "NTI-TEST")
+		concepts = get_ranked_concepts(self.sample, "NTI-TEST")
 		assert_that(concepts, has_length(8))
 		concept = concepts[0]
 		assert_that(concept, is_not(None))

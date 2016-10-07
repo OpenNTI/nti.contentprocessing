@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Concept tagging objects
-
 .. $Id$
 """
 
@@ -44,8 +42,7 @@ class Concept(object):
 
 	@property
 	def sourcemap(self):
-		result = {c.source:c.uri for c in self.sources}
-		return result
+		return {c.source:c.uri for c in self.sources}
 
 	def __str__(self):
 		return self.text

@@ -10,5 +10,6 @@
 	<include package="zope.security" />
 	
 	<utility factory=".alchemy._AlchemyAPIKConceptTaggger" />
+	<utility factory=".alchemy._AlchemyAPIKConceptTaggger" name='en' />
 	
 </configure>

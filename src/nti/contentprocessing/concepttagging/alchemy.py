@@ -68,7 +68,8 @@ class _AlchemyAPIKConceptTaggger(object):
 
 	__slots__ = ()
 
-	def __call__(self, content, keyname=None, **kwargs):
+	@staticmethod
+	def tag(content, keyname=None, **kwargs):
 		result = ()
 		content = content or u''
 		size_kb = sys.getsizeof(content) / 1024.0
@@ -81,3 +82,6 @@ class _AlchemyAPIKConceptTaggger(object):
 		except:
 			logger.exception('Error while getting concept tags from Alchemy')
 		return result
+
+	def __call__(self, content, keyname=None, **kwargs):
+		return self.tag(content, keyname, **kwargs)
