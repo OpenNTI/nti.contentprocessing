@@ -24,7 +24,10 @@ from zope import interface
 try:
 	from zopyx.txng3.ext.levenshtein import ratio as relative
 except ImportError:
-	from whoosh.support.levenshtein import relative
+	try:
+		from whoosh.support.levenshtein import relative
+	except ImportError:
+		relative = lambda x,y: 0
 
 import repoze.lru
 
@@ -60,18 +63,18 @@ def _default_word_tokenizer_pattern():
 def tokenize_content(text, lang='en'):
 	if not text or not isinstance(text, string_types):
 		return ()
-	tokenizer = component.getUtility(IContentTokenizer, name=lang)
-	result = tokenizer.tokenize(text)
-	return result
+	else:
+		tokenizer = component.queryUtility(IContentTokenizer, name=lang)
+		return tokenizer.tokenize(text) if tokenizer is not None else ()
 split_content = tokenize_content
 
 def get_content(text=None, lang="en"):
 	if not text or not isinstance(text, string_types):
-		return ''
-
-	result = tokenize_content(text, lang)
-	result = ' '.join(result)
-	return result
+		return u''
+	else:
+		result = tokenize_content(text, lang)
+		result = ' '.join(result)
+		return result
 
 def normalize(u, form='NFC'):
 	"""
@@ -88,18 +91,16 @@ class _ContentTokenizer(object):
 
 	__slots__ = ()
 
-	tokenizer = DefaultRegexpTokenizer(
-						_default_word_tokenizer_expression(),
-						flags=re.MULTILINE | re.DOTALL | re.UNICODE)
+	tokenizer = DefaultRegexpTokenizer(_default_word_tokenizer_expression(),
+									   flags=re.MULTILINE | re.DOTALL | re.UNICODE)
 
 	@classmethod
 	def tokenize(cls, content):
 		if not content or not isinstance(content, string_types):
 			return ()
-
-		plain_text = cls.to_plain_text(content)
-		result = cls.tokenizer.tokenize(plain_text)
-		return result
+		else:
+			plain_text = cls.to_plain_text(content)
+			return cls.tokenizer.tokenize(plain_text)
 
 	@classmethod
 	def to_plain_text(cls, content):
@@ -115,46 +116,43 @@ class _BaseWordSimilarity(object):
 		return 0
 
 	def rank(self, word, terms, reverse=True):
-		result = sorted(terms, key=lambda w: self.compute(word, w), reverse=reverse)
-		return result
+		return sorted(terms, key=lambda w: self.compute(word, w), reverse=reverse)
 
 class _SequenceMatcherWordSimilarity(_BaseWordSimilarity):
 
 	def compute(self, a, b):
-		result = difflib.SequenceMatcher(None, a, b).ratio()
-		return result
+		return difflib.SequenceMatcher(None, a, b).ratio()
 
 class _LevenshteinWordSimilarity(_BaseWordSimilarity):
 
 	def compute(self, a, b):
-		result = relative(a, b)
-		return result
+		return relative(a, b)
 
 def rank_words(word, terms, reverse=True):
 	ws = component.getUtility(IWordSimilarity)
 	result = ws.rank(word, terms, reverse)
 	return result
 
-default_trans_table = None
+_default_trans_table = None
 
 @interface.implementer(IContentTranslationTable)
 def _default_content_translation_table():
 
-	global default_trans_table
+	global _default_trans_table
 
-	if default_trans_table is None:
+	if _default_trans_table is None:
 		name = resource_filename(__name__, "punctuation-en.txt")
 		with open(name, 'r') as src:
 			lines = src.readlines()
 
-		default_trans_table = {}
+		_default_trans_table = {}
 		for line in lines:
 			line = line.replace('\n', '')
 			splits = line.split('\t')
 			repl = splits[4] or None if len(splits) >= 5 else None
-			default_trans_table[int(splits[0])] = repl
+			_default_trans_table[int(splits[0])] = repl
 
-	return default_trans_table
+	return _default_trans_table
 
 def clean_special_characters(source, replacement=u''):
 	"""

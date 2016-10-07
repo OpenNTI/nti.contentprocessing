@@ -35,6 +35,7 @@ class IContentTokenizer(interface.Interface):
 		"""
 
 class INgramComputer(interface.Interface):
+
 	minsize = Int(title="Min ngram size.", required=True)
 	maxsize = Int(title="Max ngram size", required=False)
 
@@ -93,17 +94,19 @@ class IContentMetadata(interface.Interface):
 	title = PlainTextLine(title="The title of the content",
 						  required=False,
 						  default='')
+
 	description = PlainText(title="A short description of the content",
 							required=False,
 							default='')
+
 	creator = PlainTextLine(title="A description of the creator",
 							description="Possibly one or more names or even an organization.",
 							required=False,
 							default='')
 
 	images = ListOrTuple(Object(IImageMetadata),
-						  title="Any images associated with this content, typically thumbnails",
-						  default=())
+						 title="Any images associated with this content, typically thumbnails",
+						 default=())
 
 	contentMimeType = TextLine(title="The Mime Type of the content",
 							   constraint=mimeTypeConstraint,
@@ -114,13 +117,14 @@ class IContentMetadata(interface.Interface):
 											" a canonical URL for the content, different from"
 											" the source location. For permanent storage and use"
 											" this is the value to use, not the source location."),
-								required=False)
+							   required=False)
 
 	sourceLocation = TextLine(title="The location of the source content",
 							  description=("The unprocessed, original location of the content"
 											" used to find the metadata. May be a local file"
 											" path or a URL."),
-									  required=False)
+							  required=False)
+
 	sourcePath = TextLine(title="A local file path to the content",
 						  description=("If the content was a local file, or"
 									   " had to be downloaded to a temporary file"
