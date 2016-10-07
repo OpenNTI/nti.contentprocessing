@@ -129,8 +129,8 @@ class _LevenshteinWordSimilarity(_BaseWordSimilarity):
 		return relative(a, b)
 
 def rank_words(word, terms, reverse=True):
-	ws = component.getUtility(IWordSimilarity)
-	result = ws.rank(word, terms, reverse)
+	ws = component.queryUtility(IWordSimilarity)
+	result = ws.rank(word, terms, reverse) if ws is not None else 0
 	return result
 
 _default_trans_table = None
