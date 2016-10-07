@@ -15,22 +15,29 @@ try:
 	from nltk import PorterStemmer
 except ImportError:
 	class PorterStemmer(object):
-		def stem(self, x): return x
+		def stem(self, x): 
+			return x
 
 from zope import interface
+
+from nti.common.string import to_unicode
 
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 
 @interface.implementer(IStemmer)
 class _PorterStemmer(object):
 
+	__slots__ = ()
+
 	def __init__(self, *args, **kwargs):
 		pass
 
 	def stem(self, token, lang='en'):
-		token = unicode(token)
-		# The underlying stemmer object is NOT thread safe,
-		# it must not be used concurrently
-		stemmer = PorterStemmer()
-		result = stemmer.stem(token)
-		return result if result else token
+		token = to_unicode(token)
+		if lang == 'en':
+			# The underlying stemmer object is NOT thread safe,
+			# it must not be used concurrently
+			stemmer = PorterStemmer()
+			result = stemmer.stem(token)
+			return result if result else token
+		return token

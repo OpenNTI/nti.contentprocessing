@@ -18,16 +18,24 @@ except ImportError:
 
 from zope import interface
 
+from nti.common.string import to_unicode
+
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 
 @interface.implementer(IStemmer)
 class _WhooshStemmer(object):
 
+	__slots__ = ()
+
 	def __init__(self, *args, **kwargs):
 		pass
 
-	def stem(self, token, language='en'):
-		stemmer = stemmer_for_language(language)
-		token = unicode(token)
-		result = stemmer(token)
-		return result if result else token
+	def stem(self, token, lang='en'):
+		token = to_unicode(token)
+		try:
+			stemmer = stemmer_for_language(lang)
+			result = stemmer(token) if stemmer is not None else token
+			return result if result else token
+		except KeyError:
+			pass
+		return  token
