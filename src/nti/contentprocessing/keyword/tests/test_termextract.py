@@ -21,8 +21,6 @@ class TestKeyWordExtract(unittest.TestCase):
 
 	layer = SharedConfiguringTestLayer
 
-	# features = ()  # force loading the tagger
-
 	@property
 	def sample(self):
 		name = os.path.join(os.path.dirname(__file__), 'sample.txt')

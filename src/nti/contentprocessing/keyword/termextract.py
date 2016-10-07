@@ -130,5 +130,4 @@ class _DefaultKeyWorExtractor():
 		for token, tag in tagged_items or ():
 			root = stemmers.stem_word(token, lang)
 			tagged_terms.append((token, tag, root))
-		result = extractor.extract(tagged_terms)
-		return result
+		return extractor.extract(tagged_terms)

@@ -20,8 +20,9 @@ from zope import interface
 
 from nti.common.string import to_unicode
 
-from nti.contentprocessing.keyword import ContentKeyWord
 from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
+
+from nti.contentprocessing.keyword.model import ContentKeyWord
 
 from nti.contentprocessing.utils import get_alchemy_api_key
 
