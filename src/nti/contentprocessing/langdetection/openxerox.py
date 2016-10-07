@@ -17,7 +17,7 @@ from zope import interface
 
 from nti.common.string import to_unicode
 
-from nti.contentprocessing.langdetection import Language
+from nti.contentprocessing.langdetection.model import Language
 
 from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
@@ -28,7 +28,8 @@ class _OpenXeroxLanguageDetector(object):
 	
 	__slots__ = ()
 	
-	def __call__(self, content, **kwargs):
+	@staticmethod
+	def detect(content):
 		result = None
 		headers = {
 			u'content-type': u'application/x-www-form-urlencoded', 
@@ -48,3 +49,6 @@ class _OpenXeroxLanguageDetector(object):
 			logger.exception('Error while detecting language using OpenXerox')
 
 		return result
+	
+	def __call__(self, content, **kwargs):
+		return self.detect(content)

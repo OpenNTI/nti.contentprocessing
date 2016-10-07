@@ -11,7 +11,7 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
-from nti.contentprocessing.langdetection import Language
+from nti.contentprocessing.langdetection.model import Language
 
 from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
@@ -22,19 +22,23 @@ from nti.contentprocessing.langdetection.tika.profile import LanguageProfile
 
 _profiles_loaded = False
 def loadProfiles():
-    global _profiles_loaded
-    if not _profiles_loaded:
-        initProfiles()
-        _profiles_loaded = True
+	global _profiles_loaded
+	if not _profiles_loaded:
+		initProfiles()
+		_profiles_loaded = True
 
 @interface.implementer(ILanguageDetector)
 class _TikaLanguageDetector(object):
 
-    __slots__ = ()
+	__slots__ = ()
 
-    def __call__(self, content, **kwargs):
-        loadProfiles()
-        profile = LanguageProfile(content)
-        iden = LanguageIdentifier(profile)
-        result = Language(code=iden.language)
-        return result
+	@staticmethod
+	def detect(content, **kwargs):
+		loadProfiles()
+		profile = LanguageProfile(content)
+		iden = LanguageIdentifier(profile)
+		result = Language(code=iden.language)
+		return result
+
+	def __call__(self, content, **kwargs):
+		return self.detect(content)

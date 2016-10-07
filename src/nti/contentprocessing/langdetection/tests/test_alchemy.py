@@ -33,7 +33,7 @@ class TestAlchemyLangDetector(unittest.TestCase):
 
 	@unittest.SkipTest
 	def test_alchemy_detector(self):
-		lang = _AlchemyTextLanguageDetector()(self.sample_en, "NTI-TEST")
+		lang = _AlchemyTextLanguageDetector.detect(self.sample_en, "NTI-TEST")
 		assert_that(lang, is_not(none()))
 		assert_that(lang, has_property('code', is_('en')))
 		assert_that(lang, has_property('name', is_('english')))

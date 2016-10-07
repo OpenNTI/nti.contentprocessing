@@ -11,37 +11,16 @@ logger = __import__('logging').getLogger(__name__)
 
 import functools
 
-from zope import interface
+from zope import component
 
-from zope.schema.fieldproperty import FieldPropertyStoredThroughField as FP
+from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
-from nti.common.representation import WithRepr
+DETECTORS = ('alchemy', 'xerox', 'tika')
 
-from nti.contentprocessing.langdetection.interfaces import ILanguage
-
-from nti.property.property import alias
-
-from nti.schema.eqhash import EqHash
-
-from nti.schema.schema import SchemaConfigured
-
-from nti.schema.fieldproperty import createDirectFieldProperties
-
-@WithRepr
-@EqHash('code',)
-@functools.total_ordering
-@interface.implementer(ILanguage)
-class Language(SchemaConfigured):
-	createDirectFieldProperties(ILanguage)
-
-	def __lt__(self, other):
-		try:
-			return self.code < other.code
-		except AttributeError:
-			return NotImplemented
-
-	def __gt__(self, other):
-		try:
-			return self.code > other.code
-		except AttributeError:
-			return NotImplemented
+def detect_Language(content, name=None):
+	names = (name,) if name else DETECTORS
+	for name in names:
+		detector = component.queryUtility(ILanguageDetector, name=name)
+		if detector is not None:
+			return detector(content)
+	return None

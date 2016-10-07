@@ -22,7 +22,7 @@ from nti.common.representation import WithRepr
 
 from nti.common.string import to_unicode
 
-from nti.contentprocessing.langdetection import Language
+from nti.contentprocessing.langdetection.model import Language
 
 from nti.contentprocessing.langdetection.interfaces import IAlchemyLanguage
 from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
@@ -51,7 +51,8 @@ class _AlchemyTextLanguageDetector(object):
 
 	__slots__ = ()
 
-	def __call__(self, content, keyname=None, **kwargs):
+	@staticmethod
+	def detect(content, keyname=None, **kwargs):
 		result = None
 		content = content or u''
 		size_kb = sys.getsizeof(content) / 1024.0
@@ -64,6 +65,9 @@ class _AlchemyTextLanguageDetector(object):
 		except:
 			logger.exception('Error while detecting language using Alchemy')
 		return result
+	
+	def __call__(self, content, keyname=None, **kwargs):
+		return self.detect(content, keyname=keyname, **kwargs)
 
 def get_language(content, name=None, **kwargs):
 	apikey = get_alchemy_api_key(name=name)
