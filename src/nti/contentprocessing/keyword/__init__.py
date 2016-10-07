@@ -50,11 +50,13 @@ class ContentKeyWord(object):
 			return NotImplemented
 
 def term_extract_key_words(content, lang='en', filtername=u''):
-	extractor = component.getUtility(ITermExtractKeyWordExtractor)
-	result = extractor(content, lang=lang, filtername=filtername)
-	return result
+	extractor = component.queryUtility(ITermExtractKeyWordExtractor, name=lang)
+	if extractor is not None:
+		return extractor(content, lang=lang, filtername=filtername)
+	return ()
 
 def extract_key_words(content):
-	extractor = component.getUtility(IKeyWordExtractor)
-	result = extractor(content)
-	return result
+	extractor = component.queryUtility(IKeyWordExtractor)
+	if extractor is not None:
+		return extractor(content)
+	return ()

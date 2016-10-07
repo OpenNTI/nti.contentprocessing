@@ -43,8 +43,8 @@ def get_keywords(content, name=None, **kwargs):
 
 	if r.status_code == 200 and data.get('status', 'ERROR') == 'OK':
 		keywords = data.get('keywords', ())
-		result = [ContentKeyWord(d['text'], float(d.get('relevance', 0)))
-				  for d in keywords]
+		result = tuple(	ContentKeyWord(d['text'], float(d.get('relevance', 0)))
+				  		for d in keywords)
 	else:
 		result = ()
 		logger.error('Invalid request status while getting keywords from Alchemy; %s',
