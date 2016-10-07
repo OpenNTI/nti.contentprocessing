@@ -12,8 +12,10 @@ __docformat__ = "restructuredtext en"
 logger = __import__('logging').getLogger(__name__)
 
 try:
+	from whoosh.lang import has_stemmer
 	from whoosh.lang import stemmer_for_language
 except ImportError:
+	has_stemmer = lambda x: False
 	stemmer_for_language = lambda x: x
 
 from zope import interface
@@ -32,10 +34,8 @@ class _WhooshStemmer(object):
 
 	def stem(self, token, lang='en'):
 		token = to_unicode(token)
-		try:
+		if has_stemmer(lang):
 			stemmer = stemmer_for_language(lang)
 			result = stemmer(token) if stemmer is not None else token
 			return result if result else token
-		except KeyError:
-			pass
 		return  token
