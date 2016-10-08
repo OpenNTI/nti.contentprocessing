@@ -18,6 +18,8 @@ from nti.common.representation import WithRepr
 from nti.contentprocessing.concepttagging.interfaces import IConcept
 from nti.contentprocessing.concepttagging.interfaces import IConceptSource
 
+from nti.property.property import Lazy
+
 from nti.schema.eqhash import EqHash
 
 @WithRepr
@@ -40,7 +42,7 @@ class Concept(object):
 		self.sources = sources
 		self.relevance = relevance
 
-	@property
+	@Lazy
 	def sourcemap(self):
 		return {c.source:c.uri for c in self.sources}
 
