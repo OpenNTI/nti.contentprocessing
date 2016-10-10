@@ -62,8 +62,9 @@ class _AlchemyAPIKeyWorExtractor(object):
 
 	def __call__(self, content, keyname=None, *args, **kwargs):
 		result = ()
-		content = content or u''
-		size_kb = sys.getsizeof(content) / 1024.0
+		if isinstance(content, (list, tuple)):
+			content = ' '.join(content)
+		size_kb = sys.getsizeof(content or '') / 1024.0
 		if size_kb > ALCHEMYAPI_LIMIT_KB:
 			s = StringIO(content)
 			content = s.read(ALCHEMYAPI_LIMIT_KB)
