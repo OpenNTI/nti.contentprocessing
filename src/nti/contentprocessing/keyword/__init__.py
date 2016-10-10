@@ -20,8 +20,8 @@ def term_extract_key_words(content, lang='en', filtername=u''):
 		return extractor(content, lang=lang, filtername=filtername)
 	return ()
 
-def extract_key_words(content):
-	extractor = component.queryUtility(IKeyWordExtractor)
+def extract_key_words(content, lang='en'):
+	extractor = component.queryUtility(IKeyWordExtractor, name='en')
 	if extractor is not None:
 		return extractor(content)
 	return ()

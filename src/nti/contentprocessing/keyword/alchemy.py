@@ -30,7 +30,9 @@ ALCHEMYAPI_LIMIT_KB = 150
 ALCHEMYAPI_URL = u'http://access.alchemyapi.com/calls/text/TextGetRankedKeywords'
 
 def get_keywords(content, name=None, **kwargs):
-	apikey = get_alchemy_api_key(name=name)
+	apikey = get_alchemy_api_key(name=name, error=False)
+	if apikey is None:
+		return ()
 	headers = {u'content-type': u'application/x-www-form-urlencoded'}
 	params = {
 		u'text':to_unicode(content),
