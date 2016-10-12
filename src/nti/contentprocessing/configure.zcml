@@ -53,6 +53,7 @@
 	<utility factory=".ngrams_utils._DefaultNgramComputer" />
 	<utility factory=".ngrams_utils._DefaultNgramComputer" name="en" />
 
+	<include package=".taggers" />
 	<include package=".keyword" />
 	<include package=".stemmers" />
 	<include package=".stopwords" />

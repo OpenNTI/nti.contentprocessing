@@ -13,7 +13,7 @@ from hamcrest import assert_that
 import os
 import unittest
 
-from nti.contentprocessing.keyword import extract_key_words
+from nti.contentprocessing.keyword import term_extract_key_words
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
@@ -28,7 +28,7 @@ class TestKeyWordExtract(unittest.TestCase):
 			return f.read()
 
 	def test_term_extract(self):
-		terms = extract_key_words(self.sample)
+		terms = term_extract_key_words(self.sample)
 		terms = [(r.token, r.frequency, r.strength) for r in terms]
 		assert_that(sorted(terms),
 					is_(sorted([('blood', 4, 1),
