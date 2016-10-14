@@ -62,19 +62,20 @@ def _default_word_tokenizer_pattern():
 @repoze.lru.lru_cache(500)
 def tokenize_content(text, lang='en'):
 	if not text or not isinstance(text, string_types):
-		return ()
+		result = ()
 	else:
 		tokenizer = component.queryUtility(IContentTokenizer, name=lang)
-		return tokenizer.tokenize(text) if tokenizer is not None else ()
+		result = tokenizer.tokenize(text) if tokenizer is not None else ()
+	return result
 split_content = tokenize_content
 
 def get_content(text=None, lang="en"):
 	if not text or not isinstance(text, string_types):
-		return u''
+		result = u''
 	else:
 		result = tokenize_content(text, lang)
 		result = ' '.join(result)
-		return result
+	return result
 
 def normalize(u, form='NFC'):
 	"""
@@ -97,17 +98,17 @@ class _ContentTokenizer(object):
 	@classmethod
 	def tokenize(cls, content):
 		if not content or not isinstance(content, string_types):
-			return ()
+			result = ()
 		else:
 			plain_text = cls.to_plain_text(content)
-			return cls.tokenizer.tokenize(plain_text)
+			result = cls.tokenizer.tokenize(plain_text)
+		return result
 
 	@classmethod
 	def to_plain_text(cls, content):
-		text = component.getAdapter(content,
+		return component.getAdapter(content,
 									IPlainTextContentFragment,
 									name='text')
-		return text
 
 @interface.implementer(IWordSimilarity)
 class _BaseWordSimilarity(object):
