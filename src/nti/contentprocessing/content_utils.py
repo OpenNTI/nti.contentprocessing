@@ -29,8 +29,6 @@ except ImportError:
 	except ImportError:
 		relative = lambda x,y: 0
 
-import repoze.lru
-
 from nti.contentfragments.interfaces import IPlainTextContentFragment
 
 from nti.contentprocessing import space_pattern
@@ -59,7 +57,6 @@ def _default_word_tokenizer_expression():
 def _default_word_tokenizer_pattern():
 	return default_word_tokenizer_pattern
 
-@repoze.lru.lru_cache(500)
 def tokenize_content(text, lang='en'):
 	if not text or not isinstance(text, string_types):
 		result = ()
