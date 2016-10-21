@@ -51,6 +51,7 @@ setup(
 		'repoze.lru',
 		'requests',
 		'simplejson',
+		'watson-developer-cloud',
 		'Whoosh',
 		'zope.cachedescriptors',
 		'zope.component',
