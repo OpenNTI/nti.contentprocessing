@@ -11,52 +11,33 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-import sys
-import requests
-
-from simplejson.compat import StringIO
-
 from zope import interface
 
-from nti.common.string import to_unicode
+from nti.contentprocessing.alchemy import get_alchemy_client
 
 from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 
 from nti.contentprocessing.keyword.model import ContentKeyWord
 
-from nti.contentprocessing.utils import get_alchemy_api_key
-
-ALCHEMYAPI_LIMIT_KB = 150
-ALCHEMYAPI_URL = u'http://access.alchemyapi.com/calls/text/TextGetRankedKeywords'
-
 def get_keywords(content, name=None, **kwargs):
-	apikey = get_alchemy_api_key(name=name, error=False)
-	if apikey is None:
-		return ()
-	headers = {u'content-type': u'application/x-www-form-urlencoded'}
-	params = {
-		u'text':to_unicode(content),
-		u'apikey':apikey.value,
-		u'outputMode':u'json'
-	}
-	params.update(kwargs)
-
-	r = requests.post(ALCHEMYAPI_URL, data=params, headers=headers)
-	data = r.json()
-
-	if r.status_code == 200 and data.get('status', 'ERROR') == 'OK':
-		keywords = data.get('keywords', ())
-		result = tuple(	ContentKeyWord(d['text'], float(d.get('relevance', 0)))
-				  		for d in keywords)
-	else:
-		result = ()
-		logger.error('Invalid request status while getting keywords from Alchemy; %s',
-					 data.get('status', ''))
-
+	alchemy_client = get_alchemy_client( name )
+	result = ()
+	if alchemy_client is not None:
+		try:
+			# XXX: Do we need to sniff (or convert to) for HTML or text?
+			# max_items defaults to 50
+			result = alchemy_client.keywords( text=content )
+		except Exception:
+			result = ()
+			logger.error('Invalid request status while getting keywords from Alchemy')
+		else:
+			keywords = result.get('keywords', ())
+			result = tuple(	ContentKeyWord(d['text'], float(d.get('relevance', 0)))
+				  			for d in keywords)
 	return result
 
 @interface.implementer(IKeyWordExtractor)
-class _AlchemyAPIKeyWorExtractor(object):
+class _AlchemyAPIKeyWordExtractor(object):
 
 	__slots__ = ()
 
@@ -64,12 +45,8 @@ class _AlchemyAPIKeyWorExtractor(object):
 		result = ()
 		if isinstance(content, (list, tuple)):
 			content = ' '.join(content)
-		size_kb = sys.getsizeof(content or '') / 1024.0
-		if size_kb > ALCHEMYAPI_LIMIT_KB:
-			s = StringIO(content)
-			content = s.read(ALCHEMYAPI_LIMIT_KB)
 		try:
-			if content: 
+			if content:
 				result = get_keywords(content, keyname, **kwargs)
 		except:
 			logger.exception('Error while getting keywords from Alchemy')

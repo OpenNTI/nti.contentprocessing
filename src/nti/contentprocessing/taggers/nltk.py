@@ -20,7 +20,7 @@ from zope import component
 from zope import interface
 
 from nltk.tag import NgramTagger
-from nltk.tag import DefaultTagger 
+from nltk.tag import DefaultTagger
 
 from nti.contentprocessing.taggers.interfaces import INLTKTagger
 
@@ -30,7 +30,7 @@ resource_stream = __import__('pkg_resources').resource_stream
 # Interfaces
 
 class INLTKTaggedSents(interface.Interface):
-	
+
 	def __call__(corpus):
 		"""
 		return tagged sents for the specified corpus
@@ -40,12 +40,12 @@ class ITaggedCorpus(interface.Interface):
 	"""
 	Define a POS tagged corpus.
 	"""
-	
+
 	def tagged_words():
 		"""
 		return a list of POS tagged words
 		"""
-		
+
 	def tagged_sents():
 		"""
 		return a list of POS tagged sentences
@@ -53,13 +53,13 @@ class ITaggedCorpus(interface.Interface):
 
 class INLTKBackoffNgramTagger(INLTKTagger):
 	pass
-		
+
 class INLTKBackoffNgramTaggerFactory(interface.Interface):
-	
+
 	def __call__(ngrams, corpus, train_sents, limit):
 		"""
 		Create and train a backoff ngram tagger
-		
+
 		:param ngrams Number of ngrams
 		:param corpus Optional corpus name
 		:param train_sents: Training tagged sents
