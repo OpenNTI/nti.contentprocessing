@@ -27,7 +27,7 @@ def get_keywords(content, name=None, **kwargs):
 			# XXX: Do we need to sniff (or convert to) for HTML or text?
 			# max_items defaults to 50
 			result = alchemy_client.keywords( text=content )
-		except Exception:
+		except:
 			result = ()
 			logger.error('Invalid request status while getting keywords from Alchemy')
 		else:
