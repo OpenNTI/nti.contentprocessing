@@ -46,7 +46,7 @@ class ITermExtractFilter(interface.Interface):
 		:param strength: word strength
 		"""
 
-class IKeyWordExtractor(interface.Interface):
+class IBaseyWordExtractor(interface.Interface):
 
 	def __call___(content, *args, **kwargs):
 		"""
@@ -55,5 +55,8 @@ class IKeyWordExtractor(interface.Interface):
 		:param content: Text to process
 		"""
 
-class ITermExtractKeyWordExtractor(IKeyWordExtractor):
+class IKeyWordExtractor(IBaseyWordExtractor):
+	pass
+
+class ITermExtractKeyWordExtractor(interface.Interface):
 	pass

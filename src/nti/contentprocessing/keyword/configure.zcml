@@ -11,7 +11,7 @@
 
 	<utility factory=".termextract.DefaultFilter" />
 
-	<utility factory=".termextract._DefaultKeyWorExtractor" />
-	<utility factory=".termextract._DefaultKeyWorExtractor" name="en" />
+	<utility factory=".termextract._DefaultTermKeyWorExtractor" />
+	<utility factory=".termextract._DefaultTermKeyWorExtractor" name="en" />
 
 </configure>

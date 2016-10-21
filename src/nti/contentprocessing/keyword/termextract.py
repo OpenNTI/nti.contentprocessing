@@ -116,7 +116,7 @@ class TermExtractor(object):
 		return result
 
 @interface.implementer(ITermExtractKeyWordExtractor)
-class _DefaultKeyWorExtractor():
+class _DefaultTermKeyWorExtractor(object):
 
 	def __call__(self, content, lang='en', filtername=u'', *args, **kwargs):
 		if isinstance(content, six.string_types):
