@@ -18,7 +18,7 @@ import repoze.lru
 from zope import component
 from zope import interface
 
-from nti.common.string import to_unicode
+from nti.contentprocessing._compat import to_unicode
 
 from nti.contentprocessing import default_ngram_maxsize
 from nti.contentprocessing import default_ngram_minsize
@@ -27,46 +27,50 @@ from nti.contentprocessing.content_utils import tokenize_content
 
 from nti.contentprocessing.interfaces import INgramComputer
 
+
 @repoze.lru.lru_cache(5000)
 def _ngram_cache(text, minsize=3, maxsize=None, unique=True, lower=True):
-	result = []
-	maxsize = maxsize or len(text)
-	text = text.lower() if lower else text
-	limit = min(maxsize, len(text))
-	for size in xrange(minsize, limit + 1):
-		ngram = text[:size]
-		result.append(ngram)
-	return result
+    result = []
+    maxsize = maxsize or len(text)
+    text = text.lower() if lower else text
+    limit = min(maxsize, len(text))
+    for size in xrange(minsize, limit + 1):
+        ngram = text[:size]
+        result.append(ngram)
+    return result
+
 
 def ngram_filter(text, minsize=3, maxsize=None, unique=True, lower=True):
-	tokens = tokenize_content(text)
-	result = set() if unique else list()
-	for text in tokens:
-		ngrams = _ngram_cache(text, minsize, maxsize, unique, lower)
-		if unique:
-			result.update(ngrams)
-		else:
-			result.extend(ngrams)
-	return result
+    tokens = tokenize_content(text)
+    result = set() if unique else list()
+    for text in tokens:
+        ngrams = _ngram_cache(text, minsize, maxsize, unique, lower)
+        if unique:
+            result.update(ngrams)
+        else:
+            result.extend(ngrams)
+    return result
+
 
 @repoze.lru.lru_cache(100)
 def compute_ngrams(text, lang="en"):
-	if not text or not isinstance(text, string_types):
-		return u''
-	else:
-		computer = component.getUtility(INgramComputer, name=lang)
-		return to_unicode(computer.compute(text))
+    if not text or not isinstance(text, string_types):
+        return u''
+    else:
+        computer = component.getUtility(INgramComputer, name=lang)
+        return to_unicode(computer.compute(text))
+
 
 @interface.implementer(INgramComputer)
 class _DefaultNgramComputer(object):
 
-	minsize = default_ngram_minsize
-	maxsize = default_ngram_maxsize
+    minsize = default_ngram_minsize
+    maxsize = default_ngram_maxsize
 
-	def compute(self, text):
-		if text:
-			result = ngram_filter(text, self.minsize, self.maxsize)
-			result = ' '.join(result)
-		else:
-			result = u''
-		return result
+    def compute(self, text):
+        if text:
+            result = ngram_filter(text, self.minsize, self.maxsize)
+            result = ' '.join(result)
+        else:
+            result = u''
+        return result

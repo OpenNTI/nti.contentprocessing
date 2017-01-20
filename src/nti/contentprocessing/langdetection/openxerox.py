@@ -15,7 +15,7 @@ import requests
 
 from zope import interface
 
-from nti.common.string import to_unicode
+from nti.contentprocessing._compat import to_unicode
 
 from nti.contentprocessing.langdetection.model import Language
 
