@@ -13,11 +13,12 @@ from functools import total_ordering
 
 from zope import interface
 
-from nti.common.representation import WithRepr
-
 from nti.contentprocessing.keyword.interfaces import IContentKeyWord
 
+from nti.contentprocessing.representation import WithRepr
+
 from nti.schema.eqhash import EqHash
+
 
 @WithRepr
 @EqHash('token',)
@@ -25,20 +26,20 @@ from nti.schema.eqhash import EqHash
 @interface.implementer(IContentKeyWord)
 class ContentKeyWord(object):
 
-	__slots__ = ('token', 'relevance')
+    __slots__ = ('token', 'relevance')
 
-	def __init__(self, token=None, relevance=None):
-		self.token = token
-		self.relevance = relevance
+    def __init__(self, token=None, relevance=None):
+        self.token = token
+        self.relevance = relevance
 
-	def __lt__(self, other):
-		try:
-			return self.relevance < other.relevance
-		except AttributeError:
-			return NotImplemented
+    def __lt__(self, other):
+        try:
+            return self.relevance < other.relevance
+        except AttributeError:
+            return NotImplemented
 
-	def __gt__(self, other):
-		try:
-			return self.relevance > other.relevance
-		except AttributeError:
-			return NotImplemented
+    def __gt__(self, other):
+        try:
+            return self.relevance > other.relevance
+        except AttributeError:
+            return NotImplemented

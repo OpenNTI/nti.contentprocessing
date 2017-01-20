@@ -13,23 +13,25 @@ import functools
 
 from zope import interface
 
-from nti.common.representation import WithRepr
-
 from nti.contentprocessing.concepttagging.interfaces import IConcept
 from nti.contentprocessing.concepttagging.interfaces import IConceptSource
+
+from nti.contentprocessing.representation import WithRepr
 
 from nti.property.property import Lazy
 
 from nti.schema.eqhash import EqHash
 
+
 @WithRepr
-@EqHash('uri','source')
+@EqHash('uri', 'source')
 @interface.implementer(IConceptSource)
 class ConceptSource(object):
 
-	def __init__(self, source, uri=None):
-		self.uri = uri
-		self.source = source
+    def __init__(self, source, uri=None):
+        self.uri = uri
+        self.source = source
+
 
 @WithRepr
 @EqHash('text',)
@@ -37,26 +39,26 @@ class ConceptSource(object):
 @interface.implementer(IConcept)
 class Concept(object):
 
-	def __init__(self, text=None, relevance=None, sources=()):
-		self.text = text
-		self.sources = sources
-		self.relevance = relevance
+    def __init__(self, text=None, relevance=None, sources=()):
+        self.text = text
+        self.sources = sources
+        self.relevance = relevance
 
-	@Lazy
-	def sourcemap(self):
-		return {c.source:c.uri for c in self.sources}
+    @Lazy
+    def sourcemap(self):
+        return {c.source: c.uri for c in self.sources}
 
-	def __str__(self):
-		return self.text
+    def __str__(self):
+        return self.text
 
-	def __lt__(self, other):
-		try:
-			return self.relevance < other.relevance
-		except AttributeError:
-			return NotImplemented
+    def __lt__(self, other):
+        try:
+            return self.relevance < other.relevance
+        except AttributeError:
+            return NotImplemented
 
-	def __gt__(self, other):
-		try:
-			return self.relevance > other.relevance
-		except AttributeError:
-			return NotImplemented
+    def __gt__(self, other):
+        try:
+            return self.relevance > other.relevance
+        except AttributeError:
+            return NotImplemented

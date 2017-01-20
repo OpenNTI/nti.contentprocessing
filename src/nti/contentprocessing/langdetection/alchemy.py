@@ -13,14 +13,14 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
-from nti.common.representation import WithRepr
-
 from nti.contentprocessing.alchemy import get_alchemy_client
 
 from nti.contentprocessing.langdetection.model import Language
 
 from nti.contentprocessing.langdetection.interfaces import IAlchemyLanguage
 from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
+
+from nti.contentprocessing.representation import WithRepr
 
 from nti.property.property import alias
 
