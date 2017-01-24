@@ -21,16 +21,20 @@ from nti.contentprocessing.alchemy import create_api_key
 
 from nti.contentprocessing.interfaces import IAlchemyAPIKey
 
+
 class IRegisterAlchemyAPIKeyDirective(interface.Interface):
-	"""
-	The arguments needed for registering a key
-	"""
-	name = fields.TextLine(title="The human readable/writable key name", required=False)
-	value = fields.TextLine(title="The actual key value. Should not contain spaces", required=True)
+    """
+    The arguments needed for registering a key
+    """
+    name = fields.TextLine(title="The human readable/writable key name",
+                           required=False)
+    value = fields.TextLine(title="The actual key value. Should not contain spaces",
+                            required=True)
+
 
 def registerAlchemyAPIKey(_context, value, name=u''):
-	"""
-	Register an alchemy key with the given alias
-	"""
-	factory = partial(create_api_key, name=name, value=value)
-	utility(_context, provides=IAlchemyAPIKey, factory=factory, name=name)
+    """
+    Register an alchemy key with the given alias
+    """
+    factory = partial(create_api_key, name=name, value=value)
+    utility(_context, provides=IAlchemyAPIKey, factory=factory, name=name)

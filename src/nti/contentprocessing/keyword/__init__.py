@@ -14,14 +14,16 @@ from zope import component
 from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWordExtractor
 
+
 def term_extract_key_words(content, lang='en', filtername=u''):
-	extractor = component.queryUtility(ITermExtractKeyWordExtractor, name=lang)
-	if extractor is not None:
-		return extractor(content, lang=lang, filtername=filtername)
-	return ()
+    extractor = component.queryUtility(ITermExtractKeyWordExtractor, name=lang)
+    if extractor is not None:
+        return extractor(content, lang=lang, filtername=filtername)
+    return ()
+
 
 def extract_key_words(content, lang='en'):
-	extractor = component.queryUtility(IKeyWordExtractor, name=lang)
-	if extractor is not None:
-		return extractor(content)
-	return ()
+    extractor = component.queryUtility(IKeyWordExtractor, name=lang)
+    if extractor is not None:
+        return extractor(content)
+    return ()

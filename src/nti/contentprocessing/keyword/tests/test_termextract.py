@@ -17,23 +17,24 @@ from nti.contentprocessing.keyword import term_extract_key_words
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
+
 class TestKeyWordExtract(unittest.TestCase):
 
-	layer = SharedConfiguringTestLayer
+    layer = SharedConfiguringTestLayer
 
-	@property
-	def sample(self):
-		name = os.path.join(os.path.dirname(__file__), 'sample.txt')
-		with open(name, "r") as f:
-			return f.read()
+    @property
+    def sample(self):
+        name = os.path.join(os.path.dirname(__file__), 'sample.txt')
+        with open(name, "r") as f:
+            return f.read()
 
-	def test_term_extract(self):
-		terms = term_extract_key_words(self.sample)
-		terms = [(r.token, r.frequency, r.strength) for r in terms]
-		assert_that(sorted(terms),
-					is_(sorted([('blood', 4, 1),
-								('virus', 3, 1),
-								('blood vessel', 1, 2),
-								('blood cells', 1, 2),
-								('body works', 1, 2),
-								('blood cells viruses', 1, 3)])))
+    def test_term_extract(self):
+        terms = term_extract_key_words(self.sample)
+        terms = [(r.token, r.frequency, r.strength) for r in terms]
+        assert_that(sorted(terms),
+                    is_(sorted([('blood', 4, 1),
+                                ('virus', 3, 1),
+                                ('blood vessel', 1, 2),
+                                ('blood cells', 1, 2),
+                                ('body works', 1, 2),
+                                ('blood cells viruses', 1, 3)])))

@@ -16,27 +16,30 @@ from nti.schema.field import Object
 from nti.schema.field import ListOrTuple
 from nti.schema.field import ValidTextLine
 
+
 class IConceptSource(interface.Interface):
-	"""
-	Represent a concept source entry (e.g. linked data) 
-	"""
-	source = ValidTextLine(title="source name", required=True)
-	uri = ValidTextLine(title="source uri", required=True)
+    """
+    Represent a concept source entry (e.g. linked data) 
+    """
+    source = ValidTextLine(title="source name", required=True)
+    uri = ValidTextLine(title="source uri", required=True)
+
 
 class IConcept(interface.Interface):
-	"""
-	Represent a concept
-	"""
-	text = ValidTextLine(title="concept text", required=True)
-	relevance = Number(title="concept relevance", required=False)
-	sources = ListOrTuple(title="Concept sources", min_length=0,
-						  value_type=Object(IConceptSource, title="The source"))
+    """
+    Represent a concept
+    """
+    text = ValidTextLine(title="concept text", required=True)
+    relevance = Number(title="concept relevance", required=False)
+    sources = ListOrTuple(title="Concept sources", min_length=0,
+                          value_type=Object(IConceptSource, title="The source"))
+
 
 class IConceptTagger(interface.Interface):
 
-	def __call___(content):
-		"""
-		Return the IConcept(s) associated with the specified content
-		
-		:param content: Text to process
-		"""
+    def __call___(content):
+        """
+        Return the IConcept(s) associated with the specified content
+
+        :param content: Text to process
+        """

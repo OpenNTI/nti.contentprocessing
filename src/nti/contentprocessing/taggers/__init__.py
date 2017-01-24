@@ -19,9 +19,11 @@ from nti.contentprocessing.taggers.interfaces import ITagger
 from nti.contentprocessing.taggers.interfaces import INLTKTagger
 from nti.contentprocessing.taggers.interfaces import IStanfordTagger
 
+
 @repoze.lru.lru_cache(500)
 def tag_word(word, lang=u'en'):
     return tag_tokens((word,), lang)
+
 
 def tag_tokens(tokens, lang=u'en'):
     for provided in (IStanfordTagger, INLTKTagger):

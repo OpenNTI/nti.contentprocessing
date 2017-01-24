@@ -16,47 +16,53 @@ from nti.schema.field import Number
 from nti.schema.field import ListOrTuple
 from nti.schema.field import ValidTextLine
 
+
 class IContentKeyWord(interface.Interface):
-	"""
-	represent a key word found in a content
-	"""
-	token = ValidTextLine(title="word token", required=True)
-	relevance = Number(title="word relevance", required=False)
+    """
+    represent a key word found in a content
+    """
+    token = ValidTextLine(title="word token", required=True)
+    relevance = Number(title="word relevance", required=False)
+
 
 class ITermExtractKeyWord(IContentKeyWord):
-	"""
-	represent a key word found in a content
-	"""
-	frequency = Int(title="word frequency", required=False)
-	strength = Int(title="word strength", required=False)
-	terms = ListOrTuple(value_type=ValidTextLine(title="Term"),
-						title="terms associated with token", required=False)
+    """
+    represent a key word found in a content
+    """
+    frequency = Int(title="word frequency", required=False)
+    strength = Int(title="word strength", required=False)
+    terms = ListOrTuple(value_type=ValidTextLine(title="Term"),
+                        title="terms associated with token", required=False)
+
 
 class ITermExtractFilter(interface.Interface):
-	"""
-	Defines a key word extractor filter
-	"""
+    """
+    Defines a key word extractor filter
+    """
 
-	def __call__(word, occur, strength):
-		"""
-		filter specified key word
-		
-		:param word: word to filter
-		:param occur: word frequency
-		:param strength: word strength
-		"""
+    def __call__(word, occur, strength):
+        """
+        filter specified key word
+
+        :param word: word to filter
+        :param occur: word frequency
+        :param strength: word strength
+        """
+
 
 class IBaseyWordExtractor(interface.Interface):
 
-	def __call___(content, *args, **kwargs):
-		"""
-		Return the keywords associated with the specified content
-		
-		:param content: Text to process
-		"""
+    def __call___(content, *args, **kwargs):
+        """
+        Return the keywords associated with the specified content
+
+        :param content: Text to process
+        """
+
 
 class IKeyWordExtractor(IBaseyWordExtractor):
-	pass
+    pass
+
 
 class ITermExtractKeyWordExtractor(interface.Interface):
-	pass
+    pass

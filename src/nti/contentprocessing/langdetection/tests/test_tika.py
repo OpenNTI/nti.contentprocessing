@@ -21,37 +21,39 @@ from nti.contentprocessing.langdetection.tika import _TikaLanguageDetector
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
+
 class TestTikaLangDetector(unittest.TestCase):
 
-	layer = SharedConfiguringTestLayer
+    layer = SharedConfiguringTestLayer
 
-	@property
-	def sample_en(self):
-		name = os.path.join(os.path.dirname(__file__), 'sample_en.txt')
-		with open(name, "r") as f:
-			return f.read()
+    @property
+    def sample_en(self):
+        name = os.path.join(os.path.dirname(__file__), 'sample_en.txt')
+        with open(name, "r") as f:
+            return f.read()
 
-	@property
-	def sample_es(self):
-		name = os.path.join(os.path.dirname(__file__), 'sample_es.txt')
-		with codecs.open(name, "r", "utf-8") as f:
-			return f.read()
-	@property
-	def sample_ru(self):
-		name = os.path.join(os.path.dirname(__file__), 'sample_ru.txt')
-		with codecs.open(name, "r", "utf-8") as f:
-			return f.read()
+    @property
+    def sample_es(self):
+        name = os.path.join(os.path.dirname(__file__), 'sample_es.txt')
+        with codecs.open(name, "r", "utf-8") as f:
+            return f.read()
 
-	def test_lang_detector(self):
-		dectector = _TikaLanguageDetector()
-		lang = dectector(self.sample_en)
-		assert_that(lang, is_not(none()))
-		assert_that(lang, has_property('code', is_('en')))
+    @property
+    def sample_ru(self):
+        name = os.path.join(os.path.dirname(__file__), 'sample_ru.txt')
+        with codecs.open(name, "r", "utf-8") as f:
+            return f.read()
 
-		lang = dectector(self.sample_es)
-		assert_that(lang, is_not(none()))
-		assert_that(lang, has_property('code', is_('es')))
+    def test_lang_detector(self):
+        dectector = _TikaLanguageDetector()
+        lang = dectector(self.sample_en)
+        assert_that(lang, is_not(none()))
+        assert_that(lang, has_property('code', is_('en')))
 
-		lang = dectector(self.sample_ru)
-		assert_that(lang, is_not(none()))
-		assert_that(lang, has_property('code', is_('ru')))
+        lang = dectector(self.sample_es)
+        assert_that(lang, is_not(none()))
+        assert_that(lang, has_property('code', is_('es')))
+
+        lang = dectector(self.sample_ru)
+        assert_that(lang, is_not(none()))
+        assert_that(lang, has_property('code', is_('ru')))

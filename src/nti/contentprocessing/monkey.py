@@ -12,20 +12,22 @@ logger = __import__('logging').getLogger(__name__)
 # All the patching uses private things so turn that warning off
 # pylint: disable=W0212
 
+
 def _patch_html5lib():
-	import html5lib
-	from html5lib._inputstream import HTMLBinaryInputStream
+    import html5lib
+    from html5lib._inputstream import HTMLBinaryInputStream
 
-	class _HTMLBinaryInputStream(HTMLBinaryInputStream):
+    class _HTMLBinaryInputStream(HTMLBinaryInputStream):
 
-		def __init__(self, *args, **kwargs):
-			if 'encoding' in kwargs:
-				encoding = kwargs.pop('encoding', None)
-				kwargs['override_encoding'] = encoding
-			HTMLBinaryInputStream.__init__(self, *args, **kwargs)
+        def __init__(self, *args, **kwargs):
+            if 'encoding' in kwargs:
+                encoding = kwargs.pop('encoding', None)
+                kwargs['override_encoding'] = encoding
+            HTMLBinaryInputStream.__init__(self, *args, **kwargs)
 
-	html5lib._inputstream.HTMLBinaryInputStream = _HTMLBinaryInputStream
+    html5lib._inputstream.HTMLBinaryInputStream = _HTMLBinaryInputStream
 _patch_html5lib()
 
+
 def patch():
-	pass
+    pass

@@ -21,24 +21,26 @@ from nti.contentprocessing.langdetection.tika.identifier import LanguageIdentifi
 from nti.contentprocessing.langdetection.tika.profile import LanguageProfile
 
 _profiles_loaded = False
+
+
 def loadProfiles():
-	global _profiles_loaded
-	if not _profiles_loaded:
-		initProfiles()
-		_profiles_loaded = True
+    global _profiles_loaded
+    if not _profiles_loaded:
+        initProfiles()
+        _profiles_loaded = True
+
 
 @interface.implementer(ILanguageDetector)
 class _TikaLanguageDetector(object):
 
-	__slots__ = ()
+    __slots__ = ()
 
-	@staticmethod
-	def detect(content, **kwargs):
-		loadProfiles()
-		profile = LanguageProfile(content)
-		iden = LanguageIdentifier(profile)
-		result = Language(code=iden.language)
-		return result
+    @staticmethod
+    def detect(content, **kwargs):
+        loadProfiles()
+        profile = LanguageProfile(content)
+        iden = LanguageIdentifier(profile)
+        return Language(code=iden.language)
 
-	def __call__(self, content, **kwargs):
-		return self.detect(content)
+    def __call__(self, content, **kwargs):
+        return self.detect(content)

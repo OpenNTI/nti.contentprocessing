@@ -21,27 +21,34 @@ from nti.contentprocessing.langdetection.alchemy import _AlchemyTextLanguageDete
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
+
 class TestAlchemyLangDetector(unittest.TestCase):
 
-	layer = SharedConfiguringTestLayer
+    layer = SharedConfiguringTestLayer
 
-	@property
-	def sample_en(self):
-		name = os.path.join(os.path.dirname(__file__), 'sample_en.txt')
-		with open(name, "r") as f:
-			return f.read()
+    @property
+    def sample_en(self):
+        name = os.path.join(os.path.dirname(__file__), 'sample_en.txt')
+        with open(name, "r") as f:
+            return f.read()
 
-	@unittest.SkipTest
-	def test_alchemy_detector(self):
-		lang = _AlchemyTextLanguageDetector.detect(self.sample_en, "NTI-TEST")
-		assert_that(lang, is_not(none()))
-		assert_that(lang, has_property('code', is_('en')))
-		assert_that(lang, has_property('name', is_('english')))
+    @unittest.SkipTest
+    def test_alchemy_detector(self):
+        lang = _AlchemyTextLanguageDetector.detect(self.sample_en, "NTI-TEST")
+        assert_that(lang, is_not(none()))
+        assert_that(lang, has_property('code', is_('en')))
+        assert_that(lang, has_property('name', is_('english')))
 
-	def test_alchemy_language(self):
-		a = _AlchemyLanguage(ISO_639_1='en', ISO_639_2='a', ISO_639_3='a', name='enlgish')
-		assert_that(a.code, is_('en'))
-		b = _AlchemyLanguage(ISO_639_1='en', ISO_639_2='a', ISO_639_3='a', name='enlgish')
-		assert_that(a, is_(b))
-		assert_that(hash(a), is_(hash(b) ) )
-		assert_that(str(a), is_('en'))
+    def test_alchemy_language(self):
+        a = _AlchemyLanguage(ISO_639_1='en', 
+                             ISO_639_2='a', 
+                             ISO_639_3='a', 
+                             name='enlgish')
+        assert_that(a.code, is_('en'))
+        b = _AlchemyLanguage(ISO_639_1='en', 
+                             ISO_639_2='a', 
+                             ISO_639_3='a', 
+                             name='enlgish')
+        assert_that(a, is_(b))
+        assert_that(hash(a), is_(hash(b)))
+        assert_that(str(a), is_('en'))

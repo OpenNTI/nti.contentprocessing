@@ -13,8 +13,9 @@ from zope import component
 
 from nti.contentprocessing.concepttagging.interfaces import IConceptTagger
 
+
 def concept_tag(content, name=u''):
-	tagger = component.queryUtility(IConceptTagger, name=name)
-	if tagger is not None:
-		return tagger(content)
-	return ()
+    tagger = component.queryUtility(IConceptTagger, name=name)
+    if tagger is not None:
+        return tagger(content)
+    return ()

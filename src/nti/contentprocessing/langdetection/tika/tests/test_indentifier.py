@@ -20,44 +20,45 @@ from nti.contentprocessing.langdetection.tika import identifier
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
+
 class TestIndentifier(unittest.TestCase):
 
-	layer = SharedConfiguringTestLayer
+    layer = SharedConfiguringTestLayer
 
-	languages = ("de", "en", "es")
+    languages = ("de", "en", "es")
 
-	def test_initProfiles(self):
-		c = identifier.initProfiles()
-		assert_that(c, is_(27))
+    def test_initProfiles(self):
+        c = identifier.initProfiles()
+        assert_that(c, is_(27))
 
-	def test_clearAddAndInitProfiles(self):
-		identifier.LanguageIdentifier.initProfiles()
-		enProfile = profile.LanguageProfile()
-		self.writeTo("en", enProfile)
+    def test_clearAddAndInitProfiles(self):
+        identifier.LanguageIdentifier.initProfiles()
+        enProfile = profile.LanguageProfile()
+        self.writeTo("en", enProfile)
 
-		iden = identifier.LanguageIdentifier(enProfile)
-		assert_that(iden, has_property('language', "en"))
-		assert_that(iden.isReasonablyCertain(), is_(True))
+        iden = identifier.LanguageIdentifier(enProfile)
+        assert_that(iden, has_property('language', "en"))
+        assert_that(iden.isReasonablyCertain(), is_(True))
 
-		identifier.clearProfiles()
-		iden = identifier.LanguageIdentifier(enProfile)
-		assert_that(iden.isReasonablyCertain(), is_(False))
-		
-		identifier.addProfile("en", enProfile);
-		iden = identifier.LanguageIdentifier(enProfile)
-		assert_that(iden, has_property('language', "en"))
-		assert_that(iden.isReasonablyCertain(), is_(True))
+        identifier.clearProfiles()
+        iden = identifier.LanguageIdentifier(enProfile)
+        assert_that(iden.isReasonablyCertain(), is_(False))
 
-	def test_languageDetection(self):
-		identifier.initProfiles()
-		for language in self.languages:
-			pro = profile.LanguageProfile()
-			self.writeTo(language, pro)
-			iden = identifier.LanguageIdentifier(pro)
-			assert_that(iden, has_property('language', language))
-			assert_that(iden.isReasonablyCertain(), is_(True))
+        identifier.addProfile("en", enProfile)
+        iden = identifier.LanguageIdentifier(enProfile)
+        assert_that(iden, has_property('language', "en"))
+        assert_that(iden.isReasonablyCertain(), is_(True))
 
-	def writeTo(self, language, writer):
-		source = os.path.join(os.path.dirname(__file__), '%s.test' % language)
-		with codecs.open(source, "r", "utf-8") as fp:
-			writer.write(fp.read())
+    def test_languageDetection(self):
+        identifier.initProfiles()
+        for language in self.languages:
+            pro = profile.LanguageProfile()
+            self.writeTo(language, pro)
+            iden = identifier.LanguageIdentifier(pro)
+            assert_that(iden, has_property('language', language))
+            assert_that(iden.isReasonablyCertain(), is_(True))
+
+    def writeTo(self, language, writer):
+        source = os.path.join(os.path.dirname(__file__), '%s.test' % language)
+        with codecs.open(source, "r", "utf-8") as fp:
+            writer.write(fp.read())

@@ -20,18 +20,19 @@ from nti.contentprocessing.langdetection.openxerox import _OpenXeroxLanguageDete
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
+
 class TestOpenXeroxLangDetector(unittest.TestCase):
 
-	layer = SharedConfiguringTestLayer
+    layer = SharedConfiguringTestLayer
 
-	@property
-	def sample_en(self):
-		name = os.path.join(os.path.dirname(__file__), 'sample_en.txt')
-		with open(name, "r") as f:
-			return f.read()
+    @property
+    def sample_en(self):
+        name = os.path.join(os.path.dirname(__file__), 'sample_en.txt')
+        with open(name, "r") as f:
+            return f.read()
 
-	@unittest.SkipTest
-	def test_lang_detector(self):
-		lang = _OpenXeroxLanguageDetector.detect(self.sample_en)
-		assert_that(lang, is_not(none()))
-		assert_that(lang, has_property('code', is_('en')))
+    @unittest.SkipTest
+    def test_lang_detector(self):
+        lang = _OpenXeroxLanguageDetector.detect(self.sample_en)
+        assert_that(lang, is_not(none()))
+        assert_that(lang, has_property('code', is_('en')))

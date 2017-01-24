@@ -13,22 +13,25 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
-class ITagger(interface.Interface):
-	"""
-	Defines a POS tagger
-	"""
 
-	def tag(tokens):
-		"""
-		tag the specified tokens
-		"""
+class ITagger(interface.Interface):
+    """
+    Defines a POS tagger
+    """
+
+    def tag(tokens):
+        """
+        tag the specified tokens
+        """
+
 
 class INLTKTagger(ITagger):
-	"""
-	Defines an NTLK POS tagger
-	"""
+    """
+    Defines an NTLK POS tagger
+    """
+
 
 class IStanfordTagger(ITagger):
-	"""
-	Defines an Standford POS tagger
-	"""
+    """
+    Defines an Standford POS tagger
+    """

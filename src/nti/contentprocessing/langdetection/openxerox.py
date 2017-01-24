@@ -23,32 +23,33 @@ from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
 OPEN_XEROX_URL = u'https://services.open.xerox.com/RestOp/LanguageIdentifier/GetLanguageForString'
 
+
 @interface.implementer(ILanguageDetector)
 class _OpenXeroxLanguageDetector(object):
-	
-	__slots__ = ()
-	
-	@staticmethod
-	def detect(content):
-		result = None
-		headers = {
-			u'content-type': u'application/x-www-form-urlencoded', 
-			u"Accept": "text/plain"
-		}
-		params = {u'document':to_unicode(content)}
-		try:
-			r = requests.post(OPEN_XEROX_URL, data=params, headers=headers)
-			data = r.json()
-			if r.status_code == 200 and data:
-				result = Language(code=data)
-			else:
-				logger.error("%s is an invalid status response code; %s",
-							 r.status_code, data)
-		except Exception:
-			result = None
-			logger.exception('Error while detecting language using OpenXerox')
 
-		return result
-	
-	def __call__(self, content, **kwargs):
-		return self.detect(content)
+    __slots__ = ()
+
+    @staticmethod
+    def detect(content):
+        result = None
+        headers = {
+            u'content-type': u'application/x-www-form-urlencoded',
+            u"Accept": "text/plain"
+        }
+        params = {u'document': to_unicode(content)}
+        try:
+            r = requests.post(OPEN_XEROX_URL, data=params, headers=headers)
+            data = r.json()
+            if r.status_code == 200 and data:
+                result = Language(code=data)
+            else:
+                logger.error("%s is an invalid status response code; %s",
+                             r.status_code, data)
+        except Exception:
+            result = None
+            logger.exception('Error while detecting language using OpenXerox')
+
+        return result
+
+    def __call__(self, content, **kwargs):
+        return self.detect(content)
