@@ -50,7 +50,7 @@ setup(
         'rdflib',
         'repoze.lru',
         'requests',
-        'simplejson',
+        'six',
         'watson-developer-cloud',
         'Whoosh',
         'zope.cachedescriptors',
