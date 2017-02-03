@@ -20,6 +20,7 @@ from nti.contentprocessing.stemmers.zopyx import stemmer
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
+
 @unittest.skipIf(stemmer is None, "zopyx not installed")
 class TestZopyYXStemmer(unittest.TestCase):
 

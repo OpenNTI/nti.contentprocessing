@@ -18,6 +18,7 @@ from nti.contentprocessing.stemmers import interfaces
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
+
 class TestWhooshStemmer(unittest.TestCase):
 
     layer = SharedConfiguringTestLayer
