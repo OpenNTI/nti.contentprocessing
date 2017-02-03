@@ -11,9 +11,10 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
+
 class IStemmer(interface.Interface):
 
-	def stem(token, lang='en'):
-		"""
-		Return the stem from the specified token
-		"""
+    def stem(token, lang='en'):
+        """
+        Return the stem from the specified token
+        """

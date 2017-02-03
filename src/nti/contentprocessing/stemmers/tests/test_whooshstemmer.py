@@ -20,9 +20,9 @@ from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
 class TestWhooshStemmer(unittest.TestCase):
 
-	layer = SharedConfiguringTestLayer
+    layer = SharedConfiguringTestLayer
 
-	def test_utility(self):
-		stemmer = component.getUtility(interfaces.IStemmer, "whoosh")
-		assert_that(stemmer.stem('viruses'), is_('virus'))
-		assert_that(stemmer.stem('temptation'), is_('temptat'))
+    def test_utility(self):
+        stemmer = component.getUtility(interfaces.IStemmer, "whoosh")
+        assert_that(stemmer.stem('viruses'), is_('virus'))
+        assert_that(stemmer.stem('temptation'), is_('temptat'))

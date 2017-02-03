@@ -6,8 +6,8 @@
 #
 # Copyright (C) 2001-2016 NLTK Project
 # Author: Steven Bird <stevenbird1@gmail.com>
-#		 Edward Loper <edloper@gmail.com>
-#		 Nitin Madnani <nmadnani@ets.org>
+#        Edward Loper <edloper@gmail.com>
+#        Nitin Madnani <nmadnani@ets.org>
 # URL: <http://nltk.org/>
 # For license information, see LICENSE.TXT
 
@@ -159,9 +159,9 @@ class RegexpTokenizer(TokenizerI):
 
     def __repr__(self):
         return ('%s(pattern=%r, gaps=%r, discard_empty=%r, flags=%r)' %
-                (self.__class__.__name__, 
-				 self._pattern, 
-				 self._gaps,
+                (self.__class__.__name__,
+                 self._pattern,
+                 self._gaps,
                  self._discard_empty,
                  self._flags))
 

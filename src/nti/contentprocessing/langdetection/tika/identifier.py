@@ -93,8 +93,8 @@ class LanguageIdentifier(object):
         languages = languages.split(",")
         for language in languages:
             language = unicode(language.strip())
-            name = config.get(ConfigParser.DEFAULTSECT, 
-							  "name." + language, "Unknown")
+            name = config.get(ConfigParser.DEFAULTSECT,
+                              "name." + language, "Unknown")
             try:
                 cls.addProfile(language)
             except Exception as e:

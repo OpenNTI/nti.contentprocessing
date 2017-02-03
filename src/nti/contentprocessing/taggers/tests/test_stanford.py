@@ -19,10 +19,10 @@ from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
 class TestStandford(unittest.TestCase):
 
-	layer = SharedConfiguringTestLayer
+    layer = SharedConfiguringTestLayer
 
-	def test_utility(self):
-		source = os.path.join(os.path.dirname(__file__), 'source.tag')
-		with open(source, "r") as fp:
-			tags = StanfordPostagger.parse_tags(fp)
-			assert_that(tags, has_length(301))
+    def test_utility(self):
+        source = os.path.join(os.path.dirname(__file__), 'source.tag')
+        with open(source, "r") as fp:
+            tags = StanfordPostagger.parse_tags(fp)
+            assert_that(tags, has_length(301))

@@ -78,7 +78,7 @@ def nltk_tagged_corpora():
         from nltk import corpus
         from nltk.corpus import LazyCorpusLoader, CorpusReader
         for k, v in inspect.getmembers(corpus):
-            if 		isinstance(v, (LazyCorpusLoader, CorpusReader)) \
+            if      isinstance(v, (LazyCorpusLoader, CorpusReader)) \
                 and hasattr(v, "tagged_sents") \
                 and hasattr(v, "tagged_words"):
                 result[k] = v

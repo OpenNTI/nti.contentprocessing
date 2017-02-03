@@ -23,9 +23,9 @@ from nti.contentprocessing.tests import SharedConfiguringTestLayer
 @unittest.skipIf(stemmer is None, "zopyx not installed")
 class TestZopyYXStemmer(unittest.TestCase):
 
-	layer = SharedConfiguringTestLayer
+    layer = SharedConfiguringTestLayer
 
-	def test_utility(self):
-		stemmer = component.getUtility(interfaces.IStemmer, "zopyx")
-		assert_that(stemmer.stem('viruses'), is_('virus'))
-		assert_that(stemmer.stem('temptation'), is_('temptat'))
+    def test_utility(self):
+        stemmer = component.getUtility(interfaces.IStemmer, "zopyx")
+        assert_that(stemmer.stem('viruses'), is_('virus'))
+        assert_that(stemmer.stem('temptation'), is_('temptat'))
