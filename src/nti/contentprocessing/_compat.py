@@ -33,7 +33,7 @@ else:
     _unicode = unicode
 
 
-def bytes_(s, encoding='latin-1', errors='strict'):  # pragma NO COVER
+def bytes_(s, encoding='utf-8', errors='strict'):  # pragma NO COVER
     if isinstance(s, text_type):
         return s.encode(encoding, errors)
     return s
