@@ -9,31 +9,25 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
-import sys
-import types
+import six
 
-PY3 = sys.version_info[0] == 3
+PY3 = six.PY3
 
-if PY3:  # pragma: no cover
-    text_type = str
-    class_types = type,
-    string_types = str,
-    integer_types = int,
-    binary_type = bytes
-else:
-    binary_type = str
-    text_type = unicode
-    string_types = basestring,
-    integer_types = (int, long)
-    class_types = (type, types.ClassType)
+text_type = six.text_type
+class_types = six.class_types
+string_types = six.string_types
+integer_types = six.integer_types
 
 if PY3:  # pragma: no cover
     _unicode = lambda s: s
 else:
     _unicode = unicode
 
-
-def bytes_(s, encoding='utf-8', errors='strict'):  # pragma NO COVER
+def bytes_(s, encoding='utf-8', errors='strict'):
+    """
+    If ``s`` is an instance of ``text_type``, return
+    ``s.encode(encoding, errors)``, otherwise return ``str(s)``
+    """
     if isinstance(s, text_type):
         return s.encode(encoding, errors)
     return s
