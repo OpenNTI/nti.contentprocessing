@@ -19,9 +19,10 @@ string_types = six.string_types
 integer_types = six.integer_types
 
 if PY3:  # pragma: no cover
-    _unicode = lambda s: s
+    def _unicode(s): return str(s)
 else:
     _unicode = unicode
+
 
 def bytes_(s, encoding='utf-8', errors='strict'):
     """
@@ -39,4 +40,6 @@ def unicode_(s, encoding='utf-8', err='strict'):
     """
     s = s.decode(encoding, err) if isinstance(s, bytes) else s
     return _unicode(s) if s is not None else None
+
+
 to_unicode = unicode_
