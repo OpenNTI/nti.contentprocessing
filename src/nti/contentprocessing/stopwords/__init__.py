@@ -14,9 +14,9 @@ import codecs
 
 from zope import interface
 
-from nti.contentprocessing.interfaces import IStopWords
+from zope.cachedescriptors.property import Lazy
 
-from nti.property.property import Lazy
+from nti.contentprocessing.interfaces import IStopWords
 
 
 @interface.implementer(IStopWords)

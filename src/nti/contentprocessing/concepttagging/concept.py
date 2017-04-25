@@ -13,12 +13,12 @@ import functools
 
 from zope import interface
 
+from zope.cachedescriptors.property import Lazy
+
 from nti.contentprocessing.concepttagging.interfaces import IConcept
 from nti.contentprocessing.concepttagging.interfaces import IConceptSource
 
 from nti.contentprocessing.representation import WithRepr
-
-from nti.property.property import Lazy
 
 from nti.schema.eqhash import EqHash
 
