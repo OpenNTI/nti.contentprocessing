@@ -20,14 +20,10 @@ __docformat__ = "restructuredtext en"
 logger = __import__('logging').getLogger(__name__)
 
 import re
-import sys
+import six
 import types
-import sre_parse
-import sre_compile
-import sre_constants
 
-PY3 = sys.version_info[0] == 3
-if PY3:
+if six.PY3:
     get_im_class = lambda meth: meth.__self__.__class__
 else:
     get_im_class = lambda meth: meth.im_class
@@ -158,32 +154,3 @@ def regexp_span_tokenize(s, regexp):
             yield left, right
         left = next_
     yield left, len(s)
-
-
-def compile_regexp_to_noncapturing(pattern, flags=0):
-    """
-    Compile the regexp pattern after switching all grouping parentheses
-    in the given regexp pattern to non-capturing groups.
-
-    :type pattern: str
-    :rtype: str
-    """
-    def convert_regexp_to_noncapturing_parsed(parsed_pattern):
-        res_data = []
-        for key, value in parsed_pattern.data:
-            if key == sre_constants.SUBPATTERN:
-                _, subpattern = value
-                value = (
-                    None, convert_regexp_to_noncapturing_parsed(subpattern)
-                )
-            elif key == sre_constants.GROUPREF:
-                msg = 'Regex with back-references are not supported: %r' % pattern
-                raise ValueError(msg)
-            res_data.append((key, value))
-        parsed_pattern.data = res_data
-        parsed_pattern.pattern.groups = 1
-        parsed_pattern.pattern.groupdict = {}
-        return parsed_pattern
-
-    parsed = convert_regexp_to_noncapturing_parsed(sre_parse.parse(pattern))
-    return sre_compile.compile(parsed, flags=flags)

@@ -27,7 +27,6 @@ from nti.contentprocessing.tokenizer.utils import overridden
 from nti.contentprocessing.tokenizer.utils import add_metaclass
 from nti.contentprocessing.tokenizer.utils import regexp_span_tokenize
 from nti.contentprocessing.tokenizer.utils import string_span_tokenize
-from nti.contentprocessing.tokenizer.utils import compile_regexp_to_noncapturing
 
 
 @add_metaclass(ABCMeta)
@@ -164,15 +163,4 @@ class RegexpTokenizer(TokenizerI):
 
 
 class DefaultRegexpTokenizer(RegexpTokenizer):
-
-    def _check_regexp(self):
-        if self._regexp is None:
-            try:
-                # Remove capturing parentheses -- if the regexp contains any
-                # capturing parentheses, then the behavior of re.findall and
-                # re.split will change.
-                self._regexp = compile_regexp_to_noncapturing(self._pattern,
-                                                              self._flags)
-            except re.error as e:
-                msg = 'Error in regular expression %r: %s'
-                raise ValueError(msg % (self._pattern, e))
+    pass
