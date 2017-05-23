@@ -1,8 +1,6 @@
 import codecs
 from setuptools import setup, find_packages
 
-VERSION = '0.0.0'
-
 entry_points = {
     'console_scripts': [
     ],
@@ -13,31 +11,43 @@ TESTS_REQUIRE = [
     'zope.testrunner',
 ]
 
+
+def _read(fname):
+    with codecs.open(fname, encoding='utf-8') as f:
+        return f.read()
+
+
 setup(
     name='nti.contentprocessing',
-    version=VERSION,
+    version=_read('version.txt').strip(),
     author='Jason Madden',
     author_email='jason@nextthought.com',
-    description="NTI Content Processing",
-    long_description=codecs.open('README.rst', encoding='utf-8').read(),
-    license='Proprietary',
-    keywords='Content Processing',
+    description="NTI content processing",
+    long_description=(_read('README.rst')  + '\n\n' + _read('CHANGES.rst')),
+    license='Apache',
+    keywords='ZODB',
     classifiers=[
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy'
     ],
+    zip_safe=True,
     packages=find_packages('src'),
     package_dir={'': 'src'},
+    include_package_data=True,
     namespace_packages=['nti'],
     tests_require=TESTS_REQUIRE,
     install_requires=[
         'setuptools',
         'nltk',
+        'nti.contentfragments',
+        'nti.property',
+        'nti.schema',
         'numpy',
         'pyquery',
         'PyPDF2',
@@ -56,13 +66,10 @@ setup(
         'zope.security',
         'zope.schema',
         'zopyx.txng3.ext',
-        'nti.contentfragments',
-        'nti.property',
-        'nti.schema'
     ],
     extras_require={
         'test': TESTS_REQUIRE,
     },
-    dependency_links=[],
-    entry_points=entry_points
+    entry_points=entry_points,
+    test_suite="nti.contentprocessing.tests",
 )
