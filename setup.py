@@ -1,6 +1,10 @@
 import codecs
 from setuptools import setup, find_packages
 
+import platform
+py_impl = getattr(platform, 'python_implementation', lambda: None)
+IS_PYPY = py_impl() == 'PyPy'
+
 entry_points = {
     'console_scripts': [
     ],
@@ -44,11 +48,11 @@ setup(
     tests_require=TESTS_REQUIRE,
     install_requires=[
         'setuptools',
-        'nltk',
+        'nltk' if not IS_PYPY else '',
         'nti.contentfragments',
         'nti.property',
         'nti.schema',
-        'numpy',
+        'numpy' if not IS_PYPY else '',
         'pyquery',
         'PyPDF2',
         'rdflib',
