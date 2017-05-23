@@ -70,8 +70,6 @@ def tokenize_content(text, lang='en'):
         tokenizer = component.queryUtility(IContentTokenizer, name=lang)
         result = tokenizer.tokenize(text) if tokenizer is not None else ()
     return result
-
-
 split_content = tokenize_content
 
 
@@ -147,6 +145,7 @@ def rank_words(word, terms, reverse=True):
     return result
 
 
+#: Default translation table
 _default_trans_table = None
 
 
