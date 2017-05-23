@@ -6,7 +6,7 @@ Whoosh based stemmers
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -20,7 +20,7 @@ except ImportError:
 
 from zope import interface
 
-from nti.contentprocessing._compat import to_unicode
+from nti.contentprocessing._compat import text_
 
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 
@@ -34,7 +34,7 @@ class _WhooshStemmer(object):
         pass
 
     def stem(self, token, lang='en'):
-        token = to_unicode(token)
+        token = text_(token)
         if has_stemmer(lang):
             stemmer = stemmer_for_language(lang)
             result = stemmer(token) if stemmer is not None else token

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -25,5 +25,5 @@ class TestWhooshStemmer(unittest.TestCase):
 
     def test_utility(self):
         stemmer = component.getUtility(interfaces.IStemmer, "whoosh")
-        assert_that(stemmer.stem('viruses'), is_('virus'))
-        assert_that(stemmer.stem('temptation'), is_('temptat'))
+        assert_that(stemmer.stem(u'viruses'), is_('virus'))
+        assert_that(stemmer.stem(u'temptation'), is_('temptat'))

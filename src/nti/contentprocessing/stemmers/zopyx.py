@@ -6,7 +6,7 @@ ZOPYX based stemmers
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -18,7 +18,7 @@ except ImportError:  # PyPy
 
 from zope import interface
 
-from nti.contentprocessing._compat import to_unicode
+from nti.contentprocessing._compat import text_
 
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 
@@ -46,7 +46,7 @@ class _ZopyYXStemmer(object):
     def stem(self, token, lang='en'):
         try:
             if stemmer is not None:
-                token = to_unicode(token)
+                token = text_(token)
                 result = self._stemmer(lang).stem((token,))
                 return result[0] if result else token
         except KeyError:  # lang not available
