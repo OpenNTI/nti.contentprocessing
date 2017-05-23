@@ -15,6 +15,8 @@ import codecs
 import functools
 from array import array
 
+from nti.contentprocessing._compat import text_
+
 
 class QuickStringBuffer(object):
 
@@ -260,14 +262,14 @@ class LanguageProfilerBuilder(object):
 
     def load(self, source, encoding="utf-8"):
         result = 0
-        source = open(str(source), "r") if not hasattr(
-            source, "readlines") else source
+        if not hasattr(source, "readlines"):
+            source = open(str(source), "r")
         try:
             self.ngrams.clear()
             self.ngramcounts = array(str('i'), 
                                      (0 for _ in range(self.maxLength + 1)))
-            reader = codecs.getreader(encoding)(source)
-            for line in reader.readlines():
+            for line in source.readlines():
+                line = text_(line, encoding)
                 if line and line[0] != '#':
                     splits = line.split()
                     ngramsequence = splits[0].strip()
