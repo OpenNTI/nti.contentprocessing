@@ -225,7 +225,7 @@ class LanguageProfilerBuilder(object):
     def normalize(self):
         if self.ngramcounts is None:
             self.ngramcounts = array(str('i'),
-                                     (0 for _ in xrange(self.maxLength + 1)))
+                                     (0 for _ in range(self.maxLength + 1)))
             for e in self.ngrams.values():
                 self.ngramcounts[e.size()] += e.count
 
@@ -265,7 +265,7 @@ class LanguageProfilerBuilder(object):
         try:
             self.ngrams.clear()
             self.ngramcounts = array(str('i'), 
-                                     (0 for _ in xrange(self.maxLength + 1)))
+                                     (0 for _ in range(self.maxLength + 1)))
             reader = codecs.getreader(encoding)(source)
             for line in reader.readlines():
                 if line and line[0] != '#':
@@ -296,7 +296,7 @@ class LanguageProfilerBuilder(object):
 
             lst = list()
             sublist = list()
-            for i in xrange(self.minLength, self.maxLength + 1):
+            for i in range(self.minLength, self.maxLength + 1):
                 for e in self.ngrams.values():
                     if len(e.seq) == i:
                         sublist.append(e)

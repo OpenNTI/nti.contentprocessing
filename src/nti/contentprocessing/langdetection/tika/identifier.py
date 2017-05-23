@@ -12,7 +12,14 @@ logger = __import__('logging').getLogger(__name__)
 import os
 import six
 import codecs
-import ConfigParser
+try:
+    from ConfigParser import ConfigParser
+except ImportError:
+    from configparser import ConfigParser
+
+DEFAULTSECT = 'DEFAULT'
+
+from nti.contentprocessing._compat import text_
 
 from nti.contentprocessing.langdetection.tika.profile import LanguageProfile
 
@@ -66,7 +73,7 @@ class LanguageIdentifier(object):
                               'languages/%s.ngp' % language)
         with codecs.open(source, "r", "utf-8") as fp:
             for line in fp.readlines():
-                line = unicode(line) if line else None
+                line = text_(line) if line else None
                 if line and line[0] != '#':
                     splits = line.split()
                     profile.add(splits[0].strip(), int(splits[1].strip()))
@@ -86,14 +93,14 @@ class LanguageIdentifier(object):
         cls.clearProfiles()
         source = os.path.join(os.path.dirname(__file__),
                               'languages/tika.language.properties')
-        config = ConfigParser.ConfigParser()
+        config = ConfigParser()
         config.readfp(open(source))
 
-        languages = config.get(ConfigParser.DEFAULTSECT, 'languages')
+        languages = config.get(DEFAULTSECT, 'languages')
         languages = languages.split(",")
         for language in languages:
-            language = unicode(language.strip())
-            name = config.get(ConfigParser.DEFAULTSECT,
+            language = text_(language.strip())
+            name = config.get(DEFAULTSECT,
                               "name." + language, "Unknown")
             try:
                 cls.addProfile(language)
