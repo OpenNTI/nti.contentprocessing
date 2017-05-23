@@ -13,7 +13,9 @@ patch()
 logger = __import__('logging').getLogger(__name__)
 
 import re
+import six
 import sys
+
 
 default_ngram_minsize = 2
 default_ngram_maxsize = 20  # average word size in English in 5.10
@@ -32,7 +34,7 @@ special_regexp_chars = (
 def _makenon_alpha_re():
     non_alpha = [u'[^']
     for i in range(sys.maxunicode):
-        c = unichr(i)
+        c = six.unichr(i)
         if c.isalpha():
             non_alpha.append(c)
         non_alpha.append(u']')
