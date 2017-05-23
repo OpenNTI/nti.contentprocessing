@@ -20,8 +20,6 @@ except ImportError:
 
 from zope import interface
 
-from nti.contentprocessing._compat import text_
-
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 
 
@@ -34,7 +32,6 @@ class _WhooshStemmer(object):
         pass
 
     def stem(self, token, lang='en'):
-        token = text_(token)
         if has_stemmer(lang):
             stemmer = stemmer_for_language(lang)
             result = stemmer(token) if stemmer is not None else token

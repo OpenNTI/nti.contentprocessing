@@ -18,8 +18,6 @@ except ImportError:
 
 from zope import interface
 
-from nti.contentprocessing._compat import text_
-
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 
 
@@ -32,7 +30,6 @@ class _PorterStemmer(object):
         pass
 
     def stem(self, token, lang='en'):
-        token = text_(token)
         if lang == 'en' and PorterStemmer is not None:
             # The underlying stemmer object is NOT thread safe,
             # it must not be used concurrently

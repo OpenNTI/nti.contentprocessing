@@ -18,8 +18,6 @@ except ImportError:  # PyPy
 
 from zope import interface
 
-from nti.contentprocessing._compat import text_
-
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 
 lang_translation = {'en': 'english', 'es': 'spansih', 'ru': 'russian',
@@ -46,7 +44,6 @@ class _ZopyYXStemmer(object):
     def stem(self, token, lang='en'):
         try:
             if stemmer is not None:
-                token = text_(token)
                 result = self._stemmer(lang).stem((token,))
                 return result[0] if result else token
         except KeyError:  # lang not available
