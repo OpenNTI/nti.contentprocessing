@@ -100,8 +100,7 @@ class LanguageIdentifier(object):
         languages = languages.split(",")
         for language in languages:
             language = text_(language.strip())
-            name = config.get(DEFAULTSECT,
-                              "name." + language, "Unknown")
+            name = config.get(DEFAULTSECT, "name." + language) or "Unknown"
             try:
                 cls.addProfile(language)
             except Exception as e:
