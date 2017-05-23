@@ -16,3 +16,4 @@ recursive-include doc Makefile
 recursive-exclude doc changelog.rst
 recursive-include src *.zcml
 recursive-include src *.txt
+recursive-include src *.ngp
