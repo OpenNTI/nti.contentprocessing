@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -39,8 +39,8 @@ class IContentTokenizer(interface.Interface):
 
 class INgramComputer(interface.Interface):
 
-    minsize = Int(title="Min ngram size.", required=True)
-    maxsize = Int(title="Max ngram size", required=False)
+    minsize = Int(title=u"Min ngram size.", required=True)
+    maxsize = Int(title=u"Max ngram size", required=False)
 
     def compute(text):
         """
@@ -85,11 +85,12 @@ class IImageMetadata(interface.Interface):
     Holds information about a particular image.
     """
 
-    url = TextLine(title="The URL to resolve the image")
+    url = TextLine(title=u"The URL to resolve the image")
 
-    width = Number(title="The width in pixels of the image",
+    width = Number(title=u"The width in pixels of the image",
                    required=False)
-    height = Number(title="The height in pixels of the image",
+
+    height = Number(title=u"The height in pixels of the image",
                     required=False)
 
 
@@ -100,45 +101,45 @@ class IContentMetadata(interface.Interface):
     possible extraction and each may be missing or empty.
     """
 
-    title = PlainTextLine(title="The title of the content",
+    title = PlainTextLine(title=u"The title of the content",
                           required=False,
-                          default='')
+                          default=u'')
 
-    description = PlainText(title="A short description of the content",
+    description = PlainText(title=u"A short description of the content",
                             required=False,
-                            default='')
+                            default=u'')
 
-    creator = PlainTextLine(title="A description of the creator",
-                            description="Possibly one or more names or even an organization.",
+    creator = PlainTextLine(title=u"A description of the creator",
+                            description=u"Possibly one or more names or even an organization.",
                             required=False,
-                            default='')
+                            default=u'')
 
     images = ListOrTuple(Object(IImageMetadata),
-                         title="Any images associated with this content, typically thumbnails",
+                         title=u"Any images associated with this content, typically thumbnails",
                          default=())
 
-    contentMimeType = TextLine(title="The Mime Type of the content",
+    contentMimeType = TextLine(title=u"The Mime Type of the content",
                                constraint=mimeTypeConstraint,
                                required=False)
 
-    contentLocation = TextLine(title="The canonical URL of the content",
-                               description=("After metadata extraction, we may have obtained"
-                                            " a canonical URL for the content, different from"
-                                            " the source location. For permanent storage and use"
-                                            " this is the value to use, not the source location."),
+    contentLocation = TextLine(title=u"The canonical URL of the content",
+                               description=(u"After metadata extraction, we may have obtained"
+                                            u" a canonical URL for the content, different from"
+                                            u" the source location. For permanent storage and use"
+                                            u" this is the value to use, not the source location."),
                                required=False)
 
-    sourceLocation = TextLine(title="The location of the source content",
-                              description=("The unprocessed, original location of the content"
-                                           " used to find the metadata. May be a local file"
-                                           " path or a URL."),
+    sourceLocation = TextLine(title=u"The location of the source content",
+                              description=(u"The unprocessed, original location of the content"
+                                           u" used to find the metadata. May be a local file"
+                                           u" path or a URL."),
                               required=False)
 
-    sourcePath = TextLine(title="A local file path to the content",
-                          description=("If the content was a local file, or"
-                                       " had to be downloaded to a temporary file"
-                                       " that was preserved following metadata processing,"
-                                       " this will be the path to that file."),
+    sourcePath = TextLine(title=u"A local file path to the content",
+                          description=(u"If the content was a local file, or"
+                                       u" had to be downloaded to a temporary file"
+                                       u" that was preserved following metadata processing,"
+                                       u" this will be the path to that file."),
                           required=False)
 
 
@@ -148,8 +149,7 @@ class IContentMetadataExtractorArgs(interface.Interface):
     """
 
     stream = interface.Attribute("A file-like object for reading the content")
-    bidirectionalstream = interface.Attribute(
-        "A file-like object for reading the content, supports seeking")
+    bidirectionalstream = interface.Attribute("A file-like object for reading the content, supports seeking")
     bytes = interface.Attribute("Raw bytes of the content.")
     text = interface.Attribute("Decoded text of the content.")
 

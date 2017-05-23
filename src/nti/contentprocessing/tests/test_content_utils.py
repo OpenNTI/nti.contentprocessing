@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -36,7 +36,7 @@ class TestContentUtils(unittest.TestCase):
 
     layer = SharedConfiguringTestLayer
 
-    sample_words = ("alfa", "bravo", "charlie", "delta", "echo")
+    sample_words = (u"alfa", u"bravo", u"charlie", u"delta", u"echo")
 
     def test_split_conent(self):
         s = u'ax+by=0'
@@ -51,32 +51,32 @@ class TestContentUtils(unittest.TestCase):
     def test_get_content(self):
         assert_that(get_content(None), is_(u''))
         assert_that(get_content({}), is_(u''))
-        assert_that(get_content('Zanpakuto Zangetsu'),
+        assert_that(get_content(u'Zanpakuto Zangetsu'),
                     is_('Zanpakuto Zangetsu'))
-        assert_that(get_content('\n\tZanpakuto,Zangetsu'),
+        assert_that(get_content(u'\n\tZanpakuto,Zangetsu'),
                     is_('Zanpakuto Zangetsu'))
-        assert_that(get_content('<html><b>Zangetsu</b></html>'),
+        assert_that(get_content(u'<html><b>Zangetsu</b></html>'),
                     is_('Zangetsu'))
         assert_that(get_content('orange-haired'), is_('orange-haired'))
 
-        assert_that(get_content('U.S.A. vs Japan'), is_('U.S.A. vs Japan'))
-        assert_that(get_content('$12.45'), is_('$12.45'))
-        assert_that(get_content('82%'), is_('82%'))
+        assert_that(get_content(u'U.S.A. vs Japan'), is_('U.S.A. vs Japan'))
+        assert_that(get_content(u'$12.45'), is_('$12.45'))
+        assert_that(get_content(u'82%'), is_('82%'))
 
         u = unichr(40960) + u'bleach' + unichr(1972)
         assert_that(get_content(u), is_(u'\ua000bleach'))
 
     def test_clean_special(self):
 
-        source = 'Zanpakuto Zangetsu'
+        source = u'Zanpakuto Zangetsu'
         assert_that(clean_special_characters(source), is_(source))
 
-        source = '?*?.\\+(ichigo^^{['
+        source = u'?*?.\\+(ichigo^^{['
         assert_that(clean_special_characters(source), is_('ichigo'))
 
     def test_rank_words(self):
         terms = sorted(self.sample_words)
-        word = 'stranger'
+        word = u'stranger'
         w = rank_words(word, terms)
         assert_that(sorted(w),
                     is_(sorted([u'bravo', u'delta', u'charlie', u'alfa', u'echo'])))

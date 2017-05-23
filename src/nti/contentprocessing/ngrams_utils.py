@@ -6,7 +6,7 @@ NGRAM processing utilities
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -17,8 +17,6 @@ import repoze.lru
 
 from zope import component
 from zope import interface
-
-from nti.contentprocessing._compat import to_unicode
 
 from nti.contentprocessing import default_ngram_maxsize
 from nti.contentprocessing import default_ngram_minsize
@@ -58,7 +56,7 @@ def compute_ngrams(text, lang="en"):
         return u''
     else:
         computer = component.getUtility(INgramComputer, name=lang)
-        return to_unicode(computer.compute(text))
+        return computer.compute(text)
 
 
 @interface.implementer(INgramComputer)

@@ -6,7 +6,7 @@ Content processing utilities
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -27,7 +27,7 @@ except ImportError:
     try:
         from whoosh.support.levenshtein import relative
     except ImportError:
-        relative = lambda x, y: 0
+        def relative(x, y): return 0
 
 from nti.contentfragments.interfaces import IPlainTextContentFragment
 
@@ -36,6 +36,8 @@ from nti.contentprocessing import non_alpha_pattern
 from nti.contentprocessing import special_regexp_chars
 from nti.contentprocessing import default_word_tokenizer_pattern
 from nti.contentprocessing import default_word_tokenizer_expression
+
+from nti.contentprocessing._compat import text_
 
 from nti.contentprocessing.interfaces import IWordSimilarity
 from nti.contentprocessing.interfaces import IContentTokenizer
@@ -68,6 +70,8 @@ def tokenize_content(text, lang='en'):
         tokenizer = component.queryUtility(IContentTokenizer, name=lang)
         result = tokenizer.tokenize(text) if tokenizer is not None else ()
     return result
+
+
 split_content = tokenize_content
 
 
@@ -76,7 +80,7 @@ def get_content(text=None, lang="en"):
         result = u''
     else:
         result = tokenize_content(text, lang)
-        result = ' '.join(result)
+        result = u' '.join(result)
     return result
 
 
@@ -86,8 +90,8 @@ def normalize(u, form='NFC'):
     Remove non-alpha chars and compress runs of spaces.
     """
     u = unicodedata.normalize(form, u)
-    u = non_alpha_pattern.sub(' ', u)
-    u = space_pattern.sub(' ', u)
+    u = non_alpha_pattern.sub(u' ', u)
+    u = space_pattern.sub(u' ', u)
     return u
 
 
@@ -142,6 +146,7 @@ def rank_words(word, terms, reverse=True):
     result = ws.rank(word, terms, reverse) if ws is not None else 0
     return result
 
+
 _default_trans_table = None
 
 
@@ -160,7 +165,7 @@ def _default_content_translation_table():
             line = line.replace('\n', '')
             splits = line.split('\t')
             repl = splits[4] or None if len(splits) >= 5 else None
-            _default_trans_table[int(splits[0])] = repl
+            _default_trans_table[int(splits[0])] = text_(repl)
 
     return _default_trans_table
 

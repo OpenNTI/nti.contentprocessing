@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -12,8 +12,8 @@ logger = __import__('logging').getLogger(__name__)
 
 def make_repr(default=None):
     if default is None:
-        default = lambda self: "%s().__dict__.update( %s )" % (
-            self.__class__.__name__, self.__dict__)
+        default = lambda self: "%s().__dict__.update( %s )" % \
+                  (self.__class__.__name__, self.__dict__)
 
     def __repr__(self):
         try:

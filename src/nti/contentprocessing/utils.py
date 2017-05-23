@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -22,4 +22,4 @@ def get_alchemy_api_key(name=None, error=True):
     if error and result is None:
         raise ComponentLookupError(IAlchemyAPIKey, name)
     return result
-getAlchemyAPIKey = get_alchemy_api_key
+getAlchemyAPIKey = get_alchemy_api_key # BWC

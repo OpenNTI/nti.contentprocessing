@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -26,9 +26,10 @@ class IRegisterAlchemyAPIKeyDirective(interface.Interface):
     """
     The arguments needed for registering a key
     """
-    name = fields.TextLine(title="The human readable/writable key name",
+    name = fields.TextLine(title=u"The human readable/writable key name",
                            required=False)
-    value = fields.TextLine(title="The actual key value. Should not contain spaces",
+
+    value = fields.TextLine(title=u"The actual key value. Should not contain spaces",
                             required=True)
 
 

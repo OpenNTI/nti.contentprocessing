@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 from nti.contentprocessing.monkey import patch
@@ -25,7 +25,8 @@ default_word_tokenizer_pattern = re.compile(default_word_tokenizer_expression,
 space_pattern = re.compile(r'\s+', re.UNICODE)
 
 special_regexp_chars = (
-    '.', '\\', '^', '$', '.', '|', '?', '*', '+', '(', ')', '[', '{')
+    '.', '\\', '^', '$', '.', '|', '?', '*', '+', '(', ')', '[', '{'
+)
 
 
 def _makenon_alpha_re():
