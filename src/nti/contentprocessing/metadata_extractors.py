@@ -18,7 +18,10 @@ import six
 import shutil
 import string
 import tempfile
-import urlparse
+try:
+    from urlparse import urlparse
+except ImportError:
+    from urllib.parse import urlparse
 
 import pyquery
 
@@ -37,6 +40,8 @@ from zope.location.interfaces import IContained
 
 from zope.mimetype.interfaces import IMimeTypeGetter
 from zope.mimetype.interfaces import IContentTypeAware
+
+from nti.contentprocessing._compat import text_
 
 from nti.contentprocessing.interfaces import IImageMetadata
 from nti.contentprocessing.interfaces import IContentMetadata
@@ -136,7 +141,7 @@ class _file_args(_abstract_args):
     @Lazy
     def text(self):
         with open(self.path, 'r') as f:
-            return f.read().decode('utf-8')
+            return text_(f.read())
 
     @Lazy
     def bytes(self):
@@ -220,7 +225,7 @@ def get_metadata_from_http_url(url):
     will raise a ValueError
     """
 
-    urlscheme = urlparse.urlparse(url).scheme
+    urlscheme = urlparse(url).scheme
     if urlscheme and urlscheme.startswith('http'):
         return _get_metadata_from_url(urlscheme, url)
     else:
@@ -240,7 +245,7 @@ def get_metadata_from_content_location(location):
 
     # Is it a URL and not a local file (taking care not
     # to treat windoze paths like "c:\foo" as URLs)
-    urlscheme = urlparse.urlparse(location).scheme
+    urlscheme = urlparse(location).scheme
     if urlscheme and (len(urlscheme) != 1 or urlscheme not in string.ascii_letters):
         # look up a handler for the scheme and pass it over.
         # this lets us delegate responsibility for schemes we
