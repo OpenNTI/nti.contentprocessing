@@ -27,9 +27,9 @@ setup(
     author='Jason Madden',
     author_email='jason@nextthought.com',
     description="NTI content processing",
-    long_description=(_read('README.rst')  + '\n\n' + _read('CHANGES.rst')),
+    long_description=(_read('README.rst') + '\n\n' + _read('CHANGES.rst')),
     license='Apache',
-    keywords='ZODB',
+    keywords='content processing',
     classifiers=[
         'Intended Audience :: Developers',
         'Natural Language :: English',
@@ -39,6 +39,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy',
     ],
     zip_safe=True,
     packages=find_packages('src'),
@@ -75,5 +76,4 @@ setup(
         'test': TESTS_REQUIRE,
     },
     entry_points=entry_points,
-    test_suite="nti.contentprocessing.tests",
 )

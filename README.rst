@@ -1,6 +1,6 @@
-==========
+=======================
  nti.contentprocessing
-==========
+=======================
 
 .. image:: https://travis-ci.org/NextThought/nti.contentprocessing.svg?branch=master
     :target: https://travis-ci.org/NextThought/nti.contentprocessing

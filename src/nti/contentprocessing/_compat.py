@@ -11,9 +11,11 @@ logger = __import__('logging').getLogger(__name__)
 
 import six
 
+PY2 = six.PY2
 PY3 = six.PY3
 
 text_type = six.text_type
+binary_type = six.binary_type
 class_types = six.class_types
 string_types = six.string_types
 integer_types = six.integer_types
@@ -27,7 +29,7 @@ else:
 def bytes_(s, encoding='utf-8', errors='strict'):
     """
     If ``s`` is an instance of ``text_type``, return
-    ``s.encode(encoding, errors)``, otherwise return ``str(s)``
+    ``s.encode(encoding, errors)``, otherwise return ``s``
     """
     if isinstance(s, text_type):
         return s.encode(encoding, errors)
@@ -40,7 +42,19 @@ def text_(s, encoding='utf-8', err='strict'):
     """
     s = s.decode(encoding, err) if isinstance(s, bytes) else s
     return _unicode(s) if s is not None else None
-to_unicode = unicode_ = text_
+unicode_ = to_unicode = text_
+
+
+if PY3:
+    def ascii_native_(s):
+        if isinstance(s, text_type):
+            s = s.encode('ascii')
+        return str(s, 'ascii', 'strict')
+else:
+    def ascii_native_(s):
+        if isinstance(s, text_type):
+            s = s.encode('ascii')
+        return str(s)
 
 
 if PY3:
@@ -61,4 +75,5 @@ else:
         if isinstance(s, text_type):
             return s.encode(encoding, errors)
         return str(s)
+
 
