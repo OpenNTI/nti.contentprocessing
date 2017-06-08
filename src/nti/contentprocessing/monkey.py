@@ -27,6 +27,7 @@ def _patch_html5lib():
 
     html5lib._inputstream.HTMLBinaryInputStream = _HTMLBinaryInputStream
 _patch_html5lib()
+del _patch_html5lib
 
 
 def patch():
