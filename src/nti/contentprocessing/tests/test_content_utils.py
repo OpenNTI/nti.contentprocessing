@@ -31,6 +31,10 @@ from nti.contentprocessing.interfaces import IWordTokenizerExpression
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
+try:
+    _unichr = unichr
+except (ImportError, NameError):
+    _unichr = chr
 
 class TestContentUtils(unittest.TestCase):
 
@@ -63,7 +67,7 @@ class TestContentUtils(unittest.TestCase):
         assert_that(get_content(u'$12.45'), is_('$12.45'))
         assert_that(get_content(u'82%'), is_('82%'))
 
-        u = unichr(40960) + u'bleach' + unichr(1972)
+        u = _unichr(40960) + u'bleach' + unichr(1972)
         assert_that(get_content(u), is_(u'\ua000bleach'))
 
     def test_clean_special(self):
