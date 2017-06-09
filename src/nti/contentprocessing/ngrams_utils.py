@@ -32,7 +32,7 @@ def _ngram_cache(text, minsize=3, maxsize=None, unique=True, lower=True):
     maxsize = maxsize or len(text)
     text = text.lower() if lower else text
     limit = min(maxsize, len(text))
-    for size in xrange(minsize, limit + 1):
+    for size in range(minsize, limit + 1):
         ngram = text[:size]
         result.append(ngram)
     return result
