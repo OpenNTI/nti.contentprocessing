@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -12,6 +12,8 @@ from hamcrest import assert_that
 from hamcrest import has_property
 from hamcrest import has_properties
 from hamcrest import contains_inanyorder
+
+from nti.testing.matchers import validly_provides
 
 import fudge
 import os.path
@@ -28,8 +30,6 @@ from nti.contentprocessing.interfaces import IContentMetadata
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
-from nti.testing.matchers import validly_provides
-
 
 class TestMetadataExtractors(unittest.TestCase):
 
@@ -42,8 +42,8 @@ class TestMetadataExtractors(unittest.TestCase):
     def test_opengraph_extraction_from_file(self):
         # Originally from NewYorker
         # http://www.newyorker.com/reporting/2013/01/07/130107fa_fact_green?currentPage=all
-        the_file = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), 'og_metadata.html'))
+        the_file = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                               u'og_metadata.html'))
 
         graph = Graph()
         graph.parse(the_file, format='rdfa')
@@ -73,7 +73,7 @@ class TestMetadataExtractors(unittest.TestCase):
         # Originally from NYTimes:
         # https://www.nytimes.com/2013/05/17/health/exercise-class-obedience-not-required.html
         the_file = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                'twitter_metadata.html'))
+                                                u'twitter_metadata.html'))
 
         graph = Graph()
         graph.parse(the_file, format='rdfa')
@@ -121,21 +121,20 @@ class TestMetadataExtractors(unittest.TestCase):
             html = template % prefix
             __traceback_info__ = html
             args = _args()
-            args.__name__ = 'http://example.com'
+            args.__name__ = u'http://example.com'
             args.text = html
 
-            result = _HTMLExtractor()._extract_opengraph(
-                ContentMetadata(), args)
+            result = _HTMLExtractor()._extract_opengraph(ContentMetadata(), args)
 
             assert_that(result, has_property('title', 'The Rock'))
-            assert_that(result, 
+            assert_that(result,
                         has_property('href', 'http://www.imdb.com/title/tt0117500/'))
             # For one image, we can preserve the width and height, if given
-            assert_that(result, 
-                        has_property('images', 
-                                    contains(has_properties(
-                                                'url', 'http://ia.media-imdb.com/images/rock.jpg',
-                                                'width', 300,
+            assert_that(result,
+                        has_property('images',
+                                     contains(has_properties(
+                                         'url', 'http://ia.media-imdb.com/images/rock.jpg',
+                                         'width', 300,
                                                 'height', 400))))
             assert_that(result, validly_provides(IContentMetadata))
 
@@ -165,17 +164,16 @@ class TestMetadataExtractors(unittest.TestCase):
             html = template % prefix
             __traceback_info__ = html
             args = _args()
-            args.__name__ = 'http://example.com'
+            args.__name__ = u'http://example.com'
             args.text = html
 
-            result = _HTMLExtractor()._extract_opengraph(
-                ContentMetadata(), args)
+            result = _HTMLExtractor()._extract_opengraph(ContentMetadata(), args)
 
             assert_that(result, has_property('title', 'The Rock'))
-            assert_that(result, 
+            assert_that(result,
                         has_property('href', 'http://www.imdb.com/title/tt0117500/'))
             # Sadly, order is not preserved
-            assert_that(result, has_property('images', 
+            assert_that(result, has_property('images',
                                              contains_inanyorder(has_property('url', 'http://example.com/rock.jpg'),
                                                                  has_property('url', 'http://example.com/rock2.jpg'),
                                                                  has_property('url', 'http://example.com/rock3.jpg'))))
@@ -185,8 +183,8 @@ class TestMetadataExtractors(unittest.TestCase):
         # By commenting out the patch line, we can test with a real file
         if fake_get is not None:
             # This real URL has been download locally
-            pdf_file = os.path.join(
-                os.path.dirname(__file__), 'test_page574_12.pdf')
+            pdf_file = os.path.join(os.path.dirname(__file__),
+                                    u'test_page574_12.pdf')
 
             class R1(object):
 
@@ -196,9 +194,9 @@ class TestMetadataExtractors(unittest.TestCase):
 
             fake_get.is_callable().returns(R1())
             # remote href
-            href = 'http://someserver.com/path/to/test_page574_12.pdf'
+            href = u'http://someserver.com/path/to/test_page574_12.pdf'
         else:
-            href = 'http://support.pokemon.com/FileManagement/Download/f6029520f8ea43f08790ec4975944bb3'
+            href = u'http://support.pokemon.com/FileManagement/Download/f6029520f8ea43f08790ec4975944bb3'
 
         result = get_metadata_from_content_location(href)
 
