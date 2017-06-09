@@ -36,6 +36,7 @@ try:
 except (ImportError, NameError):
     _unichr = chr
 
+
 class TestContentUtils(unittest.TestCase):
 
     layer = SharedConfiguringTestLayer
