@@ -19,7 +19,8 @@ from zope import interface
 
 from nti.contentprocessing import taggers
 from nti.contentprocessing import stemmers
-from nti.contentprocessing import tokenize_content
+
+from nti.contentprocessing.content_utils import tokenize_content
 
 from nti.contentprocessing.keyword.interfaces import ITermExtractFilter
 from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWord
