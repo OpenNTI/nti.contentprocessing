@@ -16,7 +16,6 @@ import re
 import six
 import sys
 
-
 default_ngram_minsize = 2
 default_ngram_maxsize = 20  # average word size in English is 5.10
 default_word_tokenizer_expression = r"(?x)(?:[A-Z]\.)+ | \$?\d+(?:\.\d+)?%? | \w+(?:[-']\w+)*"
@@ -43,18 +42,3 @@ def _makenon_alpha_re():
 
 non_alpha_pattern = _makenon_alpha_re()
 del _makenon_alpha_re
-
-# BWC
-from nti.contentfragments.punctuation import default_punk_mark_pattern as default_punk_char_pattern
-from nti.contentfragments.punctuation import default_punk_mark_expression as default_punk_char_expression
-from nti.contentfragments.punctuation import default_punk_mark_pattern_plus as default_punk_char_pattern_plus
-from nti.contentfragments.punctuation import default_punk_mark_expression_plus as default_punk_char_expression_plus
-
-# [re]export common functions
-from nti.contentprocessing.content_utils import normalize
-from nti.contentprocessing.content_utils import rank_words
-from nti.contentprocessing.content_utils import tokenize_content
-from nti.contentprocessing.content_utils import get_content_translation_table
-split_content = tokenize_content
-
-from nti.contentprocessing.ngrams_utils import compute_ngrams

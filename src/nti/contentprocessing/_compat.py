@@ -11,14 +11,9 @@ logger = __import__('logging').getLogger(__name__)
 
 import six
 
-PY2 = six.PY2
 PY3 = six.PY3
 
 text_type = six.text_type
-binary_type = six.binary_type
-class_types = six.class_types
-string_types = six.string_types
-integer_types = six.integer_types
 
 if PY3:  # pragma: no cover
     def _unicode(s): return str(s)
@@ -75,5 +70,3 @@ else:
         if isinstance(s, text_type):
             return s.encode(encoding, errors)
         return str(s)
-
-
