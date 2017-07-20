@@ -364,12 +364,12 @@ class _HTMLExtractor(object):
             meta = args.pyquery_dom(b'meta[name=description]')
             text = meta.attr['content'] if meta else ''
             if text:
-                result.description = unicode(text)
+                result.description = text_(text)
         if not result.title:
             title = args.pyquery_dom(b'title')
             text = title.text()
             if text:
-                result.title = unicode(text)
+                result.title = text_(text)
         return result
 
 
