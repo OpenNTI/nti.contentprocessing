@@ -31,9 +31,8 @@ class TestNgramUtils(unittest.TestCase):
                     is_(sorted('wo word wor'.split(' '))))
 
         n = compute_ngrams('self-esteem')
-        assert_that(
-            sorted(n.split(' ')),
-            is_(sorted('self- self-este self-es self self-est self-e self-estee sel se self-esteem'.split(' '))))
+        assert_that(sorted(n.split(' ')),
+                    is_(sorted('self- self-este self-es self self-est self-e self-estee sel se self-esteem'.split(' '))))
 
         n = compute_ngrams(None)
         assert_that(n, is_(''))

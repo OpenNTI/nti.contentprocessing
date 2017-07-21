@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -14,6 +14,7 @@ from hamcrest import assert_that
 from hamcrest import has_property
 
 import os
+import fudge
 import unittest
 
 from nti.contentprocessing.langdetection.openxerox import _OpenXeroxLanguageDetector
@@ -31,8 +32,11 @@ class TestOpenXeroxLangDetector(unittest.TestCase):
         with open(name, "r") as f:
             return f.read()
 
-    @unittest.SkipTest
-    def test_lang_detector(self):
+    @fudge.patch('requests.post')
+    def test_lang_detector(self, mock_post):
+        res = fudge.Fake().provides("json").calls(lambda : 'en')
+        res.has_attr(status_code=200)
+        mock_post.is_callable().returns(res)
         lang = _OpenXeroxLanguageDetector.detect(self.sample_en)
         assert_that(lang, is_not(none()))
         assert_that(lang, has_property('code', is_('en')))

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -34,6 +34,6 @@ class TestConceptTagger(unittest.TestCase):
         terms = alchemy.get_keywords(self.sample, "NTI-TEST")
         terms = {r.token: r.relevance for r in terms}
         assert_that(terms, has_length(20))
-        assert_that(terms, has_key(u'knobby green objects'))
-        assert_that(terms, has_key(u'blood cells'))
-        assert_that(terms, has_key(u'red blood cells'))
+        assert_that(terms, has_key('knobby green objects'))
+        assert_that(terms, has_key('blood cells'))
+        assert_that(terms, has_key('red blood cells'))

@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -15,7 +15,7 @@ from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWordExtractor
 
 
-def term_extract_key_words(content, lang='en', filtername=u''):
+def term_extract_key_words(content, lang='en', filtername=''):
     extractor = component.queryUtility(ITermExtractKeyWordExtractor, name=lang)
     if extractor is not None:
         return extractor(content, lang=lang, filtername=filtername)

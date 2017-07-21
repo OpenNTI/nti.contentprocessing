@@ -41,7 +41,7 @@ class _OpenXeroxLanguageDetector(object):
             r = requests.post(OPEN_XEROX_URL, data=params, headers=headers)
             data = r.json()
             if r.status_code == 200 and data:
-                result = Language(code=data)
+                result = Language(code=text_(data))
             else:
                 logger.error("%s is an invalid status response code; %s",
                              r.status_code, data)

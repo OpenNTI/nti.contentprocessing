@@ -4,12 +4,14 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
+
+from nti.contentprocessing._compat import text_
 
 from nti.contentprocessing.langdetection.model import Language
 
@@ -40,7 +42,7 @@ class _TikaLanguageDetector(object):
         loadProfiles()
         profile = LanguageProfile(content)
         iden = LanguageIdentifier(profile)
-        return Language(code=iden.language)
+        return Language(code=text_(iden.language))
 
     def __call__(self, content, **kwargs):
         return self.detect(content)

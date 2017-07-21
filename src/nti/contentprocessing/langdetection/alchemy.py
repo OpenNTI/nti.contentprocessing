@@ -6,7 +6,7 @@ Alchemy lang detector
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -50,8 +50,8 @@ class _AlchemyTextLanguageDetector(object):
         try:
             if content:
                 result = get_language(content, name=keyname, **kwargs)
-        except:
-            logger.exception('Error while detecting language using Alchemy')
+        except Exception:
+            logger.exception('Error while detecting language')
         return result
 
     def __call__(self, content, keyname=None, **kwargs):
@@ -67,8 +67,7 @@ def get_language(content, name=None, **kwargs):
             data = alchemy_client.language(text=content)
         except Exception:
             result = None
-            logger.error(
-                'Invalid request status while detecting language from Alchemy')
+            logger.error('Invalid request status while detecting language')
         else:
             result = _AlchemyLanguage(ISO_639_1=data.get('iso-639-1'),
                                       ISO_639_2=data.get('iso-639-2', None),

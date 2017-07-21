@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 # disable: accessing protected members, too many methods
@@ -40,15 +40,16 @@ class TestAlchemyLangDetector(unittest.TestCase):
         assert_that(lang, has_property('name', is_('english')))
 
     def test_alchemy_language(self):
-        a = _AlchemyLanguage(ISO_639_1='en', 
-                             ISO_639_2='a', 
-                             ISO_639_3='a', 
-                             name='enlgish')
-        assert_that(a.code, is_('en'))
-        b = _AlchemyLanguage(ISO_639_1='en', 
-                             ISO_639_2='a', 
-                             ISO_639_3='a', 
-                             name='enlgish')
+        a = _AlchemyLanguage(ISO_639_1=u'en', 
+                             ISO_639_2=u'a', 
+                             ISO_639_3=u'a', 
+                             name=u'enlgish')
+        assert_that(a, has_property('code', is_('en')))
+
+        b = _AlchemyLanguage(ISO_639_1=u'en', 
+                             ISO_639_2=u'a', 
+                             ISO_639_3=u'a', 
+                             name=u'enlgish')
         assert_that(a, is_(b))
         assert_that(hash(a), is_(hash(b)))
         assert_that(str(a), is_('en'))

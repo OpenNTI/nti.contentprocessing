@@ -6,7 +6,7 @@ Alchemy keyword extractor
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -30,12 +30,11 @@ def get_keywords(content, name=None, **kwargs):
             result = alchemy_client.keywords(text=content)
         except Exception:
             result = ()
-            logger.error(
-                'Invalid request status while getting keywords from Alchemy')
+            logger.exception('Invalid request status while getting keywords')
         else:
             keywords = result.get('keywords', ())
-            result = tuple(    ContentKeyWord(d['text'], float(d.get('relevance', 0)))
-                            for d in keywords)
+            result = tuple(ContentKeyWord(d['text'], float(d.get('relevance', 0)))
+                           for d in keywords)
     return result
 
 
@@ -46,11 +45,11 @@ class _AlchemyAPIKeyWordExtractor(object):
 
     def __call__(self, content, keyname=None, *args, **kwargs):
         result = ()
-        if isinstance(content, (list, tuple)):
-            content = ' '.join(content)
+        if isinstance(content, (list, tuple, set)):
+            content = u' '.join(content)
         try:
             if content:
                 result = get_keywords(content, keyname, **kwargs)
         except Exception:
-            logger.exception('Error while getting keywords from Alchemy')
+            logger.exception('Error while getting keywords')
         return result

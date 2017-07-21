@@ -6,7 +6,7 @@ TermExtract keyword extractor
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -107,7 +107,7 @@ class TermExtractor(object):
             elif state == self._NOUN and not tag.startswith('N'):
                 state = self._SEARCH
                 if len(multiterm) > 1:
-                    word = ' '.join([word for word, norm in multiterm])
+                    word = u' '.join([word for word, norm in multiterm])
                     terms.setdefault(word, 0)
                     terms[word] += 1
                 multiterm = []
@@ -124,7 +124,7 @@ class TermExtractor(object):
 @interface.implementer(ITermExtractKeyWordExtractor)
 class _DefaultTermKeyWorExtractor(object):
 
-    def __call__(self, content, lang='en', filtername=u'', *args, **kwargs):
+    def __call__(self, content, lang='en', filtername='', *args, **kwargs):
         if isinstance(content, six.string_types):
             tokenized_words = tokenize_content(content, lang)
         else:

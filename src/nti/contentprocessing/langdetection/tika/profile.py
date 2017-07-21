@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -70,8 +70,7 @@ class LanguageProfile(object):
     def distance(self, that):
 
         if self.length != that.length:
-            raise ValueError(
-                "Unable to calculate distance of language profiles")
+            raise ValueError("Unable to calculate distance of language profiles")
 
         sumOfSquares = 0.0
         thisCount = max(self.count, 1.0)

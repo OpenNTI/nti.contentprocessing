@@ -5,12 +5,9 @@
 		    i18n_domain="zope">
 
 	<include package="zope.component" file="meta.zcml" />
-	<include package="zope.security" file="meta.zcml" />
 	<include package="zope.component" />
-	<include package="zope.security" />
 
 	<utility factory=".termextract.DefaultFilter" />
-
 	<utility factory=".termextract._DefaultTermKeyWorExtractor" />
 	<utility factory=".termextract._DefaultTermKeyWorExtractor" name="en" />
 

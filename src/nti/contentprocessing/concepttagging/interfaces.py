@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -21,18 +21,18 @@ class IConceptSource(interface.Interface):
     """
     Represent a concept source entry (e.g. linked data) 
     """
-    source = ValidTextLine(title="source name", required=True)
-    uri = ValidTextLine(title="source uri", required=True)
+    source = ValidTextLine(title=u"source name", required=True)
+    uri = ValidTextLine(title=u"source uri", required=True)
 
 
 class IConcept(interface.Interface):
     """
     Represent a concept
     """
-    text = ValidTextLine(title="concept text", required=True)
-    relevance = Number(title="concept relevance", required=False)
-    sources = ListOrTuple(title="Concept sources", min_length=0,
-                          value_type=Object(IConceptSource, title="The source"))
+    text = ValidTextLine(title=u"concept text", required=True)
+    relevance = Number(title=u"concept relevance", required=False)
+    sources = ListOrTuple(title=u"Concept sources", min_length=0,
+                          value_type=Object(IConceptSource, title=u"The source"))
 
 
 class IConceptTagger(interface.Interface):

@@ -4,7 +4,7 @@
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -21,18 +21,21 @@ class IContentKeyWord(interface.Interface):
     """
     represent a key word found in a content
     """
-    token = ValidTextLine(title="word token", required=True)
-    relevance = Number(title="word relevance", required=False)
+    token = ValidTextLine(title=u"word token", required=True)
+
+    relevance = Number(title=u"word relevance", required=False)
 
 
 class ITermExtractKeyWord(IContentKeyWord):
     """
     represent a key word found in a content
     """
-    frequency = Int(title="word frequency", required=False)
-    strength = Int(title="word strength", required=False)
-    terms = ListOrTuple(value_type=ValidTextLine(title="Term"),
-                        title="terms associated with token", required=False)
+    frequency = Int(title=u"word frequency", required=False)
+
+    strength = Int(title=u"word strength", required=False)
+
+    terms = ListOrTuple(value_type=ValidTextLine(title=u"Term"),
+                        title=u"terms associated with token", required=False)
 
 
 class ITermExtractFilter(interface.Interface):
