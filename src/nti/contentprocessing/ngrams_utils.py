@@ -27,7 +27,7 @@ from nti.contentprocessing.interfaces import INgramComputer
 
 
 @repoze.lru.lru_cache(5000)
-def _ngram_cache(text, minsize=3, maxsize=None, unique=True, lower=True):
+def _ngram_cache(text, minsize=3, maxsize=None, lower=True):
     result = []
     maxsize = maxsize or len(text)
     text = text.lower() if lower else text
@@ -42,7 +42,7 @@ def ngram_filter(text, minsize=3, maxsize=None, unique=True, lower=True):
     tokens = tokenize_content(text)
     result = set() if unique else list()
     for text in tokens:
-        ngrams = _ngram_cache(text, minsize, maxsize, unique, lower)
+        ngrams = _ngram_cache(text, minsize, maxsize, lower)
         if unique:
             result.update(ngrams)
         else:
@@ -68,7 +68,7 @@ class _DefaultNgramComputer(object):
     def compute(self, text):
         if text:
             result = ngram_filter(text, self.minsize, self.maxsize)
-            result = ' '.join(result)
+            result = u' '.join(result)
         else:
             result = u''
         return result
