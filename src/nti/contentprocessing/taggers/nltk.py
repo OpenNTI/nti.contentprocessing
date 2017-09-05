@@ -13,8 +13,12 @@ logger = __import__('logging').getLogger(__name__)
 
 import os
 import gzip
-import pickle
 import inspect
+
+try:
+    from six.moves import cPickle as pickle
+except ImportError:
+    import pickle
 
 from zope import component
 from zope import interface
