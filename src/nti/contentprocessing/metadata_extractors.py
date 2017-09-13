@@ -164,8 +164,8 @@ def _get_metadata_from_mime_type(location, mime_type, args_factory):
         result = processor.extract_metadata(args)
 
     if result is not None:
-        result.sourceLocation = location
-        result.contentMimeType = six.text_type(mime_type)
+        result.sourceLocation = text_(location)
+        result.contentMimeType = text_(mime_type)
 
     return result, args
 
@@ -199,12 +199,12 @@ def _http_scheme_handler(location):
     # Get the content type, splitting off encoding, etc
     mime_type = response.headers.get('content-type').split(';', 1)[0]
 
-    result, args = \
-        _get_metadata_from_mime_type(
-            location, mime_type, lambda: _request_args(location, response))
+    result, args = _get_metadata_from_mime_type(
+                         location, mime_type, lambda: _request_args(location, response)
+                    )
 
     if result is not None:
-        result.sourcePath = args.download_path
+        result.sourcePath = text_(args.download_path)
     return result
 interface.directlyProvides(_http_scheme_handler, IContentMetadataURLHandler)
 
@@ -216,7 +216,7 @@ def _get_metadata_from_path(location):
                                              lambda: _file_args(location))
 
     if result is not None:
-        result.sourcePath = location
+        result.sourcePath = text_(location)
     return result
 
 
@@ -301,15 +301,18 @@ class _HTMLExtractor(object):
             if getattr(result, attr_name, None):
                 continue
 
-            triples = \
-                graph.triples_choices(
-                    (None, [getattr(x, ns_name) for x in nss], None))
+            triples = graph.triples_choices(
+                        (None, [getattr(x, ns_name) for x in nss], None)
+                      )
 
             for _, _, val in triples:
+                val =  val.toPython()
+                if isinstance(val, six.string_types):
+                    val = text_(val)
                 if ns_name == 'image':
                     if not result.images:
                         result.images = []
-                    image = ImageMetadata(url=val.toPython())
+                    image = ImageMetadata(url=val)
                     image.__parent__ = result
                     image.__name__ = image.url
                     # FIXME: If there are multiple image elements,
@@ -319,14 +322,14 @@ class _HTMLExtractor(object):
                     # We can only do it if there is exactly one image.
                     result.images.append(image)
                 else:
-                    setattr(result, attr_name, val.toPython())
+                    setattr(result, attr_name, val)
                     break
 
         if len(result.images) == 1:
             for k in 'height', 'width':
-                triples = \
-                    graph.triples_choices(
-                        (None, [getattr(x, 'image:' + k) for x in nss], None))
+                triples = graph.triples_choices(
+                             (None, [getattr(x, 'image:' + k) for x in nss], None)
+                          )
                 for _, _, val in triples:
                     setattr(result.images[0], k, int(val.toPython()))
         return result
@@ -350,7 +353,7 @@ class _HTMLExtractor(object):
             val = meta.get('content')
 
             if name and val:
-                val = six.text_type(val)
+                val = text_(val)
                 if name in prop_names:
                     attr_name = prop_names[name]
                     if not getattr(result, attr_name, None):
@@ -393,9 +396,9 @@ class _PDFExtractor(object):
         # This dict is weird: [] and get() return different things,
         # with [] returning the strings we want
         if '/Title' in info and info['/Title']:
-            result.title = info['/Title']
+            result.title = text_(info['/Title'])
         if '/Author' in info and info['/Author']:
-            result.creator = info['/Author']
+            result.creator = text_(info['/Author'])
         if '/Subject' in info and info['/Subject']:
-            result.description = info['/Subject']
+            result.description = text_(info['/Subject'])
         return result
