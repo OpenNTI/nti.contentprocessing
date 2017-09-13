@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Alchemy keyword extractor
+Watson keyword extractor
 
 .. $Id$
 """
@@ -11,39 +11,46 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+import watson_developer_cloud.natural_language_understanding.features.v1 as features
+
 from zope import interface
 
-from nti.contentprocessing.watson import get_natural_lang_understanding_client as get_alchemy_client
+from nti.contentprocessing.watson import get_natural_lang_understanding_client
 
 from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 
 from nti.contentprocessing.keyword.model import ContentKeyWord
 
 
-def get_keywords(content, name=None, **kwargs):
+def analyze(client, content, **kwargs):
+    response = client.analyze(text=content,
+                              features=[features.Keywords()],
+                              **kwargs)
+    return response
+
+
+def get_keywords(content, name='', **kwargs):
     result = ()
-    alchemy_client = get_alchemy_client(name)
-    if alchemy_client is not None:
+    watson_client = get_natural_lang_understanding_client(name)
+    if watson_client is not None:
         try:
-            # XXX: Do we need to sniff (or convert to) for HTML or text?
-            # max_items defaults to 50
-            result = alchemy_client.keywords(text=content)
+            response = analyze(watson_client, content, **kwargs)
         except Exception:
             result = ()
             logger.exception('Invalid request status while getting keywords')
         else:
-            keywords = result.get('keywords', ())
+            keywords = response.get('keywords', ())
             result = tuple(ContentKeyWord(d['text'], float(d.get('relevance', 0)))
                            for d in keywords)
     return result
 
 
 @interface.implementer(IKeyWordExtractor)
-class _AlchemyAPIKeyWordExtractor(object):
+class _WatsonAPIKeyWordExtractor(object):
 
     __slots__ = ()
 
-    def __call__(self, content, keyname=None, *args, **kwargs):
+    def __call__(self, content, keyname=None, **kwargs):
         result = ()
         if isinstance(content, (list, tuple, set)):
             content = u' '.join(content)

@@ -34,7 +34,7 @@ class DefaultFilter(object):
         self.no_limit_strength = no_limit_strength
         self.single_strength_min_occur = single_strength_min_occur
 
-    def __call__(self, word, occur, strength):
+    def __call__(self, unused_word, occur, strength):
         return (strength == 1 and occur >= self.single_strength_min_occur) \
             or (strength >= self.no_limit_strength)
 
@@ -45,7 +45,7 @@ class DefaultFilter(object):
     __str__ = __repr__
 
 
-def term_extract_filter(name=u''):
+def term_extract_filter(name=''):
     result = component.queryUtility(ITermExtractFilter, name=name)
     return result or DefaultFilter()
 
@@ -124,7 +124,7 @@ class TermExtractor(object):
 @interface.implementer(ITermExtractKeyWordExtractor)
 class _DefaultTermKeyWorExtractor(object):
 
-    def __call__(self, content, lang='en', filtername='', *args, **kwargs):
+    def __call__(self, content, lang='en', filtername='', *unused_args, **unused_kwargs):
         if isinstance(content, six.string_types):
             tokenized_words = tokenize_content(content, lang)
         else:

@@ -44,7 +44,7 @@ class TestConceptTagger(unittest.TestCase):
             return simplejson.load(fp)
 
     @fudge.patch('nti.contentprocessing.concepttagging.watson.analyze')
-    def test_alchemy_ct(self, mock_an):
+    def test_watson_concepts(self, mock_an):
         mock_an.is_callable().with_args().returns(self.response)
         concepts = get_ranked_concepts(self.sample)
         assert_that(concepts, has_length(8))

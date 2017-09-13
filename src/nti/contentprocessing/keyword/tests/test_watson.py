@@ -11,15 +11,17 @@ from hamcrest import has_key
 from hamcrest import has_length
 from hamcrest import assert_that
 
+import fudge
+
 import os
 import unittest
 
-from nti.contentprocessing.keyword import alchemy
+import simplejson
+
+from nti.contentprocessing.keyword import watson
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
-
-@unittest.SkipTest
 class TestConceptTagger(unittest.TestCase):
 
     layer = SharedConfiguringTestLayer
@@ -30,8 +32,16 @@ class TestConceptTagger(unittest.TestCase):
         with open(name, "r") as f:
             return f.read()
 
-    def test_alchemy_keywords(self):
-        terms = alchemy.get_keywords(self.sample, "NTI-TEST")
+    @property
+    def response(self):
+        name = os.path.join(os.path.dirname(__file__), 'response.json')
+        with open(name, "r") as fp:
+            return simplejson.load(fp)
+
+    @fudge.patch('nti.contentprocessing.keyword.watson.analyze')
+    def test_watson_keywords(self, mock_an):
+        mock_an.is_callable().with_args().returns(self.response)
+        terms = watson.get_keywords(self.sample)
         terms = {r.token: r.relevance for r in terms}
         assert_that(terms, has_length(20))
         assert_that(terms, has_key('knobby green objects'))
