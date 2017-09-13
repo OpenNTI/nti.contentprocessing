@@ -15,11 +15,11 @@ import watson_developer_cloud.natural_language_understanding.features.v1 as feat
 
 from zope import interface
 
-from nti.contentprocessing.watson import get_natural_lang_understanding_client
-
 from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 
 from nti.contentprocessing.keyword.model import ContentKeyWord
+
+from nti.contentprocessing.watson import get_natural_lang_understanding_client
 
 
 def analyze(client, content, **kwargs):

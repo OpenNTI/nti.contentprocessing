@@ -13,6 +13,7 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
+from nti.schema.field import Number
 from nti.schema.field import TextLine
 
 
@@ -25,20 +26,13 @@ class ILanguage(interface.Interface):
     name = TextLine(title=u"language name", required=False)
 
 
-class IAlchemyLanguage(ILanguage):
+class IWatsonLanguage(ILanguage):
     """
     represent a language
     """
-    ISO_639_1 = TextLine(title=u"language iso-639-1 code", 
-                         required=True)  # alias for code
-
-    ISO_639_2 = TextLine(title=u"language iso-639-2 code", 
-                         required=False)
-
-    ISO_639_3 = TextLine(title=u"language iso-639-3 code", 
-                         required=False)
-
-    name = TextLine(title=u"language name", required=False)
+    confidence = Number(title=u"detection confidence",
+                        required=False,
+                        default=0)
 
 
 class ILanguageDetector(interface.Interface):

@@ -11,6 +11,7 @@ __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
 
+from watson_developer_cloud import LanguageTranslatorV2
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
 
 from zope import interface
@@ -53,4 +54,17 @@ def get_natural_lang_understanding_client(name=''):
                         username=watson_key.username,
                         password=watson_key.password,
                         version=NaturalLanguageUnderstandingV1.latest_version)
+    return result
+
+
+def get_language_translator_client(name=''):
+    """
+    Returns an WatsonAPI client for using the Language Translator
+    service or None if no key is configured.
+    """
+    result = None
+    watson_key = get_watson_api_key(name)
+    if watson_key:
+        result = LanguageTranslatorV2(username=watson_key.username,
+                                      password=watson_key.password)
     return result

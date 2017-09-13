@@ -13,6 +13,8 @@ import functools
 
 from zope import interface
 
+from zope.cachedescriptors.property import readproperty
+
 from nti.contentprocessing.langdetection.interfaces import ILanguage
 
 from nti.contentprocessing.representation import WithRepr
@@ -30,6 +32,10 @@ from nti.schema.schema import SchemaConfigured
 @interface.implementer(ILanguage)
 class Language(SchemaConfigured):
     createDirectFieldProperties(ILanguage)
+
+    @readproperty
+    def name(self):
+        return self.code
 
     def __lt__(self, other):
         try:

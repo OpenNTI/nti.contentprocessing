@@ -67,6 +67,11 @@
 		<watson:registerWatsonAPIKey
 			username="6a263592-7388-461c-b076-40346a43a8af"
 			password="gcCDDbmjdnTN" />
+			
+		<watson:registerWatsonAPIKey
+			name="translator"
+			username="3b372e32-8e2b-44f9-ad75-29fd6c1606a6"
+			password="KAbwteylJ2Yn" />
 	</configure>
 	
 </configure>

@@ -15,7 +15,7 @@ from zope import component
 
 from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
-DETECTORS = ('alchemy', 'xerox', 'tika')
+DETECTORS = ('watson', 'xerox', 'tika')
 
 
 def detect_Language(content, name=None):

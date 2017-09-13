@@ -14,12 +14,12 @@ logger = __import__('logging').getLogger(__name__)
 import watson_developer_cloud.natural_language_understanding.features.v1 as features
 
 from zope import interface
-    
-from nti.contentprocessing.watson import get_natural_lang_understanding_client
 
 from nti.contentprocessing.concepttagging.concept import Concept
 
 from nti.contentprocessing.concepttagging.interfaces import IConceptTagger
+
+from nti.contentprocessing.watson import get_natural_lang_understanding_client
 
 
 def analyze(client, content, **kwargs):

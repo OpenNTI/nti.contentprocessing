@@ -9,7 +9,9 @@
 	
 	<utility factory=".tika._TikaLanguageDetector"/>
 	<utility factory=".tika._TikaLanguageDetector" name="tika" />
+
+	<utility factory=".watson._WatsonTextLanguageDetector" name="watson" />
+
 	<utility factory=".openxerox._OpenXeroxLanguageDetector" name="xerox" />
-	<utility factory=".alchemy._AlchemyTextLanguageDetector" name="alchemy" />
 	
 </configure>
