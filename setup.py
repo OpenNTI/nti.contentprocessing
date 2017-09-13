@@ -64,6 +64,7 @@ setup(
         'Whoosh',
         'zope.cachedescriptors',
         'zope.component',
+        'zope.configuration',
         'zope.deprecation',
         'zope.interface',
         'zope.location',

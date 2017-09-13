@@ -13,7 +13,7 @@ logger = __import__('logging').getLogger(__name__)
 
 from zope import interface
 
-from nti.contentprocessing.alchemy import get_alchemy_client
+from nti.contentprocessing.watson import get_natural_lang_understanding_client as get_alchemy_client
 
 from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 

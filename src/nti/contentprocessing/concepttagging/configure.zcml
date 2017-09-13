@@ -7,7 +7,7 @@
 	<include package="zope.component" file="meta.zcml" />
 	<include package="zope.component" />
 	
-	<utility factory=".alchemy._AlchemyAPIKConceptTaggger" />
-	<utility factory=".alchemy._AlchemyAPIKConceptTaggger" name='en' />
+	<utility factory=".watson._WatsonAPIKConceptTaggger" />
+	<utility factory=".watson._WatsonAPIKConceptTaggger" name='en' />
 	
 </configure>

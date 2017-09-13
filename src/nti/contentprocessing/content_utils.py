@@ -27,7 +27,7 @@ except ImportError:
     try:
         from whoosh.support.levenshtein import relative
     except ImportError:
-        def relative(x, y): return 0
+        def relative(*unused_args): return 0
 
 from nti.contentfragments.interfaces import IPlainTextContentFragment
 
@@ -120,7 +120,7 @@ class _ContentTokenizer(object):
 @interface.implementer(IWordSimilarity)
 class _BaseWordSimilarity(object):
 
-    def compute(self, a, b):
+    def compute(self, *unused_args):
         return 0
 
     def rank(self, word, terms, reverse=True):

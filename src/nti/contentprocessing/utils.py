@@ -13,13 +13,13 @@ from zope import component
 
 from zope.component.interfaces import ComponentLookupError
 
-from nti.contentprocessing.interfaces import IAlchemyAPIKey
+from nti.contentprocessing.interfaces import IWatsonAPIKey
 
 
-def get_alchemy_api_key(name=None, error=True):
-    name = '' if not name else name
-    result = component.queryUtility(IAlchemyAPIKey, name=name)
+def get_watson_api_key(name='', error=True):
+    name = name or ''
+    result = component.queryUtility(IWatsonAPIKey, name=name)
     if error and result is None:
-        raise ComponentLookupError(IAlchemyAPIKey, name)
+        raise ComponentLookupError(IWatsonAPIKey, name)
     return result
-getAlchemyAPIKey = get_alchemy_api_key # BWC
+getWatsonAPIKey = get_watson_api_key # BWC

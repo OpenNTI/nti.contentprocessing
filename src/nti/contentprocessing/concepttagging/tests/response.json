@@ -1,0 +1,44 @@
+{
+	"concepts": [
+		{
+			"relevance": 0.972798,
+			"text": "Federal Bureau of Investigation",
+			"dbpedia_resource": "http://dbpedia.org/resource/Federal_Bureau_of_Investigation"
+		},
+		{
+			"relevance": 0.803067,
+			"text": "September 11 attacks",
+			"dbpedia_resource": "http://dbpedia.org/resource/September_11_attacks"
+		},
+		{
+			"relevance": 0.668425,
+			"text": "Law enforcement agency",
+			"dbpedia_resource": "http://dbpedia.org/resource/Law_enforcement_agency"
+		},
+		{
+			"relevance": 0.649366,
+			"text": "Plastic explosive",
+			"dbpedia_resource": "http://dbpedia.org/resource/Plastic_explosive"
+		},
+		{
+			"relevance": 0.646646,
+			"text": "United States",
+			"dbpedia_resource": "http://dbpedia.org/resource/United_States"
+		},
+		{
+			"relevance": 0.634269,
+			"text": "Terrorism",
+			"dbpedia_resource": "http://dbpedia.org/resource/Terrorism"
+		},
+		{
+			"relevance": 0.600042,
+			"text": "Special agent",
+			"dbpedia_resource": "http://dbpedia.org/resource/Special_agent"
+		},
+		{
+			"relevance": 0.564369,
+			"text": "Al-Qaeda",
+			"dbpedia_resource": "http://dbpedia.org/resource/Al-Qaeda"
+		}
+	]
+}

@@ -8,7 +8,7 @@ OpenGraph metadata or Twitter card metadata.
 .. $Id$
 """
 
-from __future__ import print_function, unicode_literals, absolute_import, division
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 logger = __import__('logging').getLogger(__name__)
@@ -95,7 +95,8 @@ class _abstract_args(object):
 
     @Lazy
     def pyquery_dom(self):
-        return pyquery.PyQuery(url=self.__name__, opener=lambda url, **kwargs: self.text)
+        return pyquery.PyQuery(url=self.__name__, 
+                               opener=lambda unused_url, **unused_kwgs: self.text)
 
 
 class _request_args(_abstract_args):
@@ -182,6 +183,9 @@ def _get_metadata_from_url(urlscheme, location):
         return schemehandler(location)
 
 
+USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"
+
+
 def _http_scheme_handler(location):
     # Must use requests, not the url= argument, as
     # the default Python User-Agent is blocked
@@ -189,7 +193,8 @@ def _http_scheme_handler(location):
     # The custom user-agent string is to trick Google into sending UTF-8.
     response = requests.get(location,
                             headers={
-                                'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"},
+                                'User-Agent':USER_AGENT
+                            },
                             stream=True)
     # Get the content type, splitting off encoding, etc
     mime_type = response.headers.get('content-type').split(';', 1)[0]
@@ -361,12 +366,12 @@ class _HTMLExtractor(object):
 
     def _extract_page(self, result, args):
         if not result.description:
-            meta = args.pyquery_dom(b'meta[name=description]')
+            meta = args.pyquery_dom('meta[name=description]')
             text = meta.attr['content'] if meta else ''
             if text:
                 result.description = text_(text)
         if not result.title:
-            title = args.pyquery_dom(b'title')
+            title = args.pyquery_dom('title')
             text = title.text()
             if text:
                 result.title = text_(text)

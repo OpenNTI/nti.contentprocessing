@@ -2,7 +2,7 @@
 <configure	xmlns="http://namespaces.zope.org/zope"
 			xmlns:i18n="http://namespaces.zope.org/i18n"
 			xmlns:zcml="http://namespaces.zope.org/zcml"
-			xmlns:alchemy="http://nextthought.com/ntp/alchemy">
+			xmlns:watson="http://nextthought.com/ntp/watson">
 
 	<include package="zope.component" file="meta.zcml" />
 	<include package="zope.security" file="meta.zcml" />
@@ -61,11 +61,12 @@
 	<include package=".langdetection" />
 	<include package=".concepttagging" />
 
-	<!-- Alchemy -->
-	<include package="." file="meta.zcml" />
-	<alchemy:registerAlchemyAPIKey
-		name="NTI-TEST"
-		value="075e916f48813424e9ea726bc1cbc79eb96d49b1"
-		zcml:condition="have devmode"/>
-
+	<!-- Watson -->
+	<configure zcml:condition="have testmode">
+		<include package="." file="meta.zcml" />
+		<watson:registerWatsonAPIKey
+			username="6a263592-7388-461c-b076-40346a43a8af"
+			password="gcCDDbmjdnTN" />
+	</configure>
+	
 </configure>

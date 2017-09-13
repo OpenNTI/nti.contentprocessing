@@ -11,20 +11,22 @@ from hamcrest import is_
 from hamcrest import none
 from hamcrest import is_not
 from hamcrest import close_to
-from hamcrest import has_entry
 from hamcrest import has_length
 from hamcrest import assert_that
 from hamcrest import has_property
 
+import fudge
+
 import os
 import unittest
 
-from nti.contentprocessing.concepttagging.alchemy import get_ranked_concepts
+import simplejson
+
+from nti.contentprocessing.concepttagging.watson import get_ranked_concepts
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
 
-@unittest.SkipTest
 class TestConceptTagger(unittest.TestCase):
 
     layer = SharedConfiguringTestLayer
@@ -35,22 +37,24 @@ class TestConceptTagger(unittest.TestCase):
         with open(name, "r") as f:
             return f.read()
 
-    def test_alchemy_ct(self):
-        concepts = get_ranked_concepts(self.sample, "NTI-TEST")
+    @property
+    def response(self):
+        name = os.path.join(os.path.dirname(__file__), 'response.json')
+        with open(name, "r") as fp:
+            return simplejson.load(fp)
+
+    @fudge.patch('nti.contentprocessing.concepttagging.watson.analyze')
+    def test_alchemy_ct(self, mock_an):
+        mock_an.is_callable().with_args().returns(self.response)
+        concepts = get_ranked_concepts(self.sample)
         assert_that(concepts, has_length(8))
-        
+
         concept = concepts[0]
         assert_that(concept, is_not(none()))
-        assert_that(concept, 
+        assert_that(concept,
                     has_property('text', is_('Federal Bureau of Investigation')))
         assert_that(concept,
                     has_property('relevance', is_(close_to(0.97, 0.01))))
         assert_that(concept,
-                    has_property('sourcemap', has_length(6)))
-        sm = concept.sourcemap
-        assert_that(sm, has_entry('website', 'http://www.fbi.gov',))
-        assert_that(sm,
-                    has_entry('dbpedia',
-                              'http://dbpedia.org/resource/Federal_Bureau_of_Investigation'))
-        assert_that(sm,
-                    has_entry('freebase', 'http://rdf.freebase.com/ns/m.02_1m'))
+                    has_property('resource',
+                                 'http://dbpedia.org/resource/Federal_Bureau_of_Investigation'))

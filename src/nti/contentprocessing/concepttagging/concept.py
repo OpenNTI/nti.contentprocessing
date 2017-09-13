@@ -13,24 +13,11 @@ import functools
 
 from zope import interface
 
-from zope.cachedescriptors.property import Lazy
-
 from nti.contentprocessing.concepttagging.interfaces import IConcept
-from nti.contentprocessing.concepttagging.interfaces import IConceptSource
 
 from nti.contentprocessing.representation import WithRepr
 
 from nti.schema.eqhash import EqHash
-
-
-@WithRepr
-@EqHash('uri', 'source')
-@interface.implementer(IConceptSource)
-class ConceptSource(object):
-
-    def __init__(self, source, uri=None):
-        self.uri = uri
-        self.source = source
 
 
 @WithRepr
@@ -39,14 +26,12 @@ class ConceptSource(object):
 @interface.implementer(IConcept)
 class Concept(object):
 
-    def __init__(self, text=None, relevance=None, sources=()):
-        self.text = text
-        self.sources = sources
-        self.relevance = relevance
+    __slots__ = ('text', 'relevance', 'resource')
 
-    @Lazy
-    def sourcemap(self):
-        return {c.source: c.uri for c in self.sources}
+    def __init__(self, text=None, relevance=None, resource=None):
+        self.text = text
+        self.resource = resource
+        self.relevance = relevance
 
     def __str__(self):
         return self.text

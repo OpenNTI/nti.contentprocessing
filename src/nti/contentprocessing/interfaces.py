@@ -73,9 +73,9 @@ class IWordTokenizerPattern(interface.Interface):
     """
 
 
-class IAlchemyAPIKey(interface.Interface):
-    name = interface.Attribute("Key name or alias")
-    value = interface.Attribute("The actual key value")
+class IWatsonAPIKey(interface.Interface):
+    username = interface.Attribute("The username")
+    password = interface.Attribute("The password")
 
 # Metadata extraction
 

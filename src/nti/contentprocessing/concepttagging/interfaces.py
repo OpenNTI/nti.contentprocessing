@@ -17,22 +17,15 @@ from nti.schema.field import ListOrTuple
 from nti.schema.field import ValidTextLine
 
 
-class IConceptSource(interface.Interface):
-    """
-    Represent a concept source entry (e.g. linked data) 
-    """
-    source = ValidTextLine(title=u"source name", required=True)
-    uri = ValidTextLine(title=u"source uri", required=True)
-
-
 class IConcept(interface.Interface):
     """
     Represent a concept
     """
     text = ValidTextLine(title=u"concept text", required=True)
+
     relevance = Number(title=u"concept relevance", required=False)
-    sources = ListOrTuple(title=u"Concept sources", min_length=0,
-                          value_type=Object(IConceptSource, title=u"The source"))
+
+    resource = ValidTextLine(title=u"Resource name", required=False)
 
 
 class IConceptTagger(interface.Interface):
