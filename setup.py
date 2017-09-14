@@ -12,6 +12,7 @@ entry_points = {
 
 TESTS_REQUIRE = [
     'nti.testing',
+    'simplejson',
     'zope.testrunner',
 ]
 

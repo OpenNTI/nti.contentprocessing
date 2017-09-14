@@ -12,12 +12,18 @@ from hamcrest import assert_that
 
 import os
 import unittest
+import platform
 
 from nti.contentprocessing.keyword import term_extract_key_words
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
 
+py_impl = getattr(platform, 'python_implementation', lambda: None)
+IS_PYPY = py_impl() == 'PyPy'
+
+
+@unittest.skipUnless(not IS_PYPY, 'PyPy not supported')
 class TestKeyWordExtract(unittest.TestCase):
 
     layer = SharedConfiguringTestLayer

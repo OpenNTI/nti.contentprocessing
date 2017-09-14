@@ -68,7 +68,7 @@ class TestContentUtils(unittest.TestCase):
         assert_that(get_content(u'$12.45'), is_('$12.45'))
         assert_that(get_content(u'82%'), is_('82%'))
 
-        u = _unichr(40960) + u'bleach' + unichr(1972)
+        u = _unichr(40960) + u'bleach' + _unichr(1972)
         assert_that(get_content(u), is_(u'\ua000bleach'))
 
     def test_clean_special(self):
