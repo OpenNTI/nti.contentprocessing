@@ -95,7 +95,7 @@ class _abstract_args(object):
 
     @Lazy
     def pyquery_dom(self):
-        return pyquery.PyQuery(url=self.__name__, 
+        return pyquery.PyQuery(url=self.__name__,
                                opener=lambda unused_url, **unused_kwgs: self.text)
 
 
@@ -193,15 +193,15 @@ def _http_scheme_handler(location):
     # The custom user-agent string is to trick Google into sending UTF-8.
     response = requests.get(location,
                             headers={
-                                'User-Agent':USER_AGENT
+                                'User-Agent': USER_AGENT
                             },
                             stream=True)
     # Get the content type, splitting off encoding, etc
     mime_type = response.headers.get('content-type').split(';', 1)[0]
 
     result, args = _get_metadata_from_mime_type(
-                         location, mime_type, lambda: _request_args(location, response)
-                    )
+        location, mime_type, lambda: _request_args(location, response)
+    )
 
     if result is not None:
         result.sourcePath = text_(args.download_path)
@@ -302,11 +302,11 @@ class _HTMLExtractor(object):
                 continue
 
             triples = graph.triples_choices(
-                        (None, [getattr(x, ns_name) for x in nss], None)
-                      )
+                (None, [getattr(x, ns_name) for x in nss], None)
+            )
 
             for _, _, val in triples:
-                val =  val.toPython()
+                val = val.toPython()
                 if isinstance(val, six.string_types):
                     val = text_(val)
                 if ns_name == 'image':
@@ -328,8 +328,8 @@ class _HTMLExtractor(object):
         if len(result.images) == 1:
             for k in 'height', 'width':
                 triples = graph.triples_choices(
-                             (None, [getattr(x, 'image:' + k) for x in nss], None)
-                          )
+                    (None, [getattr(x, 'image:' + k) for x in nss], None)
+                )
                 for _, _, val in triples:
                     setattr(result.images[0], k, int(val.toPython()))
         return result
