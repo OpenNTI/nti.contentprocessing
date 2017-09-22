@@ -4,12 +4,12 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import interface
+from zope import deferredimport
 
 from zope.mimetype.interfaces import mimeTypeConstraint
 
@@ -194,9 +194,8 @@ class IStopWords(interface.Interface):
         available languages
         """
 
-import zope.deferredimport
-zope.deferredimport.initialize()
-zope.deferredimport.deprecatedFrom(
+deferredimport.initialize()
+deferredimport.deprecatedFrom(
     "Moved to nti.contentfragments.interfaces",
     "nti.contentfragments.interfaces",
     "IPunctuationCharPattern",

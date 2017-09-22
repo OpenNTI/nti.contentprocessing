@@ -6,10 +6,9 @@ Implementations of API watson keys.
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from watson_developer_cloud import LanguageTranslatorV2
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
@@ -23,6 +22,8 @@ from nti.contentprocessing.utils import get_watson_api_key
 from nti.contentprocessing.representation import WithRepr
 
 from nti.schema.eqhash import EqHash
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @WithRepr
