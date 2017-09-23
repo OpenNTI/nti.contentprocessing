@@ -18,10 +18,7 @@ import six
 import shutil
 import string
 import tempfile
-try:
-    from urlparse import urlparse
-except ImportError:
-    from urllib.parse import urlparse
+from six.moves import urllib_parse
 
 import pyquery
 
@@ -230,7 +227,7 @@ def get_metadata_from_http_url(url):
     will raise a ValueError
     """
 
-    urlscheme = urlparse(url).scheme
+    urlscheme = urllib_parse.urlparse(url).scheme
     if urlscheme and urlscheme.startswith('http'):
         return _get_metadata_from_url(urlscheme, url)
     else:
@@ -250,7 +247,7 @@ def get_metadata_from_content_location(location):
 
     # Is it a URL and not a local file (taking care not
     # to treat windoze paths like "c:\foo" as URLs)
-    urlscheme = urlparse(location).scheme
+    urlscheme = urllib_parse.urlparse(location).scheme
     if urlscheme and (len(urlscheme) != 1 or urlscheme not in string.ascii_letters):
         # look up a handler for the scheme and pass it over.
         # this lets us delegate responsibility for schemes we
