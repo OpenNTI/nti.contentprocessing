@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Watson concept tagging
-
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import watson_developer_cloud.natural_language_understanding.features.v1 as features
 
@@ -20,6 +17,8 @@ from nti.contentprocessing.concepttagging.concept import Concept
 from nti.contentprocessing.concepttagging.interfaces import IConceptTagger
 
 from nti.contentprocessing.watson import get_natural_lang_understanding_client
+
+logger = __import__('logging').getLogger(__name__)
 
 
 def analyze(client, content, **kwargs):
@@ -56,13 +55,7 @@ class _WatsonAPIKConceptTaggger(object):
 
     @staticmethod
     def tag(content, keyname=None, **kwargs):
-        result = ()
-        content = content or u''
-        try:
-            if content:
-                result = get_ranked_concepts(content, name=keyname, **kwargs)
-        except Exception:
-            logger.exception('Error while getting concept tags')
+        result = get_ranked_concepts(content or '', name=keyname, **kwargs)
         return result
 
     def __call__(self, content, keyname=None, **kwargs):

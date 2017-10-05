@@ -4,12 +4,11 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
-logger = __import__('logging').getLogger(__name__)
-
-import functools
+from functools import total_ordering
 
 from zope import interface
 
@@ -19,10 +18,12 @@ from nti.contentprocessing.representation import WithRepr
 
 from nti.schema.eqhash import EqHash
 
+logger = __import__('logging').getLogger(__name__)
+
 
 @WithRepr
+@total_ordering
 @EqHash('text',)
-@functools.total_ordering
 @interface.implementer(IConcept)
 class Concept(object):
 
@@ -39,11 +40,11 @@ class Concept(object):
     def __lt__(self, other):
         try:
             return self.relevance < other.relevance
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             return NotImplemented
 
     def __gt__(self, other):
         try:
             return self.relevance > other.relevance
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             return NotImplemented

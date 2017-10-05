@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 # disable: accessing protected members, too many methods
 # pylint: disable=W0212,R0904
@@ -22,6 +23,9 @@ import unittest
 
 import simplejson
 
+from nti.contentprocessing.concepttagging import concept_tag
+
+from nti.contentprocessing.concepttagging.watson import analyze
 from nti.contentprocessing.concepttagging.watson import get_ranked_concepts
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
@@ -58,3 +62,21 @@ class TestConceptTagger(unittest.TestCase):
         assert_that(concept,
                     has_property('resource',
                                  'http://dbpedia.org/resource/Federal_Bureau_of_Investigation'))
+
+    @fudge.patch('nti.contentprocessing.concepttagging.watson.analyze')
+    def test_concept_tag(self, mock_an):
+        mock_an.is_callable().with_args().returns(self.response)
+        assert_that(concept_tag(self.sample, 'invalid'),
+                    is_(()))
+        assert_that(concept_tag(self.sample, 'en'),
+                    has_length(8))
+
+    def test_analyze(self):
+        client = fudge.Fake().provides('analyze').returns(None)
+        assert_that(analyze(client, ''), is_(none()))
+
+    @fudge.patch('nti.contentprocessing.concepttagging.watson.analyze')
+    def test_coverage(self, mock_grc):
+        mock_grc.is_callable().raises(TypeError())
+        assert_that(get_ranked_concepts(self.sample), 
+                    is_([]))
