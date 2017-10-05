@@ -6,10 +6,9 @@ Content processing utilities
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import re
 import difflib
@@ -23,10 +22,10 @@ from zope import interface
 
 try:
     from zopyx.txng3.ext.levenshtein import ratio as relative
-except ImportError:
+except ImportError:  # pragma: no cover
     try:
         from whoosh.support.levenshtein import relative
-    except ImportError:
+    except ImportError:  # pragma: no cover
         def relative(*unused_args): return 0
 
 from nti.contentfragments.interfaces import IPlainTextContentFragment
@@ -46,6 +45,8 @@ from nti.contentprocessing.interfaces import IContentTranslationTable
 from nti.contentprocessing.interfaces import IWordTokenizerExpression
 
 from nti.contentprocessing.tokenizer import DefaultRegexpTokenizer
+
+logger = __import__('logging').getLogger(__name__)
 
 
 def get_content_translation_table(lang='en'):
