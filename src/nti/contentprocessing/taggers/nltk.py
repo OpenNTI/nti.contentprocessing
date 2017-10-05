@@ -6,19 +6,15 @@ NLTK based POS taggers
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import os
 import gzip
 import inspect
 
-try:
-    from six.moves import cPickle as pickle
-except ImportError:
-    import pickle
+from six.moves import cPickle
 
 from zope import component
 from zope import interface
@@ -30,6 +26,9 @@ from nti.contentprocessing.taggers.interfaces import INLTKTagger
 
 resource_exists = __import__('pkg_resources').resource_exists
 resource_stream = __import__('pkg_resources').resource_stream
+
+logger = __import__('logging').getLogger(__name__)
+
 
 # Interfaces
 
@@ -128,7 +127,7 @@ def load_tagger_pickle(name_or_stream):
 
     if stream is not None:
         with stream as f:
-            result = pickle.load(f)
+            result = cPickle.load(f)
     return result
 
 _trained_taggers = {}
