@@ -52,11 +52,11 @@ setup(
     tests_require=TESTS_REQUIRE,
     install_requires=[
         'setuptools',
-        'nltk' if not IS_PYPY else '',
+        'nltk',
         'nti.contentfragments',
         'nti.property',
         'nti.schema',
-        'numpy' if not IS_PYPY else '',
+        'numpy',
         'pyquery',
         'PyPDF2',
         'rdflib',
