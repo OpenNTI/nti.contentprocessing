@@ -11,4 +11,6 @@
 	<utility factory=".termextract._DefaultTermKeyWorExtractor" />
 	<utility factory=".termextract._DefaultTermKeyWorExtractor" name="en" />
 
+	<utility factory=".watson._WatsonAPIKeyWordExtractor" name="watson" />
+
 </configure>
