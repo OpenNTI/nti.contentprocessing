@@ -15,3 +15,11 @@ recursive-include docs *.py
 recursive-include docs *.rst
 recursive-include docs Makefile
 recursive-include src *.zcml
+recursive-include src *.txt
+recursive-include src *.ngp
+recursive-include src *.properties
+recursive-include src *.gz
+recursive-include src *.html
+recursive-include src *.pdf
+recursive-include src *.tag
+recursive-include src *.test
