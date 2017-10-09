@@ -31,7 +31,7 @@ def make_repr(default=_default_repr):
             # Things like invalid NTIID, missing registrations for the first two.
             # The final would be a  weird database-related issue.
             return '<%s(%r)>' % (_type_name(self), e)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             return '<%s(Ghost, %r)>' % (_type_name(self), e)
     return __repr__
 
