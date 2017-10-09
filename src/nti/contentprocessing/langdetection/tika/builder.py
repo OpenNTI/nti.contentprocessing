@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import six
 import time
@@ -16,6 +15,8 @@ import functools
 from array import array
 
 from nti.contentprocessing._compat import text_
+
+logger = __import__('logging').getLogger(__name__)
 
 
 class QuickStringBuffer(object):
@@ -46,7 +47,7 @@ class QuickStringBuffer(object):
     def __eq__(self, other):
         try:
             return self is other or repr(self) == repr(other)
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             return NotImplemented
 
     def __hash__(self):
@@ -117,7 +118,7 @@ class NGramEntry(object):
     def __eq__(self, other):
         try:
             return self is other or self.seq == other.seq
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             return NotImplemented
 
     def __hash__(self):
@@ -126,13 +127,13 @@ class NGramEntry(object):
     def __lt__(self, other):
         try:
             return (self.frequency, repr(self.seq)) < (other.frequency, repr(other.seq))
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             return NotImplemented
 
     def __gt__(self, other):
         try:
             return (self.frequency, repr(self.seq)) > (other.frequency, repr(other.seq))
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             return NotImplemented
 
 
@@ -165,13 +166,14 @@ class LanguageProfilerBuilder(object):
 
     def _add_cs(self, cs):
         if (cs == self.SEP_CHARSEQ or cs == self.SEPARATOR):
-            return
+            return False
 
         nge = self.ngrams.get(cs)
         if nge is None:
             nge = NGramEntry(cs)
             self.ngrams[cs] = nge
         nge.inc()
+        return True
 
     def _add_len(self, word, n):
         if isinstance(word, six.string_types):
@@ -192,6 +194,7 @@ class LanguageProfilerBuilder(object):
         while i <= self.maxLength and i < wlen:
             self._add_len(word, i)
             i += 1
+        return i
 
     def add(self, word):
         if isinstance(word, six.string_types):
@@ -205,7 +208,7 @@ class LanguageProfilerBuilder(object):
     def analyze(self, text):
         if self.ngrams:
             self.ngrams.clear()
-            self.sorted = None
+            self._sorted = None
             self.ngramcounts = None
 
         self.word.clear().append(self.SEPARATOR)
@@ -266,7 +269,7 @@ class LanguageProfilerBuilder(object):
             source = open(str(source), "r")
         try:
             self.ngrams.clear()
-            self.ngramcounts = array(str('i'), 
+            self.ngramcounts = array(str('i'),
                                      (0 for _ in range(self.maxLength + 1)))
             for line in source.readlines():
                 line = text_(line, encoding)
