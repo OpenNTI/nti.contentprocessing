@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import functools
 
@@ -25,6 +24,8 @@ from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.schema import SchemaConfigured
 
+logger = __import__('logging').getLogger(__name__)
+
 
 @WithRepr
 @EqHash('code',)
@@ -40,11 +41,11 @@ class Language(SchemaConfigured):
     def __lt__(self, other):
         try:
             return self.code < other.code
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             return NotImplemented
 
     def __gt__(self, other):
         try:
             return self.code > other.code
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             return NotImplemented

@@ -6,10 +6,9 @@ OpenXerox lang detector
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import requests
 
@@ -22,6 +21,8 @@ from nti.contentprocessing.langdetection.model import Language
 from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
 OPEN_XEROX_URL = 'https://services.open.xerox.com/RestOp/LanguageIdentifier/GetLanguageForString'
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @interface.implementer(ILanguageDetector)
@@ -51,5 +52,5 @@ class _OpenXeroxLanguageDetector(object):
 
         return result
 
-    def __call__(self, content, **kwargs):
+    def __call__(self, content, **unused_kwargs):
         return self.detect(content)

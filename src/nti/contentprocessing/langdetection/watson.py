@@ -65,8 +65,8 @@ class _WatsonTextLanguageDetector(object):
                 break
         return result
 
-    def __call__(self, content, keyname=None, **kwargs):
-        return self.detect(content, keyname=keyname, **kwargs)
+    def __call__(self, content, name=None, **kwargs):
+        return self.detect(content, name, **kwargs)
 
 
 def identify(client, content):
