@@ -6,10 +6,9 @@ Watson keyword extractor
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import watson_developer_cloud.natural_language_understanding.features.v1 as features
 
@@ -20,6 +19,8 @@ from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 from nti.contentprocessing.keyword.model import ContentKeyWord
 
 from nti.contentprocessing.watson import get_natural_lang_understanding_client
+
+logger = __import__('logging').getLogger(__name__)
 
 
 def analyze(client, content, **kwargs):
@@ -54,9 +55,6 @@ class _WatsonAPIKeyWordExtractor(object):
         result = ()
         if isinstance(content, (list, tuple, set)):
             content = u' '.join(content)
-        try:
-            if content:
-                result = get_keywords(content, keyname, **kwargs)
-        except Exception:
-            logger.exception('Error while getting keywords')
+        if content:
+            result = get_keywords(content, keyname, **kwargs)
         return result

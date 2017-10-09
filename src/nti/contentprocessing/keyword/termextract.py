@@ -6,10 +6,9 @@ TermExtract keyword extractor
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import six
 from collections import defaultdict
@@ -25,6 +24,8 @@ from nti.contentprocessing.content_utils import tokenize_content
 from nti.contentprocessing.keyword.interfaces import ITermExtractFilter
 from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWord
 from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWordExtractor
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @interface.implementer(ITermExtractFilter)
