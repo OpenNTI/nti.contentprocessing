@@ -6,10 +6,9 @@ NGRAM processing utilities
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from six import string_types
 
@@ -24,6 +23,8 @@ from nti.contentprocessing import default_ngram_minsize
 from nti.contentprocessing.content_utils import tokenize_content
 
 from nti.contentprocessing.interfaces import INgramComputer
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @repoze.lru.lru_cache(5000)
@@ -52,11 +53,8 @@ def ngram_filter(text, minsize=3, maxsize=None, unique=True, lower=True):
 
 @repoze.lru.lru_cache(100)
 def compute_ngrams(text, lang="en"):
-    if not text or not isinstance(text, string_types):
-        return u''
-    else:
-        computer = component.getUtility(INgramComputer, name=lang)
-        return computer.compute(text)
+    computer = component.getUtility(INgramComputer, name=lang)
+    return computer.compute(text)
 
 
 @interface.implementer(INgramComputer)
@@ -66,7 +64,7 @@ class _DefaultNgramComputer(object):
     maxsize = default_ngram_maxsize
 
     def compute(self, text):
-        if text:
+        if text and isinstance(text, string_types):
             result = ngram_filter(text, self.minsize, self.maxsize)
             result = u' '.join(result)
         else:
