@@ -26,7 +26,8 @@ except ImportError:  # pragma: no cover
     try:
         from whoosh.support.levenshtein import relative
     except ImportError:  # pragma: no cover
-        def relative(*unused_args): return 0
+        def relative(*unused_args):
+            return 0
 
 from nti.contentfragments.interfaces import IPlainTextContentFragment
 
@@ -65,11 +66,8 @@ def _default_word_tokenizer_pattern():
 
 
 def tokenize_content(text, lang='en'):
-    if not text or not isinstance(text, string_types):
-        result = ()
-    else:
-        tokenizer = component.queryUtility(IContentTokenizer, name=lang)
-        result = tokenizer.tokenize(text) if tokenizer is not None else ()
+    tokenizer = component.queryUtility(IContentTokenizer, name=lang)
+    result = tokenizer.tokenize(text) if tokenizer is not None else ()
     return result
 split_content = tokenize_content
 
@@ -120,9 +118,6 @@ class _ContentTokenizer(object):
 
 @interface.implementer(IWordSimilarity)
 class _BaseWordSimilarity(object):
-
-    def compute(self, *unused_args):
-        return 0
 
     def rank(self, word, terms, reverse=True):
         return sorted(terms, key=lambda w: self.compute(word, w), reverse=reverse)

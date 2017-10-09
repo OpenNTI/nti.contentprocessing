@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 # disable: accessing protected members, too many methods
 # pylint: disable=W0212,R0904
 
 from hamcrest import is_
+from hamcrest import none
+from hamcrest import is_not
 from hamcrest import has_length
 from hamcrest import assert_that
 
 import unittest
+
+from six import unichr
 
 from zope import component
 
@@ -20,21 +25,19 @@ from nti.contentfragments.interfaces import IPunctuationMarkExpression
 from nti.contentfragments.interfaces import IPunctuationMarkPatternPlus
 from nti.contentfragments.interfaces import IPunctuationMarkExpressionPlus
 
+from nti.contentprocessing.content_utils import normalize
 from nti.contentprocessing.content_utils import rank_words
 from nti.contentprocessing.content_utils import get_content
 from nti.contentprocessing.content_utils import tokenize_content
 from nti.contentprocessing.content_utils import clean_special_characters
 from nti.contentprocessing.content_utils import get_content_translation_table
 
+from nti.contentprocessing.content_utils import _SequenceMatcherWordSimilarity
+
 from nti.contentprocessing.interfaces import IWordTokenizerPattern
 from nti.contentprocessing.interfaces import IWordTokenizerExpression
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
-
-try:
-    _unichr = unichr
-except (ImportError, NameError):
-    _unichr = chr
 
 
 class TestContentUtils(unittest.TestCase):
@@ -43,7 +46,12 @@ class TestContentUtils(unittest.TestCase):
 
     sample_words = (u"alfa", u"bravo", u"charlie", u"delta", u"echo")
 
+    def test_normalize(self):
+        assert_that(normalize(u'alpha\t\nbravoﾖ'), is_(u'alpha bravo\uff96'))
+
     def test_split_conent(self):
+        assert_that(tokenize_content(None), is_(()))
+
         s = u'ax+by=0'
         assert_that(tokenize_content(s), is_(['ax', 'by', '0']))
 
@@ -68,11 +76,10 @@ class TestContentUtils(unittest.TestCase):
         assert_that(get_content(u'$12.45'), is_('$12.45'))
         assert_that(get_content(u'82%'), is_('82%'))
 
-        u = _unichr(40960) + u'bleach' + _unichr(1972)
+        u = unichr(40960) + u'bleach' + unichr(1972)
         assert_that(get_content(u), is_(u'\ua000bleach'))
 
     def test_clean_special(self):
-
         source = u'Zanpakuto Zangetsu'
         assert_that(clean_special_characters(source), is_(source))
 
@@ -99,9 +106,19 @@ class TestContentUtils(unittest.TestCase):
         assert_that(t, is_("COPTIC OLD NUBIAN VERSE DIVIDER is  deal with it"))
 
     def test_utilities(self):
-        component.getUtility(IWordTokenizerPattern, name="en")
-        component.getUtility(IWordTokenizerExpression, name="en")
-        component.getUtility(IPunctuationMarkPattern, name="en")
-        component.getUtility(IPunctuationMarkExpression, name="en")
-        component.getUtility(IPunctuationMarkPatternPlus, name="en")
-        component.getUtility(IPunctuationMarkExpressionPlus, name="en")
+        assert_that(component.queryUtility(IWordTokenizerPattern, name="en"),
+                    is_not(none()))
+        assert_that(component.queryUtility(IWordTokenizerExpression, name="en"),
+                    is_not(none()))
+        assert_that(component.queryUtility(IPunctuationMarkPattern, name="en"),
+                    is_not(none()))
+        assert_that(component.queryUtility(IPunctuationMarkExpression, name="en"),
+                    is_not(none()))
+        assert_that(component.queryUtility(IPunctuationMarkPatternPlus, name="en"),
+                    is_not(none()))
+        assert_that(component.queryUtility(IPunctuationMarkExpressionPlus, name="en"),
+                    is_not(none()))
+
+    def test_coverage(self):
+        sim = _SequenceMatcherWordSimilarity()
+        assert_that(sim.compute('alpha', 'bravo'), is_(0.2))

@@ -4,13 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-from nti.contentprocessing.monkey import patch
-patch()
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import re
 import six
@@ -42,3 +38,8 @@ def _makenon_alpha_re():
 
 non_alpha_pattern = _makenon_alpha_re()
 del _makenon_alpha_re
+
+
+from nti.contentprocessing.monkey import patch
+patch()
+del patch
