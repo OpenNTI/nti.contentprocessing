@@ -23,3 +23,4 @@ recursive-include src *.html
 recursive-include src *.pdf
 recursive-include src *.tag
 recursive-include src *.test
+recursive-include src *.json
