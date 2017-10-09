@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 # disable: accessing protected members, too many methods
 # pylint: disable=W0212,R0904
@@ -179,25 +180,19 @@ class TestMetadataExtractors(unittest.TestCase):
                                                                  has_property('url', 'http://example.com/rock3.jpg'))))
 
     @fudge.patch('requests.get')
-    def test_extraction_remote_pdf(self, fake_get=None):
-        # By commenting out the patch line, we can test with a real file
-        if fake_get is not None:
-            # This real URL has been download locally
-            pdf_file = os.path.join(os.path.dirname(__file__),
-                                    u'test_page574_12.pdf')
+    def test_extraction_remote_pdf(self, fake_get):
+        pdf_file = os.path.join(os.path.dirname(__file__),
+                                u'test_page574_12.pdf')
 
-            class R1(object):
+        class R1(object):
 
-                def __init__(self):
-                    self.headers = {'content-type': 'application/pdf'}
-                    self.raw = open(pdf_file, 'rb')
+            def __init__(self):
+                self.headers = {'content-type': 'application/pdf'}
+                self.raw = open(pdf_file, 'rb')
 
-            fake_get.is_callable().returns(R1())
-            # remote href
-            href = u'http://someserver.com/path/to/test_page574_12.pdf'
-        else:
-            href = u'http://support.pokemon.com/FileManagement/Download/f6029520f8ea43f08790ec4975944bb3'
-
+        fake_get.is_callable().returns(R1())
+        # remote href
+        href = u'http://someserver.com/path/to/test_page574_12.pdf'
         result = get_metadata_from_content_location(href)
 
         # Values from the PDF
