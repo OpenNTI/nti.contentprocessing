@@ -11,6 +11,7 @@ from __future__ import absolute_import
 from hamcrest import is_
 from hamcrest import has_length
 from hamcrest import assert_that
+from hamcrest import has_property
 
 import os
 import unittest
@@ -22,10 +23,13 @@ from nti.contentprocessing.keyword import term_extract_key_words
 
 from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 
+from nti.contentprocessing.keyword.termextract import NormRecord
+from nti.contentprocessing.keyword.termextract import DefaultFilter
+
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
 
-class TestKeyWordExtract(unittest.TestCase):
+class TestTermExtract(unittest.TestCase):
 
     layer = SharedConfiguringTestLayer
 
@@ -34,6 +38,15 @@ class TestKeyWordExtract(unittest.TestCase):
         name = os.path.join(os.path.dirname(__file__), 'sample.txt')
         with open(name, "r") as f:
             return f.read()
+
+    def test_filter(self):
+        df = DefaultFilter()
+        assert_that(str(df), is_('DefaultFilter(2, 3)'))
+
+    def test_normn_record(self):
+        record = NormRecord('virus', 3, 1)
+        assert_that(record,
+                    has_property('relevance', is_(3)))
 
     def test_term_extract(self):
         terms = term_extract_key_words(self.sample)
@@ -45,9 +58,18 @@ class TestKeyWordExtract(unittest.TestCase):
                                 ('blood cells', 1, 2),
                                 ('body works', 1, 2),
                                 ('blood cells viruses', 1, 3)])))
-        
+
         assert_that(term_extract_key_words(self.sample, 'ru'),
                     is_(()))
+
+        terms = term_extract_key_words(
+            "And now for something completely Different")
+        assert_that(terms, has_length(0))
+
+        terms = term_extract_key_words(
+            ["And",  "now",  "for", "something", "completely", "Different"]
+        )
+        assert_that(terms, has_length(0))
 
     def test_extract_key_words(self):
         terms = extract_key_words(self.sample, 'en')
