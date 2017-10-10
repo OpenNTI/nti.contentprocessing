@@ -14,19 +14,21 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import re
 import six
 import types
 
-if six.PY3:
-    get_im_class = lambda meth: meth.__self__.__class__
+
+if six.PY3:  # pragma: no cover
+    def get_im_class(meth): return meth.__self__.__class__
 else:
-    get_im_class = lambda meth: meth.im_class
+    def get_im_class(meth): return meth.im_class
+
+logger = __import__('logging').getLogger(__name__)
 
 
 def _mro(cls):
