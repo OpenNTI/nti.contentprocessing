@@ -134,7 +134,6 @@ class _file_args(_abstract_args):
     @Lazy
     def stream(self):
         return open(self.path, 'rb')
-
     bidirectionalstream = stream
 
     @Lazy

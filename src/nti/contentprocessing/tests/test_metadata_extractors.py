@@ -8,6 +8,9 @@ from __future__ import absolute_import
 # disable: accessing protected members, too many methods
 # pylint: disable=W0212,R0904
 
+from hamcrest import is_
+from hamcrest import none
+from hamcrest import is_not
 from hamcrest import contains
 from hamcrest import assert_that
 from hamcrest import has_property
@@ -26,6 +29,8 @@ from nti.contentprocessing.metadata_extractors import _HTMLExtractor
 from nti.contentprocessing.metadata_extractors import ContentMetadata
 
 from nti.contentprocessing.metadata_extractors import _file_args
+from nti.contentprocessing.metadata_extractors import _request_args
+from nti.contentprocessing.metadata_extractors import get_metadata_from_http_url
 from nti.contentprocessing.metadata_extractors import get_metadata_from_content_location
 
 from nti.contentprocessing.interfaces import IContentMetadata
@@ -65,12 +70,23 @@ class TestMetadataExtractors(unittest.TestCase):
                                                            'http://www.newyorker.com/images/2013/01/07/g120/130107_r23011_g120_cropth.jpg'))))
             assert_that(result, validly_provides(IContentMetadata))
 
-        result = _HTMLExtractor()._extract_opengraph(ContentMetadata(), args)
+        extractor = _HTMLExtractor()
+        result = extractor._extract_opengraph(ContentMetadata(), args)
         _check(result)
+        
+        result = extractor._extract_opengraph(result, args)
+        assert_that(result,
+                    has_property('title',
+                                 'Adam Green: The Spectacular Thefts of Apollo Robbins, Pickpocket'))
 
-        result = get_metadata_from_content_location(the_file)
-        _check(result)
+        result.title = None
+        result = extractor._extract_page(result, args)
+        assert_that(result,
+                    has_property('title',
+                                 'Adam Green: The Spectacular Thefts of Apollo Robbins, Pickpocket : The New Yorker'))
 
+        get_metadata_from_content_location(the_file)
+      
     def test_twitter_extraction_from_file(self):
         # Originally from NYTimes:
         # https://www.nytimes.com/2013/05/17/health/exercise-class-obedience-not-required.html
@@ -95,6 +111,11 @@ class TestMetadataExtractors(unittest.TestCase):
 
         result = _HTMLExtractor()._extract_twitter(ContentMetadata(), args)
         _check(result)
+        
+        with args.stream as f:
+            assert_that(f.read(), is_not(none()))
+            
+        assert_that(args.bytes, is_not(none()))
 
     def test_opengraph_extraction(self):
         template = """
@@ -199,3 +220,19 @@ class TestMetadataExtractors(unittest.TestCase):
         # Values from the PDF
         assert_that(result, has_property('creator', 'Jason Madden'))
         assert_that(result, has_property('description', 'Subject'))
+
+    def test_request_args(self):
+        response = fudge.Fake().has_attr(raw=b'').has_attr(text=u'').has_attr(content=b'')
+        r = _request_args('http://nti.org', response)
+        assert_that(r.stream(), is_(b''))
+        assert_that(r, 
+                    has_properties('text', is_(u''),
+                                   'bytes', is_(b'')))
+        
+    @fudge.patch('nti.contentprocessing.metadata_extractors._get_metadata_from_url')
+    def test_get_metadata_from_http_url(self, mock_gmh):
+        mock_gmh.is_callable().returns(True)
+        assert_that(get_metadata_from_http_url('https://bleach.org'),
+                    is_(True))
+        with self.assertRaises(ValueError):
+            get_metadata_from_http_url('ftp://bleach.org')
