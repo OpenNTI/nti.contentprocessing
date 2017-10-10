@@ -4,10 +4,9 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import os
 import codecs
@@ -18,6 +17,8 @@ from zope.cachedescriptors.property import Lazy
 
 from nti.contentprocessing.interfaces import IStopWords
 
+logger = __import__('logging').getLogger(__name__)
+
 
 @interface.implementer(IStopWords)
 class FileBasedStopWords(object):
@@ -27,14 +28,15 @@ class FileBasedStopWords(object):
         result = {}
         path = os.path.join(os.path.dirname(__file__), 'data')
         for name in os.listdir(path):
-            if not name.endswith('.txt'):
-                continue
-            lang = name[:-4]
-            name = os.path.join(path, name)
-            with codecs.open(name, "r", "utf-8") as fp:
-                lines = {x.strip().lower() for x in fp.readlines()
-                         if x and not x.startswith('#')}
-                result[lang] = tuple(sorted(lines))
+            if name.endswith('.txt'):
+                lang = name[:-4]
+                name = os.path.join(path, name)
+                with codecs.open(name, "r", "utf-8") as fp:
+                    lines = {
+                        x.strip().lower() for x in fp.readlines()
+                        if x and not x.startswith('#')
+                    }
+                    result[lang] = tuple(sorted(lines))
         return result
 
     def stopwords(self, lang='en'):
@@ -50,8 +52,8 @@ class NoStopWords(object):
 
     __slots__ = ()
 
-    def stopwords(self, lang='en'):
+    def stopwords(self, unused_lang='en'):
         return ()
 
-    def available_languages(self,):
+    def available_languages(self):
         return ('en', 'es', 'ru')

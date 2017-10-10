@@ -22,9 +22,10 @@ import unittest
 
 from rdflib import Graph
 
-from nti.contentprocessing.metadata_extractors import _file_args
 from nti.contentprocessing.metadata_extractors import _HTMLExtractor
 from nti.contentprocessing.metadata_extractors import ContentMetadata
+
+from nti.contentprocessing.metadata_extractors import _file_args
 from nti.contentprocessing.metadata_extractors import get_metadata_from_content_location
 
 from nti.contentprocessing.interfaces import IContentMetadata

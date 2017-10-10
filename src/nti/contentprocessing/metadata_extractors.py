@@ -8,10 +8,9 @@ OpenGraph metadata or Twitter card metadata.
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import os
 import six
@@ -50,6 +49,8 @@ from nti.property.property import alias
 from nti.schema.fieldproperty import createDirectFieldProperties
 
 from nti.schema.schema import PermissiveSchemaConfigured
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @interface.implementer(IImageMetadata, IContained, IContentTypeAware)
@@ -99,8 +100,8 @@ class _abstract_args(object):
 class _request_args(_abstract_args):
 
     def __init__(self, url, response):
-        self.response = response
         self.__name__ = url
+        self.response = response
         self.download_path = None
 
     def stream(self):
@@ -148,10 +149,9 @@ class _file_args(_abstract_args):
 
 
 def _get_metadata_from_mime_type(location, mime_type, args_factory):
-
-    processor = None
     args = None
     result = None
+    processor = None
 
     if mime_type:
         processor = component.queryUtility(IContentMetadataExtractor,

@@ -26,6 +26,8 @@ import simplejson
 
 from nti.contentprocessing.langdetection.interfaces import IWatsonLanguage
 
+from nti.contentprocessing.langdetection.watson import identify
+
 from nti.contentprocessing.langdetection.watson import WatsonLanguage
 from nti.contentprocessing.langdetection.watson import _WatsonTextLanguageDetector
 
@@ -51,12 +53,25 @@ class TestWatsonLangDetector(unittest.TestCase):
     @fudge.patch('nti.contentprocessing.langdetection.watson.identify')
     def test_watson_detector(self, mock_id):
         mock_id.is_callable().with_args().returns(self.response)
-        lang = _WatsonTextLanguageDetector.detect(self.sample_en, 'translator')
+        detector = _WatsonTextLanguageDetector()
+        lang = detector(self.sample_en, 'translator')
         assert_that(lang, is_not(none()))
         assert_that(lang, has_property('code', is_('en')))
         assert_that(lang, has_property('confidence', is_(1.0)))
+
+        mock_id.is_callable().raises(IOError())
+        lang = detector(self.sample_en, 'translator')
+        assert_that(lang, is_(none()))
 
     def test_watson_language(self):
         a = WatsonLanguage(code=u'en', confidence=0.98)
         assert_that(a, validly_provides(IWatsonLanguage))
         assert_that(a, verifiably_provides(IWatsonLanguage))
+
+        b = WatsonLanguage(code=u'es', confidence=0.05)
+        assert_that(a.__gt__(b), is_(True))
+        assert_that(b.__lt__(a), is_(True))
+
+    def test_identify(self):
+        client = fudge.Fake().provides('identify').returns('en')
+        assert_that(identify(client, 'alpha'), is_('en'))

@@ -6,30 +6,24 @@ Whoosh based stemmers
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
-
-try:
-    from whoosh.lang import has_stemmer
-    from whoosh.lang import stemmer_for_language
-except ImportError:
-    has_stemmer = lambda x: False
-    stemmer_for_language = lambda x: x
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import interface
 
+from whoosh.lang import has_stemmer
+from whoosh.lang import stemmer_for_language
+
 from nti.contentprocessing.stemmers.interfaces import IStemmer
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @interface.implementer(IStemmer)
 class _WhooshStemmer(object):
 
     __slots__ = ()
-
-    def __init__(self, *args, **kwargs):
-        pass
 
     def stem(self, token, lang='en'):
         if has_stemmer(lang):

@@ -14,6 +14,7 @@ from hamcrest import starts_with
 from hamcrest import has_property
 
 import os
+import fudge
 import codecs
 import unittest
 
@@ -63,6 +64,17 @@ class TestIndentifier(unittest.TestCase):
         clearProfiles()
         profile = LanguageIdentifier.addProfile('en')
         assert_that(profile, is_(LanguageProfile))
+        str(profile)
+
+        assert_that(profile, has_property('length', 3))
+        with self.assertRaises(ValueError):
+            profile.add('ichigo', 3)
+            
+        with self.assertRaises(ValueError):
+            profile.distance(fudge.Fake().has_attr(length=5))
+
+        profile.close()
+        assert_that(profile, has_property('n', 1))
 
         assert_that(LanguageIdentifier.getSupportedLanguages(),
                     is_({'en'}))

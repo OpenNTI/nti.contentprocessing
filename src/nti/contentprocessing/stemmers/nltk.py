@@ -6,19 +6,17 @@ NLTK based stemmers
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
-
-try:
-    from nltk import PorterStemmer
-except ImportError:
-    PorterStemmer = None
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 from zope import interface
 
+from nltk import PorterStemmer
+
 from nti.contentprocessing.stemmers.interfaces import IStemmer
+
+logger = __import__('logging').getLogger(__name__)
 
 
 @interface.implementer(IStemmer)
@@ -26,11 +24,8 @@ class _PorterStemmer(object):
 
     __slots__ = ()
 
-    def __init__(self, *args, **kwargs):
-        pass
-
     def stem(self, token, lang='en'):
-        if lang == 'en' and PorterStemmer is not None:
+        if lang == 'en':
             # The underlying stemmer object is NOT thread safe,
             # it must not be used concurrently
             stemmer = PorterStemmer()

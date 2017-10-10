@@ -40,13 +40,13 @@ class WatsonLanguage(Language):
     def __lt__(self, other):
         try:
             return (self.confidence, self.code) < (other.confidence, other.code)
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             return NotImplemented
 
     def __gt__(self, other):
         try:
             return (self.confidence, self.code) > (other.confidence, other.code)
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             return NotImplemented
 
 
@@ -84,7 +84,7 @@ def get_languages(content, name=''):
             logger.exception('Invalid request status while detecting language')
         else:
             for lang in response.get('languages', ()):
-                lang = WatsonLanguage(code=text_(lang['language']), 
+                lang = WatsonLanguage(code=text_(lang['language']),
                                       confidence=float(lang.get('confidence', 0)))
                 result.append(lang)
             result.sort(reverse=True)

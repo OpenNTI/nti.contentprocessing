@@ -13,19 +13,15 @@ from hamcrest import assert_that
 
 import unittest
 
-from zope import component
-
-from nti.contentprocessing.stemmers.interfaces import IStemmer
+from nti.contentprocessing.stemmers import stem_word
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
 
-class TestZopyYXStemmer(unittest.TestCase):
+class TestStemmer(unittest.TestCase):
 
     layer = SharedConfiguringTestLayer
 
-    def test_utility(self):
-        stemmer = component.getUtility(IStemmer, "zopyx")
-        assert_that(stemmer.stem(u'viruses'), is_('virus'))
-        assert_that(stemmer.stem(u'temptation'), is_('temptat'))
-        assert_that(stemmer.stem(u'いちご', 'jp'), is_(u'いちご'))
+    def test_stem_word(self):
+        assert_that(stem_word(u'viruses', 'en', 'porter'), is_('virus'))
+        assert_that(stem_word(u'viruses', 'en', 'foo'), is_('viruses'))
