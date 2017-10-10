@@ -4,24 +4,22 @@
 .. $Id$
 """
 
-from __future__ import print_function, absolute_import, division
-__docformat__ = "restructuredtext en"
-
-logger = __import__('logging').getLogger(__name__)
+from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 
 import os
 import six
 import codecs
-try:
-    from ConfigParser import ConfigParser
-except ImportError:
-    from configparser import ConfigParser
-
-DEFAULTSECT = 'DEFAULT'
+from six.moves import configparser
 
 from nti.contentprocessing._compat import text_
 
 from nti.contentprocessing.langdetection.tika.profile import LanguageProfile
+
+DEFAULTSECT = 'DEFAULT'
+
+logger = __import__('logging').getLogger(__name__)
 
 
 def initProfiles():
@@ -79,6 +77,7 @@ class LanguageIdentifier(object):
                     profile.add(splits[0].strip(), int(splits[1].strip()))
 
         cls.PROFILES[language] = profile
+        return profile
 
     @classmethod
     def clearProfiles(cls):
@@ -93,7 +92,7 @@ class LanguageIdentifier(object):
         cls.clearProfiles()
         source = os.path.join(os.path.dirname(__file__),
                               'languages/tika.language.properties')
-        config = ConfigParser()
+        config = configparser.ConfigParser()
         config.readfp(open(source))
 
         languages = config.get(DEFAULTSECT, 'languages')
@@ -103,7 +102,7 @@ class LanguageIdentifier(object):
             name = config.get(DEFAULTSECT, "name." + language) or "Unknown"
             try:
                 cls.addProfile(language)
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 logger.error("language %s (%s) not not initialized; %s",
                              language, name, e)
         return len(cls.PROFILES)
