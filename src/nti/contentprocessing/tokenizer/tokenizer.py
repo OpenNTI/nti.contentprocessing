@@ -43,7 +43,7 @@ class TokenizerI(object):
 
         :rtype: list of str
         """
-        if overridden(self.tokenize_sents):
+        if overridden(self.tokenize_sents):  # pragma: no cover
             return self.tokenize_sents([s])[0]
 
     def span_tokenize(self, s):
@@ -90,6 +90,20 @@ class StringTokenizer(TokenizerI):
         for span in string_span_tokenize(s, self._string):
             yield span
 
+
+class SpaceTokenizer(StringTokenizer):
+    """
+    Tokenize a string using the space character as a delimiter,
+    which is the same as ``s.split(' ')``.
+
+        >>> from nltk.tokenize import SpaceTokenizer
+        >>> s = "Good muffins cost $3.88\nin New York.  Please buy me\ntwo of them.\n\nThanks."
+        >>> SpaceTokenizer().tokenize(s)
+        ['Good', 'muffins', 'cost', '$3.88\nin', 'New', 'York.', '',
+        'Please', 'buy', 'me\ntwo', 'of', 'them.\n\nThanks.']
+    """
+
+    _string = ' '
 
 class RegexpTokenizer(TokenizerI):
     """
