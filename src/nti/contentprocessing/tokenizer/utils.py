@@ -42,10 +42,11 @@ def _mro(cls):
     if isinstance(cls, type):
         return cls.__mro__
     else:
-        mro = [cls]
+        result = [cls]
         for base in cls.__bases__:
-            mro.extend(_mro(base))
-        return mro
+            result.extend(_mro(base))
+        return result
+mro = _mro
 
 
 def overridden(method):
@@ -75,31 +76,12 @@ def overridden(method):
                  for cls in _mro(get_im_class(method))
                  if name in cls.__dict__]
         return len(funcs) > 1
-    else:
+    else:  # pragma: no cover
         raise TypeError('Expected an instance method.')
 
 
-def add_metaclass(metaclass):
-    """
-    Class decorator for creating a class with a metaclass.
-    """
-
-    def wrapper(cls):
-        orig_vars = cls.__dict__.copy()
-        slots = orig_vars.get('__slots__')
-        if slots is not None:
-            if isinstance(slots, str):
-                slots = [slots]
-            for slots_var in slots:
-                orig_vars.pop(slots_var)
-        orig_vars.pop('__dict__', None)
-        orig_vars.pop('__weakref__', None)
-        return metaclass(cls.__name__, cls.__bases__, orig_vars)
-    return wrapper
-
-
 def string_span_tokenize(s, sep):
-    r"""
+    """
     Return the offsets of the tokens in *s*, as a sequence of ``(start, end)``
     tuples, by splitting the string at each occurrence of *sep*.
 
@@ -132,7 +114,7 @@ def string_span_tokenize(s, sep):
 
 
 def regexp_span_tokenize(s, regexp):
-    r"""
+    """
     Return the offsets of the tokens in *s*, as a sequence of ``(start, end)``
     tuples, by splitting the string at each successive match of *regexp*.
 

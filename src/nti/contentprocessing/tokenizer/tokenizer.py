@@ -19,18 +19,18 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 import re
+import six
 from abc import ABCMeta
 from abc import abstractmethod
 
 from nti.contentprocessing.tokenizer.utils import overridden
-from nti.contentprocessing.tokenizer.utils import add_metaclass
 from nti.contentprocessing.tokenizer.utils import regexp_span_tokenize
 from nti.contentprocessing.tokenizer.utils import string_span_tokenize
 
 logger = __import__('logging').getLogger(__name__)
 
 
-@add_metaclass(ABCMeta)
+@six.add_metaclass(ABCMeta)
 class TokenizerI(object):
     """
     A processing interface for tokenizing a string.
