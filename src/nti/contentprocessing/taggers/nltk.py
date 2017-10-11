@@ -72,22 +72,23 @@ class INLTKBackoffNgramTaggerFactory(interface.Interface):
         :param train_sents: Training tagged sents
         :param limit Max munber of training sents
         """
+
 # Implementation
 
 
 def nltk_tagged_corpora():
     result = {}
-    try:
-        from nltk import corpus
-        from nltk.corpus import LazyCorpusLoader, CorpusReader
-        for k, v in inspect.getmembers(corpus):
-            if      isinstance(v, (LazyCorpusLoader, CorpusReader)) \
-                and hasattr(v, "tagged_sents") \
-                and hasattr(v, "tagged_words"):
+    from nltk import corpus
+    from nltk.corpus import LazyCorpusLoader, CorpusReader
+    for k, v in inspect.getmembers(corpus):
+        try:
+            if isinstance(v, (LazyCorpusLoader, CorpusReader)) \
+                    and hasattr(v, "tagged_sents") \
+                    and hasattr(v, "tagged_words"):
                 result[k] = v
                 interface.alsoProvides(v, ITaggedCorpus)
-    except ImportError:
-        logger.error("Error importing nltk corpora")
+        except LookupError:  # pragma: no cover
+            pass
     return result
 
 
@@ -112,7 +113,7 @@ class _NLTKTaggedSents(object):
 
 def get_training_sents(corpus="brown", limit=-1):
     util = component.queryUtility(INLTKTaggedSents)
-    util = util or _NLTKTaggedSents()
+    util = _NLTKTaggedSents() if util is None else util
     return util(corpus, limit)
 
 
@@ -130,10 +131,12 @@ def load_tagger_pickle(name_or_stream):
             result = cPickle.load(f)
     return result
 
+
 _trained_taggers = {}
 
 
-def get_backoff_ngram_tagger(ngrams=3, corpus="brown", limit=-1, train_sents=None):
+def get_backoff_ngram_tagger(ngrams=3, corpus="brown", limit=-1,
+                             train_sents=None, model=None):
     tagger = None
     if not train_sents:
         # check for a trained tagger
@@ -152,7 +155,7 @@ def get_backoff_ngram_tagger(ngrams=3, corpus="brown", limit=-1, train_sents=Non
 
         tagger = DefaultTagger('NN')
         for n in range(1, ngrams + 1):
-            tagger = NgramTagger(n, train=train_sents, backoff=tagger)
+            tagger = NgramTagger(n, model=model, train=train_sents, backoff=tagger)
 
     interface.alsoProvides(tagger, INLTKBackoffNgramTagger)
     return tagger
@@ -163,6 +166,7 @@ class _NLTKBackoffNgramTaggerFactory(object):
 
     def __call__(self, ngrams=3, corpus="brown", limit=-1, train_sents=None):
         return get_backoff_ngram_tagger(ngrams, corpus, limit, train_sents)
+
 
 _the_default_nltk_tagger = None
 
