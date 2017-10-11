@@ -1,10 +1,6 @@
 import codecs
 from setuptools import setup, find_packages
 
-import platform
-py_impl = getattr(platform, 'python_implementation', lambda: None)
-IS_PYPY = py_impl() == 'PyPy'
-
 entry_points = {
     'console_scripts': [
     ],
