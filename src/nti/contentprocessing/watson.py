@@ -54,7 +54,7 @@ def get_natural_lang_understanding_client(name=''):
         result = NaturalLanguageUnderstandingV1(
                         username=watson_key.username,
                         password=watson_key.password,
-                        version=NaturalLanguageUnderstandingV1.latest_version)
+                        version=NaturalLanguageUnderstandingV1.VERSION_DATE_2017_02_27)
     return result
 
 
