@@ -8,9 +8,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-# All the patching uses private things so turn that warning off
-# pylint: disable=W0212
-
+# pylint: disable=protected-access,non-parent-init-called
 
 def _patch_html5lib():
     import html5lib
