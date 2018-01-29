@@ -158,6 +158,8 @@ def _get_metadata_from_mime_type(location, mime_type, args_factory):
     if processor:
         args = args_factory()
         result = processor.extract_metadata(args)
+    else:
+        logger.warn('No processor found for mime_type %s', mime_type)
 
     if result is not None:
         result.sourceLocation = text_(location)
