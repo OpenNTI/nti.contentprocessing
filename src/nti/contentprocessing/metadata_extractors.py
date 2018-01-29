@@ -159,7 +159,7 @@ def _get_metadata_from_mime_type(location, mime_type, args_factory):
         args = args_factory()
         result = processor.extract_metadata(args)
     else:
-        logger.warn('No processor found for mime_type %s', mime_type)
+        logger.warning('No processor found for mime_type %s', mime_type)
 
     if result is not None:
         result.sourceLocation = text_(location)
@@ -173,8 +173,7 @@ def _get_metadata_from_mime_type(location, mime_type, args_factory):
 
 
 def _get_metadata_from_url(urlscheme, location):
-    # TODO: Need to redirect here based on url scheme
-
+    # 1) Need to redirect here based on url scheme
     schemehandler = component.queryUtility(IContentMetadataURLHandler,
                                            name=urlscheme)
     if schemehandler is not None:
@@ -312,8 +311,9 @@ class _HTMLExtractor(object):
                         result.images = []
                     image = ImageMetadata(url=val)
                     image.__parent__ = result
+                    # pylint: disable=no-member
                     image.__name__ = image.url
-                    # FIXME: If there are multiple image elements,
+                    # NOTE: If there are multiple image elements,
                     # their relative order is not retained. This means
                     # that if they provide height and width values,
                     # we have no way to associate that with them.
@@ -360,6 +360,7 @@ class _HTMLExtractor(object):
                     if not result.images:
                         result.images = []
                     image = ImageMetadata(url=val)
+                    # pylint: disable=no-member
                     image.__name__ = image.url
                     image.__parent__ = result
                     result.images.append(image)
@@ -390,9 +391,10 @@ class _PDFExtractor(object):
         # minimal memory.
         result = ContentMetadata()
         pdf = pyPdf.PdfFileReader(args.bidirectionalstream)
-        info = pdf.getDocumentInfo()  # TODO: Also check the xmpMetadata?
+        info = pdf.getDocumentInfo()  # NOTE: Also check the xmpMetadata?
         # This dict is weird: [] and get() return different things,
         # with [] returning the strings we want
+        # pylint: disable=attribute-defined-outside-init
         if '/Title' in info and info['/Title']:
             result.title = text_(info['/Title'])
         if '/Author' in info and info['/Author']:
