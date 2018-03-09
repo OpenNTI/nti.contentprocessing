@@ -60,7 +60,7 @@ setup(
         'repoze.lru',
         'requests',
         'six',
-        'watson-developer-cloud <= 1.0.2',
+        'watson-developer-cloud',
         'Whoosh',
         'zope.cachedescriptors',
         'zope.component',
