@@ -52,9 +52,9 @@ def get_natural_lang_understanding_client(name=''):
     watson_key = get_watson_api_key(name)
     if watson_key:
         result = NaturalLanguageUnderstandingV1(
+                        '2017-02-27',
                         username=watson_key.username,
-                        password=watson_key.password,
-                        version=NaturalLanguageUnderstandingV1.VERSION_DATE_2017_02_27)
+                        password=watson_key.password)
     return result
 
 
