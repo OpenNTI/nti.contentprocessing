@@ -34,9 +34,10 @@ def get_ranked_concepts(content, name='', **kwargs):
     if watson_client is not None:
         try:
             response = analyze(watson_client, content, **kwargs)
-        except Exception:
+        except Exception: # pylint: disable=broad-except
             logger.exception('Invalid request status while getting concepts')
         else:
+            response = response.get_result()
             for entry in response.get('concepts', ()):
                 concept = Concept(entry.get('text'),
                                   entry.get('relevance'))

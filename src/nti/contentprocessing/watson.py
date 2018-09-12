@@ -10,7 +10,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-from watson_developer_cloud import LanguageTranslatorV2
+from watson_developer_cloud import LanguageTranslatorV3
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
 
 from zope import interface
@@ -66,6 +66,7 @@ def get_language_translator_client(name=''):
     result = None
     watson_key = get_watson_api_key(name)
     if watson_key:
-        result = LanguageTranslatorV2(username=watson_key.username,
+        result = LanguageTranslatorV3('2018-05-31',
+                                      username=watson_key.username,
                                       password=watson_key.password)
     return result
