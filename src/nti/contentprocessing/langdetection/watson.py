@@ -80,9 +80,10 @@ def get_languages(content, name=''):
     if watson_client is not None:
         try:
             response = identify(watson_client, content)
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             logger.exception('Invalid request status while detecting language')
         else:
+            response = response.get_result()
             for lang in response.get('languages', ()):
                 lang = WatsonLanguage(code=text_(lang['language']),
                                       confidence=float(lang.get('confidence', 0)))

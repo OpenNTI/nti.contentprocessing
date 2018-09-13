@@ -5,8 +5,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-# disable: accessing protected members, too many methods
-# pylint: disable=W0212,R0904
+# pylint: disable=protected-access,too-many-public-methods,arguments-differ
 
 from hamcrest import is_
 from hamcrest import none
@@ -22,6 +21,8 @@ import os
 import unittest
 
 import simplejson
+
+from watson_developer_cloud.watson_service import DetailedResponse
 
 from nti.contentprocessing.concepttagging import concept_tag
 
@@ -45,7 +46,7 @@ class TestConceptTagger(unittest.TestCase):
     def response(self):
         name = os.path.join(os.path.dirname(__file__), 'response.json')
         with open(name, "r") as fp:
-            return simplejson.load(fp)
+            return DetailedResponse(simplejson.load(fp))
 
     @fudge.patch('nti.contentprocessing.concepttagging.watson.analyze')
     def test_watson_concepts(self, mock_an):
@@ -78,5 +79,5 @@ class TestConceptTagger(unittest.TestCase):
     @fudge.patch('nti.contentprocessing.concepttagging.watson.analyze')
     def test_coverage(self, mock_grc):
         mock_grc.is_callable().raises(TypeError())
-        assert_that(get_ranked_concepts(self.sample), 
+        assert_that(get_ranked_concepts(self.sample),
                     is_([]))

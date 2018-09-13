@@ -36,10 +36,11 @@ def get_keywords(content, name='', **kwargs):
     if watson_client is not None:
         try:
             response = analyze(watson_client, content, **kwargs)
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             result = ()
             logger.exception('Invalid request status while getting keywords')
         else:
+            response = response.get_result()
             keywords = response.get('keywords', ())
             result = tuple(ContentKeyWord(d['text'], float(d.get('relevance', 0)))
                            for d in keywords)
