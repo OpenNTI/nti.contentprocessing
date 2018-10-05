@@ -8,6 +8,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+logger = __import__('logging').getLogger(__name__)
+
 
 def _type_name(self):
     t = type(self)
@@ -31,7 +33,7 @@ def make_repr(default=_default_repr):
             # Things like invalid NTIID, missing registrations for the first two.
             # The final would be a  weird database-related issue.
             return '<%s(%r)>' % (_type_name(self), e)
-        except Exception as e:  # pragma: no cover
+        except Exception as e:  # pragma: no cover, pylint: disable=broad-except
             return '<%s(Ghost, %r)>' % (_type_name(self), e)
     return __repr__
 
