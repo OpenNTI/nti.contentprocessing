@@ -10,8 +10,9 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-import six
 from collections import defaultdict
+
+import six
 
 from zope import component
 from zope import interface
@@ -125,7 +126,8 @@ class TermExtractor(object):
 @interface.implementer(ITermExtractKeyWordExtractor)
 class _DefaultTermKeyWorExtractor(object):
 
-    def __call__(self, content, lang='en', filtername='', *unused_args, **unused_kwargs):
+    def __call__(self, content, lang='en', filtername='',   # pylint: disable=keyword-arg-before-vararg
+                 *unused_args, **unused_kwargs):
         if isinstance(content, six.string_types):
             tokenized_words = tokenize_content(content, lang)
         else:

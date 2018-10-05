@@ -36,6 +36,7 @@ class Language(SchemaConfigured):
 
     @readproperty
     def name(self):
+        # pylint: disable=no-member
         return self.code
 
     def __lt__(self, other):

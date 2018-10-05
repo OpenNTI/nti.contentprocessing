@@ -46,7 +46,7 @@ class _OpenXeroxLanguageDetector(object):
             else:
                 logger.error("%s is an invalid status response code; %s",
                              r.status_code, data)
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             result = None
             logger.exception('Error while detecting language using OpenXerox')
 
