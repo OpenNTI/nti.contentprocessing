@@ -10,9 +10,9 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-from six import string_types
-
 import repoze.lru
+
+from six import string_types
 
 from zope import component
 from zope import interface
