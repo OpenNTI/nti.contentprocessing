@@ -17,7 +17,6 @@ import six
 import shutil
 import string
 import tempfile
-from six.moves import urllib_parse
 
 import pyquery
 
@@ -26,6 +25,8 @@ import rdflib
 import requests
 
 import PyPDF2 as pyPdf
+
+from six.moves import urllib_parse
 
 from zope import component
 from zope import interface

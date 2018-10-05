@@ -10,6 +10,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
+# pylint: disable=inherit-non-class
+
 import os
 import gzip
 import inspect
@@ -82,9 +84,9 @@ def nltk_tagged_corpora():
     from nltk.corpus import LazyCorpusLoader, CorpusReader
     for k, v in inspect.getmembers(corpus):
         try:
-            if isinstance(v, (LazyCorpusLoader, CorpusReader)) \
-                    and hasattr(v, "tagged_sents") \
-                    and hasattr(v, "tagged_words"):
+            if      isinstance(v, (LazyCorpusLoader, CorpusReader)) \
+                and hasattr(v, "tagged_sents") \
+                and hasattr(v, "tagged_words"):
                 result[k] = v
                 interface.alsoProvides(v, ITaggedCorpus)
         except LookupError:  # pragma: no cover
@@ -112,9 +114,9 @@ class _NLTKTaggedSents(object):
 
 
 def get_training_sents(corpus="brown", limit=-1):
-    util = component.queryUtility(INLTKTaggedSents)
-    util = _NLTKTaggedSents() if util is None else util
-    return util(corpus, limit)
+    caller = component.queryUtility(INLTKTaggedSents)
+    caller = _NLTKTaggedSents() if caller is None else caller
+    return caller(corpus, limit)
 
 
 @interface.implementer(INLTKTagger)
@@ -124,7 +126,7 @@ def load_tagger_pickle(name_or_stream):
     if hasattr(name_or_stream, 'read'):
         stream = gzip.GzipFile(fileobj=name_or_stream)
     elif os.path.exists(name_or_stream):
-        stream = gzip.open(name_or_stream, 'rb')
+        stream = gzip.open(name_or_stream, 'r')
 
     if stream is not None:
         with stream as f:
@@ -137,6 +139,9 @@ _trained_taggers = {}
 
 def get_backoff_ngram_tagger(ngrams=3, corpus="brown", limit=-1,
                              train_sents=None, model=None):
+    # pylint: disable=global-statement
+    global _trained_taggers
+
     tagger = None
     if not train_sents:
         # check for a trained tagger
@@ -156,6 +161,7 @@ def get_backoff_ngram_tagger(ngrams=3, corpus="brown", limit=-1,
         tagger = DefaultTagger('NN')
         for n in range(1, ngrams + 1):
             tagger = NgramTagger(n, model=model, train=train_sents, backoff=tagger)
+        _trained_taggers[name] = tagger
 
     interface.alsoProvides(tagger, INLTKBackoffNgramTagger)
     return tagger
@@ -173,6 +179,7 @@ _the_default_nltk_tagger = None
 
 @interface.implementer(INLTKTagger)
 def default_nltk_tagger():
+    # pylint: disable=global-statement
     global _the_default_nltk_tagger
     if _the_default_nltk_tagger is None:
         _the_default_nltk_tagger = get_backoff_ngram_tagger()

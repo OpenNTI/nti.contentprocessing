@@ -14,6 +14,8 @@ from zope import component
 
 from nti.contentprocessing.taggers.interfaces import INLTKTagger
 
+logger = __import__('logging').getLogger(__name__)
+
 
 @repoze.lru.lru_cache(500)
 def tag_word(word, lang='en'):

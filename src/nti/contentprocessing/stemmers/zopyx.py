@@ -44,9 +44,8 @@ class _ZopyYXStemmer(object):
 
     def stem(self, token, lang='en'):
         try:
-            if stemmer is not None:
-                result = self._stemmer(lang).stem((token,))
-                return result[0] if result else token
-        except KeyError:  # lang not available
+            result = self._stemmer(lang).stem((token,))
+            return result[0] if result else token
+        except (AttributeError, KeyError):  # lang not available
             pass
         return token

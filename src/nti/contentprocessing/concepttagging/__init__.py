@@ -12,6 +12,8 @@ from zope import component
 
 from nti.contentprocessing.concepttagging.interfaces import IConceptTagger
 
+logger = __import__('logging').getLogger(__name__)
+
 
 def concept_tag(content, name=''):
     tagger = component.queryUtility(IConceptTagger, name=name)

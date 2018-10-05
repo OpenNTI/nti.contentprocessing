@@ -14,6 +14,8 @@ from zope import component
 
 from nti.contentprocessing.stemmers.interfaces import IStemmer
 
+logger = __import__('logging').getLogger(__name__)
+
 
 @repoze.lru.lru_cache(200)
 def stem_word(word, lang='en', name=''):
