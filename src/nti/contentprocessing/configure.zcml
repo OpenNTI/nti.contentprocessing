@@ -37,22 +37,26 @@
 	<utility factory=".content_utils._default_word_tokenizer_expression" name="en" />
 	<utility factory=".content_utils._default_word_tokenizer_expression" name="es" />
 	<utility factory=".content_utils._default_word_tokenizer_expression" name="ru" />
+	<utility factory=".content_utils._default_word_tokenizer_expression" name="english" />
 
 	<!-- Translation Table -->
 	<utility factory=".content_utils._default_content_translation_table" />
 	<utility factory=".content_utils._default_content_translation_table" name="en" />
 	<utility factory=".content_utils._default_content_translation_table" name="es" />
 	<utility factory=".content_utils._default_content_translation_table" name="ru" />
+	<utility factory=".content_utils._default_content_translation_table" name="english" />
 
 	<!-- Word Similarity -->
 	<utility factory=".content_utils._LevenshteinWordSimilarity" />
 	<utility factory=".content_utils._LevenshteinWordSimilarity" name="en" />
 	<utility factory=".content_utils._LevenshteinWordSimilarity" name="es" />
 	<utility factory=".content_utils._LevenshteinWordSimilarity" name="ru" />
+	<utility factory=".content_utils._LevenshteinWordSimilarity" name="english" />
 
 	<!-- NGrams -->
 	<utility factory=".ngrams_utils._DefaultNgramComputer" />
 	<utility factory=".ngrams_utils._DefaultNgramComputer" name="en" />
+	<utility factory=".ngrams_utils._DefaultNgramComputer" name="english" />
 
 	<include package=".taggers" />
 	<include package=".keyword" />
