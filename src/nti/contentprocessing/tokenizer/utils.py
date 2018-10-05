@@ -19,9 +19,9 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 import re
-import six
 import types
 
+import six
 
 if six.PY3:  # pragma: no cover
     def get_im_class(meth): return meth.__self__.__class__
@@ -32,7 +32,7 @@ logger = __import__('logging').getLogger(__name__)
 
 
 def _mro(cls):
-    """
+    r"""
     Return the method resolution order for ``cls`` -- i.e., a list
     containing ``cls`` and all its base classes, in the order in which
     they would be checked by ``getattr``.  For new-style classes, this
@@ -50,7 +50,7 @@ mro = _mro
 
 
 def overridden(method):
-    """
+    r"""
     :return: True if ``method`` overrides some method with the same
     name in a base class.  This is typically used when defining
     abstract base classes or interfaces, to allow subclasses to define
@@ -81,7 +81,7 @@ def overridden(method):
 
 
 def string_span_tokenize(s, sep):
-    """
+    r"""
     Return the offsets of the tokens in *s*, as a sequence of ``(start, end)``
     tuples, by splitting the string at each occurrence of *sep*.
 
@@ -114,7 +114,7 @@ def string_span_tokenize(s, sep):
 
 
 def regexp_span_tokenize(s, regexp):
-    """
+    r"""
     Return the offsets of the tokens in *s*, as a sequence of ``(start, end)``
     tuples, by splitting the string at each successive match of *regexp*.
 

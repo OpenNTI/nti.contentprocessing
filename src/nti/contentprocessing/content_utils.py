@@ -13,6 +13,9 @@ from __future__ import absolute_import
 import re
 import difflib
 import unicodedata
+
+from nltk.tokenize import sent_tokenize as nltk_sent_tokenize
+
 from six import string_types
 
 resource_filename = __import__('pkg_resources').resource_filename
@@ -116,11 +119,23 @@ class _ContentTokenizer(object):
                                     name='text')
 
 
+def sent_tokenize(text, lang='english'):
+    lang = 'english' if lang == 'en' else lang
+    return nltk_sent_tokenize(text, lang)
+
+
+# similarity
+
+
 @interface.implementer(IWordSimilarity)
 class _BaseWordSimilarity(object):
 
+    def compute(self, a, b):
+        raise NotImplementedError
+
     def rank(self, word, terms, reverse=True):
-        return sorted(terms, key=lambda w: self.compute(word, w), reverse=reverse)
+        return sorted(terms,
+                      key=lambda w: self.compute(word, w), reverse=reverse)
 
 
 class _SequenceMatcherWordSimilarity(_BaseWordSimilarity):
@@ -148,6 +163,7 @@ _default_trans_table = None
 @interface.implementer(IContentTranslationTable)
 def _default_content_translation_table():
 
+    # pylint: disable=global-statement
     global _default_trans_table
 
     if _default_trans_table is None:
