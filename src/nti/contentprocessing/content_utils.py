@@ -18,8 +18,6 @@ from nltk.tokenize import sent_tokenize as nltk_sent_tokenize
 
 from six import string_types
 
-resource_filename = __import__('pkg_resources').resource_filename
-
 from zope import component
 from zope import interface
 
@@ -49,6 +47,8 @@ from nti.contentprocessing.interfaces import IContentTranslationTable
 from nti.contentprocessing.interfaces import IWordTokenizerExpression
 
 from nti.contentprocessing.tokenizer import DefaultRegexpTokenizer
+
+resource_filename = __import__('pkg_resources').resource_filename
 
 logger = __import__('logging').getLogger(__name__)
 
