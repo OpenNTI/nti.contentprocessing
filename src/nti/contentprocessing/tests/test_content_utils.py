@@ -5,8 +5,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-# disable: accessing protected members, too many methods
-# pylint: disable=W0212,R0904
+# pylint: disable=protected-access,too-many-public-methods,arguments-differ
 
 from hamcrest import is_
 from hamcrest import none
@@ -16,7 +15,9 @@ from hamcrest import assert_that
 
 import unittest
 
-from six import unichr
+import fudge
+
+from six import unichr as _unichr
 
 from zope import component
 
@@ -28,6 +29,7 @@ from nti.contentfragments.interfaces import IPunctuationMarkExpressionPlus
 from nti.contentprocessing.content_utils import normalize
 from nti.contentprocessing.content_utils import rank_words
 from nti.contentprocessing.content_utils import get_content
+from nti.contentprocessing.content_utils import sent_tokenize
 from nti.contentprocessing.content_utils import tokenize_content
 from nti.contentprocessing.content_utils import clean_special_characters
 from nti.contentprocessing.content_utils import get_content_translation_table
@@ -76,7 +78,7 @@ class TestContentUtils(unittest.TestCase):
         assert_that(get_content(u'$12.45'), is_('$12.45'))
         assert_that(get_content(u'82%'), is_('82%'))
 
-        u = unichr(40960) + u'bleach' + unichr(1972)
+        u = _unichr(40960) + u'bleach' + _unichr(1972)
         assert_that(get_content(u), is_(u'\ua000bleach'))
 
     def test_clean_special(self):
@@ -122,3 +124,9 @@ class TestContentUtils(unittest.TestCase):
     def test_coverage(self):
         sim = _SequenceMatcherWordSimilarity()
         assert_that(sim.compute('alpha', 'bravo'), is_(0.2))
+
+    @fudge.patch('nti.contentprocessing.content_utils.nltk_sent_tokenize')
+    def test_sent_tokenize(self, mock_tock):
+        data = "ichigo and rukia"
+        mock_tock.is_callable().returns([data])
+        assert_that(sent_tokenize(data), is_([data]))
