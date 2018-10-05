@@ -19,9 +19,10 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 import re
-import six
 from abc import ABCMeta
 from abc import abstractmethod
+
+import six
 
 from nti.contentprocessing.tokenizer.utils import overridden
 from nti.contentprocessing.tokenizer.utils import regexp_span_tokenize
@@ -84,9 +85,11 @@ class StringTokenizer(TokenizerI):
     """
 
     def tokenize(self, s):
+        # pylint: disable=no-member
         return s.split(self._string)
 
     def span_tokenize(self, s):
+        # pylint: disable=no-member
         for span in string_span_tokenize(s, self._string):
             yield span
 
@@ -106,7 +109,7 @@ class SpaceTokenizer(StringTokenizer):
     _string = ' '
 
 class RegexpTokenizer(TokenizerI):
-    """
+    r"""
     A tokenizer that splits a string using a regular expression, which
     matches either the tokens or the separators between tokens.
 
@@ -147,7 +150,7 @@ class RegexpTokenizer(TokenizerI):
         if self._regexp is None:
             self._regexp = re.compile(self._pattern, self._flags)
 
-    def tokenize(self, text):
+    def tokenize(self, text):  # pylint: disable=arguments-differ
         self._check_regexp()
         # If our regexp matches gaps, use re.split:
         if self._gaps:
@@ -160,7 +163,7 @@ class RegexpTokenizer(TokenizerI):
         else:
             return self._regexp.findall(text)
 
-    def span_tokenize(self, text):
+    def span_tokenize(self, text):  # pylint: disable=arguments-differ
         self._check_regexp()
 
         if self._gaps:
