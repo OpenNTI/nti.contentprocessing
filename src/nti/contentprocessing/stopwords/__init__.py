@@ -40,9 +40,11 @@ class FileBasedStopWords(object):
         return result
 
     def stopwords(self, lang='en'):
+        # pylint: disable=no-member
         return self._cache.get(lang, ())
 
     def available_languages(self):
+        # pylint: disable=no-member
         return tuple(sorted(self._cache.keys()))
 _DefaultStopWords = _FileBasedStopWords = FileBasedStopWords
 
