@@ -16,6 +16,8 @@ from nti.contentprocessing.langdetection.interfaces import ILanguageDetector
 
 DETECTORS = ('watson', 'xerox', 'tika')
 
+logger = __import__('logging').getLogger(__name__)
+
 
 def detect_Language(content, name=None):
     names = (name,) if name else DETECTORS

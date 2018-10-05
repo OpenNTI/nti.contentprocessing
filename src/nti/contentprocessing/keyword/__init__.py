@@ -13,6 +13,8 @@ from zope import component
 from nti.contentprocessing.keyword.interfaces import IKeyWordExtractor
 from nti.contentprocessing.keyword.interfaces import ITermExtractKeyWordExtractor
 
+logger = __import__('logging').getLogger(__name__)
+
 
 def term_extract_key_words(content, lang='en', filtername=''):
     extractor = component.queryUtility(ITermExtractKeyWordExtractor, name=lang)
