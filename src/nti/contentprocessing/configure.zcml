@@ -29,6 +29,7 @@
 	<utility factory=".content_utils._ContentTokenizer" name="en" />
 	<utility factory=".content_utils._ContentTokenizer" name="es" />
 	<utility factory=".content_utils._ContentTokenizer" name="ru" />
+	<utility factory=".content_utils._ContentTokenizer" name="english" />
 
 	<utility factory=".content_utils._default_word_tokenizer_pattern" name="en" />
 	<utility factory=".content_utils._default_word_tokenizer_pattern" name="es" />
