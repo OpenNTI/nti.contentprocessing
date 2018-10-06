@@ -5,8 +5,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 
-# disable: accessing protected members, too many methods
-# pylint: disable=W0212,R0904
+# pylint: disable=protected-access,too-many-public-methods,arguments-differ
 
 from hamcrest import is_
 from hamcrest import assert_that
@@ -41,7 +40,7 @@ class TestRepresentation(unittest.TestCase):
 
 
     def test_with_default_callable(self):
-        @WithRepr(lambda s: "<HI>")
+        @WithRepr(lambda unused_s: "<HI>")
         class Foo(object):
             pass
 
@@ -49,7 +48,7 @@ class TestRepresentation(unittest.TestCase):
         assert_that(r, is_("<HI>"))
 
     def test_raises_Exception(self):
-        def raise_(self):
+        def raise_(unused_self):
             raise Exception("CSE")
 
         @WithRepr(raise_)
@@ -62,7 +61,7 @@ class TestRepresentation(unittest.TestCase):
                         "Exception('CSE',))>"))
 
     def test_raises_attribute_error(self):
-        def raise_(self):
+        def raise_(unused_self):
             raise AttributeError("an attr")
 
         @WithRepr(raise_)
