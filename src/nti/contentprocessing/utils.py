@@ -10,7 +10,7 @@ from __future__ import absolute_import
 
 from zope import component
 
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.interfaces import ComponentLookupError
 
 from nti.contentprocessing.interfaces import IWatsonAPIKey
 
