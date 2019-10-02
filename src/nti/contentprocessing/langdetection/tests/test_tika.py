@@ -20,6 +20,9 @@ import unittest
 
 from nti.contentprocessing.langdetection.tika import _TikaLanguageDetector
 
+from nti.contentprocessing.langdetection.tika.identifier import initProfiles
+from nti.contentprocessing.langdetection.tika.identifier import clearProfiles
+
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
 
@@ -46,6 +49,8 @@ class TestTikaLangDetector(unittest.TestCase):
             return f.read()
 
     def test_lang_detector(self):
+        clearProfiles()
+        initProfiles()
         dectector = _TikaLanguageDetector()
         lang = dectector(self.sample_en)
         assert_that(lang, is_not(none()))
