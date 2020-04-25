@@ -56,6 +56,7 @@ setup(
         'numpy',
         'pyquery',
         'PyPDF2',
+        'pyrdfa3',
         'rdflib',
         'repoze.lru',
         'requests',
