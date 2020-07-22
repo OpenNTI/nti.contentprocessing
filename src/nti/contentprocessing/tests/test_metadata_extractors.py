@@ -23,7 +23,11 @@ import unittest
 
 import fudge
 
+import pyquery
+
 from rdflib import Graph
+
+from zope.cachedescriptors.property import Lazy
 
 from nti.contentprocessing.metadata_extractors import _HTMLExtractor
 from nti.contentprocessing.metadata_extractors import ContentMetadata
@@ -70,6 +74,7 @@ class TestMetadataExtractors(unittest.TestCase):
                         has_property('images',
                                      contains(has_property('url',
                                                            'http://www.newyorker.com/images/2013/01/07/g120/130107_r23011_g120_cropth.jpg'))))
+
             assert_that(result, validly_provides(IContentMetadata))
 
         extractor = _HTMLExtractor()
@@ -239,6 +244,37 @@ class TestMetadataExtractors(unittest.TestCase):
                     is_(True))
         with self.assertRaises(ValueError):
             get_metadata_from_http_url('ftp://bleach.org')
+
+    def test_extract_from_html_props(self):
+        template = """
+        <html %s>
+        <head>
+        <title>The Rock (1996)</title>
+        <meta name="description" content="Free Web tutorials">
+        <meta name="keywords" content="HTML,CSS,JavaScript">
+        <meta name="author" content="John Doe">
+        </head>
+
+        </html>"""
+
+        class _args(object):
+            __name__ = None
+            text = None
+
+            @Lazy
+            def pyquery_dom(self):
+                return pyquery.PyQuery(self.text)
+                
+
+        args = _args()
+        args.__name__ = u'http://example.com'
+        args.text = template
+
+        result = _HTMLExtractor()._extract_page(ContentMetadata(), args)
+
+        assert_that(result, has_property('creator', 'John Doe'))
+        assert_that(result, has_property('title', 'The Rock (1996)'))
+        assert_that(result, has_property('description', 'Free Web tutorials'))
 
     def test_coverage(self):
         assert_that(_get_metadata_from_mime_type(None, None, None),
