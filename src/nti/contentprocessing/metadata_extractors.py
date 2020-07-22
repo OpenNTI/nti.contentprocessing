@@ -373,7 +373,7 @@ class _HTMLExtractor(object):
             # Author is also used. The spec claims these meta names are case insensitive
             # but the syntax we query with is not.
             for attr in ('author', 'Author'):
-                meta = args.pyquery_dom('meta[name=%s]'%attr)
+                meta = args.pyquery_dom('meta[name=%s]' % (attr),)
                 text = meta.attr['content'] if meta else ''
                 if text:
                     result.creator = text_(text)
