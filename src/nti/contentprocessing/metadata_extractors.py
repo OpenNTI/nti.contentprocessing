@@ -202,12 +202,30 @@ def _http_scheme_handler(location):
     )
 
     if result is None:
-        result = ContentMetadata()
-        result.sourceLocation = text_(location)
-        result.contentMimeType = text_(mime_type)
+        result = _default_extract(location, mime_type, response)
     else:
         result.sourcePath = text_(args.download_path)
     return result
+
+
+def _default_extract(location, mime_type, response):
+    processor = component.queryUtility(IContentMetadataExtractor)
+    if processor:
+        args = _request_args(location, response)
+        result = processor.extract_metadata(args)
+    else:
+        result = _basic_content_metadata(location, mime_type, response)
+    return result
+
+
+def _basic_content_metadata(location, mime_type, response):
+    result = ContentMetadata()
+    result.contentLocation = text_(response.url)
+    result.sourceLocation = text_(location)
+    result.contentMimeType = text_(mime_type)
+    return result
+
+
 interface.directlyProvides(_http_scheme_handler, IContentMetadataURLHandler)
 
 
