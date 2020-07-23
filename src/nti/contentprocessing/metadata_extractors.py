@@ -201,7 +201,11 @@ def _http_scheme_handler(location):
         location, mime_type, lambda: _request_args(location, response)
     )
 
-    if result is not None:
+    if result is None:
+        result = ContentMetadata()
+        result.sourceLocation = text_(location)
+        result.contentMimeType = text_(mime_type)
+    else:
         result.sourcePath = text_(args.download_path)
     return result
 interface.directlyProvides(_http_scheme_handler, IContentMetadataURLHandler)

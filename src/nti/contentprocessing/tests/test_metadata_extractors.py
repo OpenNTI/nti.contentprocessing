@@ -279,4 +279,11 @@ class TestMetadataExtractors(unittest.TestCase):
     def test_coverage(self):
         assert_that(_get_metadata_from_mime_type(None, None, None),
                     is_((None, None)))
-        
+
+    @fudge.patch("nti.contentprocessing.metadata_extractors.requests.get")
+    def test_default_mimetype_handling(self, mock_get):
+        response = mock_get.is_callable().returns_fake(name="Response")
+        response.has_attr(headers={"content-type": "image/jpeg"})
+        assert_that(get_metadata_from_http_url('https://bleach.org'),
+                    has_properties(sourceLocation="https://bleach.org",
+                                   contentMimeType="image/jpeg"))
