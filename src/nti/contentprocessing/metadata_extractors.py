@@ -368,6 +368,16 @@ class _HTMLExtractor(object):
         return result
 
     def _extract_page(self, result, args):
+        if not result.creator:
+            # The typical case of the name is author, but there is evidence that
+            # Author is also used. The spec claims these meta names are case insensitive
+            # but the syntax we query with is not.
+            for attr in ('author', 'Author'):
+                meta = args.pyquery_dom('meta[name=%s]' % (attr,))
+                text = meta.attr['content'] if meta else ''
+                if text:
+                    result.creator = text_(text)
+                    break
         if not result.description:
             meta = args.pyquery_dom('meta[name=description]')
             text = meta.attr['content'] if meta else ''
