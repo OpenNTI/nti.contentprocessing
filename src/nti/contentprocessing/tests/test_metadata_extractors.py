@@ -6,6 +6,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 # pylint: disable=protected-access,too-many-public-methods
+import contextlib
 
 from hamcrest import is_
 from hamcrest import none
@@ -15,6 +16,9 @@ from hamcrest import assert_that
 from hamcrest import has_property
 from hamcrest import has_properties
 from hamcrest import contains_inanyorder
+
+from zope import component
+from zope import interface
 
 from nti.testing.matchers import validly_provides
 
@@ -40,6 +44,7 @@ from nti.contentprocessing.metadata_extractors import get_metadata_from_http_url
 from nti.contentprocessing.metadata_extractors import get_metadata_from_content_location
 
 from nti.contentprocessing.interfaces import IContentMetadata
+from nti.contentprocessing.interfaces import IContentMetadataExtractor
 
 from nti.contentprocessing.tests import SharedConfiguringTestLayer
 
@@ -281,9 +286,50 @@ class TestMetadataExtractors(unittest.TestCase):
                     is_((None, None)))
 
     @fudge.patch("nti.contentprocessing.metadata_extractors.requests.get")
-    def test_default_mimetype_handling(self, mock_get):
+    def test_fallback_extract_no_processor(self, mock_get):
+        response = mock_get.is_callable().returns_fake(name="Response")
+        response.has_attr(headers={"content-type": "image/jpeg"},
+                          url="https://www.bleach.org")
+        assert_that(get_metadata_from_http_url('http://bleach.org'),
+                    has_properties(sourceLocation="http://bleach.org",
+                                   contentMimeType="image/jpeg",
+                                   contentLocation="https://www.bleach.org"))
+
+    @fudge.patch("nti.contentprocessing.metadata_extractors.requests.get")
+    def test_fallback_extract_processor(self, mock_get):
         response = mock_get.is_callable().returns_fake(name="Response")
         response.has_attr(headers={"content-type": "image/jpeg"})
-        assert_that(get_metadata_from_http_url('https://bleach.org'),
-                    has_properties(sourceLocation="https://bleach.org",
-                                   contentMimeType="image/jpeg"))
+
+        util = _OverridingMetadataExtractor(
+            source_loc=u"http://overriddensource.org",
+            content_loc=u"http://overriddencontent.org",
+            mime_type=u"text/html")
+        with _provide_utility(util):
+            assert_that(get_metadata_from_http_url('https://bleach.org'),
+                        has_properties(sourceLocation=util.sourceLocation,
+                                       contentMimeType=util.mime_type,
+                                       contentLocation=util.contentLocation))
+
+
+@interface.implementer(IContentMetadataExtractor)
+class _OverridingMetadataExtractor(object):
+
+    def __init__(self, source_loc, content_loc, mime_type):
+        self.sourceLocation = source_loc
+        self.contentLocation = content_loc
+        self.mime_type = mime_type
+
+    def extract_metadata(self, args):
+        return ContentMetadata(sourceLocation=self.sourceLocation,
+                               contentLocation=self.contentLocation,
+                               contentMimeType=self.mime_type)
+
+
+@contextlib.contextmanager
+def _provide_utility(util):
+    gsm = component.getGlobalSiteManager()
+    gsm.registerUtility(util, IContentMetadataExtractor)
+    try:
+        yield
+    finally:
+        gsm.unregisterUtility(util, IContentMetadataExtractor)
